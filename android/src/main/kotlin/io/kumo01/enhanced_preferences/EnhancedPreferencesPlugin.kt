@@ -1,10 +1,19 @@
 package io.kumo01.enhanced_preferences
 
+import android.content.Context
+import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+
+const val TAG = "EnhancedPreferencesPlugin"
+const val ENHANCED_PREFERENCES_NAME = "FlutterEnhancedPreferences"
+val Context.sharedPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(ENHANCED_PREFERENCES_NAME)
 
 /** EnhancedPreferencesPlugin */
 class EnhancedPreferencesPlugin :
@@ -26,6 +35,7 @@ class EnhancedPreferencesPlugin :
         result: Result
     ) {
         if (call.method == "getPlatformVersion") {
+            Log.d(TAG, "getPlatformVersion called")
             result.success("Android ${android.os.Build.VERSION.RELEASE}")
         } else {
             result.notImplemented()
