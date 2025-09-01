@@ -17,6 +17,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  String _value = 'Unknown';
+
   final _enhancedPreferencesPlugin = EnhancedPreferences();
 
   @override
@@ -27,14 +29,18 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
+    // String platformVersion;
+    String value;
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _enhancedPreferencesPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      // platformVersion =
+      //     await _enhancedPreferencesPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      String key = await _enhancedPreferencesPlugin.setString("Hello", "World") ?? "Failed to set string.";
+      value = await _enhancedPreferencesPlugin.getString(key) ?? "Failed to get string.";
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      // platformVersion = 'Failed to get platform version.';
+      value = 'Failed to get sample.';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -43,7 +49,8 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
+      // _platformVersion = platformVersion;
+      _value = value;
     });
   }
 
@@ -55,7 +62,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Text('Running on: $_platformVersion\nHello: $_value\n'),
         ),
       ),
     );

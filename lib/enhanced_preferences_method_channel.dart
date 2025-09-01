@@ -14,4 +14,16 @@ class MethodChannelEnhancedPreferences extends EnhancedPreferencesPlatform {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
+
+  @override
+  Future<String?> getString(String key) async {
+    final value = await methodChannel.invokeMethod<String>('getString', { 'key': key });
+    return value;
+  }
+
+  @override
+  Future<String?> setString(String key, String value) async {
+    final result = await methodChannel.invokeMethod<String>('setString', { 'key': key, 'value': value });
+    return result;
+  }
 }

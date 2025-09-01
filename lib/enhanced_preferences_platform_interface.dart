@@ -26,4 +26,12 @@ abstract class EnhancedPreferencesPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  Future<String?> getString(String key) {
+    throw UnimplementedError('getString() has not been implemented.');
+  }
+
+  Future<String?> setString(String key, String value) {
+    throw UnimplementedError('setString() has not been implemented.');
+  }
 }
