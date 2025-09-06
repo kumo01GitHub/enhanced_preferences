@@ -13,7 +13,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     case "getString":
       do {
         guard let args = call.arguments as? Dictionary<String, Any?> else {
-          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments")
+          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
         }
         result(try getString(key: args["key"] as? String))
       } catch let error as EnhancedPreferencesError {
@@ -25,7 +25,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     case "setString":
       do {
         guard let args = call.arguments as? Dictionary<String, Any?> else {
-          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments")
+          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
         }
         result(try setString(key: args["key"] as? String, value: args["value"] as? String))
       } catch let error as EnhancedPreferencesError {
@@ -37,7 +37,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     case "getInt":
       do {
         guard let args = call.arguments as? Dictionary<String, Any?> else {
-          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments")
+          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
         }
         result(try getInt(key: args["key"] as? String))
       } catch let error as EnhancedPreferencesError {
@@ -49,7 +49,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     case "setInt":
       do {
         guard let args = call.arguments as? Dictionary<String, Any?> else {
-          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments")
+          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
         }
         result(try setInt(key: args["key"] as? String, value: args["value"] as? Int))
       } catch let error as EnhancedPreferencesError {
@@ -61,7 +61,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     case "getDouble":
       do {
         guard let args = call.arguments as? Dictionary<String, Any?> else {
-          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments")
+          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
         }
         result(try getDouble(key: args["key"] as? String))
       } catch let error as EnhancedPreferencesError {
@@ -73,7 +73,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     case "setDouble":
       do {
         guard let args = call.arguments as? Dictionary<String, Any?> else {
-          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments")
+          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
         }
         result(try setDouble(key: args["key"] as? String, value: args["value"] as? Double))
       } catch let error as EnhancedPreferencesError {
@@ -85,7 +85,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     case "getBool":
       do {
         guard let args = call.arguments as? Dictionary<String, Any?> else {
-          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments")
+          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
         }
         result(try getBool(key: args["key"] as? String))
       } catch let error as EnhancedPreferencesError {
@@ -97,7 +97,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     case "setBool":
       do {
         guard let args = call.arguments as? Dictionary<String, Any?> else {
-          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments")
+          throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
         }
         result(try setBool(key: args["key"] as? String, value: args["value"] as? Bool))
       } catch let error as EnhancedPreferencesError {
@@ -113,11 +113,11 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
 
   private func getString(key: String?) throws -> String {
     guard let key = key else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
     }
 
     guard let value = UserDefaults.standard.string(forKey: key) else {
-      throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil")
+      throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
     }
 
     return value
@@ -125,10 +125,10 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
 
   private func setString(key: String?, value: String?) throws -> String {
     guard let key = key else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
     }
     guard let value = value else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Value is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
     }
 
     UserDefaults.standard.set(value, forKey: key)
@@ -138,11 +138,11 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
 
   private func getInt(key: String?) throws -> Int {
     guard let key = key else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
     }
 
     guard let value = UserDefaults.standard.object(forKey: key) as? Int else {
-      throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil")
+      throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil or not Int.")
     }
 
     return value
@@ -150,10 +150,10 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
 
   private func setInt(key: String?, value: Int?) throws -> String {
     guard let key = key else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
     }
     guard let value = value else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Value is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
     }
 
     UserDefaults.standard.set(value, forKey: key)
@@ -163,11 +163,11 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
 
   private func getDouble(key: String?) throws -> Double {
     guard let key = key else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
     }
 
     guard let value = UserDefaults.standard.object(forKey: key) as? Double else {
-      throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil")
+      throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil or not Double.")
     }
 
     return value
@@ -175,10 +175,10 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
 
   private func setDouble(key: String?, value: Double?) throws -> String {
     guard let key = key else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
     }
     guard let value = value else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Value is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
     }
 
     UserDefaults.standard.set(value, forKey: key)
@@ -188,11 +188,11 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
 
   private func getBool(key: String?) throws -> Bool {
     guard let key = key else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
     }
 
     guard let value = UserDefaults.standard.object(forKey: key) as? Bool else {
-      throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil")
+      throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil or not Bool.")
     }
 
     return value
@@ -200,10 +200,10 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
 
   private func setBool(key: String?, value: Bool?) throws -> String {
     guard let key = key else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
     }
     guard let value = value else {
-      throw EnhancedPreferencesError.invalidArgument(message: "Value is nil")
+      throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
     }
 
     UserDefaults.standard.set(value, forKey: key)

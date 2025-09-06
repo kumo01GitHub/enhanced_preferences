@@ -123,7 +123,7 @@ class EnhancedPreferencesPlugin :
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank"
+                "Key is null or blank."
             )
         }
 
@@ -134,7 +134,7 @@ class EnhancedPreferencesPlugin :
         if (value == null) {
             throw EnhancedPreferencesError(
                 ErrorCode.REFERENCE_ERROR,
-                "Value for '$key' is null"
+                "Value for '$key' is null."
             )
         } else {
             return value
@@ -145,13 +145,13 @@ class EnhancedPreferencesPlugin :
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank"
+                "Key is null or blank."
             )
         }
         if (value == null) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Value is null or blank"
+                "Value is null or blank."
             )
         }
 
@@ -166,7 +166,7 @@ class EnhancedPreferencesPlugin :
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank"
+                "Key is null or blank."
             )
         }
 
@@ -177,7 +177,7 @@ class EnhancedPreferencesPlugin :
         if (value == null) {
             throw EnhancedPreferencesError(
                 ErrorCode.REFERENCE_ERROR,
-                "Value for '$key' is null"
+                "Value for '$key' is null."
             )
         } else {
             return value
@@ -188,13 +188,13 @@ class EnhancedPreferencesPlugin :
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank"
+                "Key is null or blank."
             )
         }
         if (value == null) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Value is null or blank"
+                "Value is null or blank."
             )
         }
 
@@ -209,7 +209,7 @@ class EnhancedPreferencesPlugin :
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank"
+                "Key is null or blank."
             )
         }
 
@@ -220,7 +220,7 @@ class EnhancedPreferencesPlugin :
         if (value == null) {
             throw EnhancedPreferencesError(
                 ErrorCode.REFERENCE_ERROR,
-                "Value for '$key' is null"
+                "Value for '$key' is null."
             )
         } else {
             return value
@@ -231,13 +231,13 @@ class EnhancedPreferencesPlugin :
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank"
+                "Key is null or blank."
             )
         }
         if (value == null) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Value is null or blank"
+                "Value is null or blank."
             )
         }
 
@@ -252,7 +252,7 @@ class EnhancedPreferencesPlugin :
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank"
+                "Key is null or blank."
             )
         }
 
@@ -263,7 +263,7 @@ class EnhancedPreferencesPlugin :
         if (value == null) {
             throw EnhancedPreferencesError(
                 ErrorCode.REFERENCE_ERROR,
-                "Value for '$key' is null"
+                "Value for '$key' is null."
             )
         } else {
             return value
@@ -274,13 +274,13 @@ class EnhancedPreferencesPlugin :
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank"
+                "Key is null or blank."
             )
         }
         if (value == null) {
             throw EnhancedPreferencesError(
                 ErrorCode.INVALID_ARGUMENT,
-                "Value is null or blank"
+                "Value is null or blank."
             )
         }
 
