@@ -5,21 +5,21 @@ enum EnhancedPreferencesError: Error, LocalizedError {
   case referenceError(message: String)
   case invalidAccess(message: String)
   case unknownError(message: String)
-
+  
   var code: String {
     switch self {
     case .invalidArgument:
-      return "INVALID_ARGUMENT"
+        return "INVALID_ARGUMENT"
     case .referenceError:
-      return "REFERENCE_ERROR"
+        return "REFERENCE_ERROR"
     case .invalidAccess:
-      return "INVALID_ACCESS"
+        return "INVALID_ACCESS"
     case .unknownError:
-      return "UNKNOWN_ERROR"
+        return "UNKNOWN_ERROR"
     }
   }
 
-  var errorDescription: String {
+  var errorDescription: String? {
     switch self {
     case .invalidArgument(let message):
       return message

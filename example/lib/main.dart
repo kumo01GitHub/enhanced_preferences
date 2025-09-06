@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:enhanced_preferences/enhanced_preferences.dart';
 
 void main() {
@@ -16,42 +14,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  String _value = 'Unknown';
-
   final _enhancedPreferencesPlugin = EnhancedPreferences();
+
+  String? _type;
+  final TextEditingController _keyController = TextEditingController();
+  final TextEditingController _valueController = TextEditingController();
+
+  dynamic _result;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    // String platformVersion;
-    String value;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      // platformVersion =
-      //     await _enhancedPreferencesPlugin.getPlatformVersion() ?? 'Unknown platform version';
-      String key = await _enhancedPreferencesPlugin.setString("Hello", "World") ?? "Failed to set string.";
-      value = await _enhancedPreferencesPlugin.getString(key) ?? "Failed to get string.";
-    } on PlatformException {
-      // platformVersion = 'Failed to get platform version.';
-      value = 'Failed to get sample.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      // _platformVersion = platformVersion;
-      _value = value;
-    });
   }
 
   @override
@@ -61,9 +34,111 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\nHello: $_value\n'),
-        ),
+        body:
+          Padding(
+            padding: EdgeInsetsGeometry.all(20),
+            child: Center(
+              child: Column(
+                spacing: 20,
+                children: [
+                  // KEY
+                  Row(
+                    spacing: 10,
+                    children: [
+                      Text('KEY:'),
+                      DropdownButton(
+                        items: [
+                          DropdownMenuItem(value: "String", child: Text("String")),
+                          DropdownMenuItem(value: "Int", child: Text("Integer")),
+                          DropdownMenuItem(value: "Double", child: Text("Double")),
+                          DropdownMenuItem(value: "Bool", child: Text("Boolean")),
+                        ],
+                        onChanged: (String? value) { setState(() { _type = value; }); },
+                        value: _type,
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: TextField(
+                          controller: _keyController,
+                          decoration: InputDecoration(hintText: 'Enter key'),
+                        ),
+                      ),
+                    ]
+                  ),
+                  // VALUE
+                  Row(
+                    spacing: 10,
+                    children: [
+                      Text('VALUE:'),
+                      SizedBox(
+                        width: 200,
+                        child: TextField(
+                          controller: _valueController,
+                          decoration: InputDecoration(hintText: 'Enter value'),
+                        ),
+                      ),
+                    ]
+                  ),
+                  // BUTTONS
+                  Row(
+                    children: [
+                      // GET
+                      ElevatedButton(
+                        onPressed: () async {
+                          dynamic result;
+
+                          try {
+                            if (_type == "String") {
+                              result = await _enhancedPreferencesPlugin.getString(_keyController.text);
+                            } else if (_type == "Int") {
+                              result = await _enhancedPreferencesPlugin.getInt(_keyController.text);
+                            } else if (_type == "Double") {
+                              result = await _enhancedPreferencesPlugin.getDouble(_keyController.text);
+                            } else if (_type == "Bool") {
+                              result = await _enhancedPreferencesPlugin.getBool(_keyController.text);
+                            }
+                          } on Exception catch (e) {
+                            result = e.toString();
+                          }
+
+                          setState(() { _result = result; });
+                        },
+                        child: Text('GET'),
+                      ),
+                      // SET
+                      ElevatedButton(
+                        onPressed: () async {
+                          dynamic result;
+
+                          try {
+                            if (_type == "String") {
+                              result = await _enhancedPreferencesPlugin.setString(_keyController.text, _valueController.text);
+                            } else if (_type == "Int") {
+                              final intValue = int.tryParse(_valueController.text) ?? 0;
+                              result = await _enhancedPreferencesPlugin.setInt(_keyController.text, intValue);
+                            } else if (_type == "Double") {
+                              final doubleValue = double.tryParse(_valueController.text) ?? 0.0;
+                              result = await _enhancedPreferencesPlugin.setDouble(_keyController.text, doubleValue);
+                            } else if (_type == "Bool") {
+                              final boolValue = (_valueController.text.toLowerCase() == 'true');
+                              result = await _enhancedPreferencesPlugin.setBool(_keyController.text, boolValue);
+                            }
+                          } on Exception catch (e) {
+                            result = e.toString();
+                          }
+
+                          setState(() { _result = result; });
+                        },
+                        child: Text('SET'),
+                      ),
+                    ],
+                  ),
+                  // RESULT
+                  Text('${_result ?? ""}'),
+                ]
+              ),
+            ),
+          )
       ),
     );
   }
