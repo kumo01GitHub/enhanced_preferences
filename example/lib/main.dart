@@ -85,8 +85,11 @@ class _MyAppState extends State<MyApp> {
                       // GET
                       ElevatedButton(
                         onPressed: () async {
-                          dynamic result;
+                          if (_keyController.text.isEmpty) {
+                            return;
+                          }
 
+                          dynamic result;
                           try {
                             if (_type == "String") {
                               result = await _enhancedPreferencesPlugin.getString(_keyController.text);
@@ -108,8 +111,11 @@ class _MyAppState extends State<MyApp> {
                       // SET
                       ElevatedButton(
                         onPressed: () async {
-                          dynamic result;
+                          if (_keyController.text.isEmpty) {
+                            return;
+                          }
 
+                          dynamic result;
                           try {
                             if (_type == "String") {
                               result = await _enhancedPreferencesPlugin.setString(_keyController.text, _valueController.text);
