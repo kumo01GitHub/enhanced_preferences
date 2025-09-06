@@ -8,7 +8,8 @@ abstract class EnhancedPreferencesPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static EnhancedPreferencesPlatform _instance = MethodChannelEnhancedPreferences();
+  static EnhancedPreferencesPlatform _instance =
+      MethodChannelEnhancedPreferences();
 
   /// The default instance of [EnhancedPreferencesPlatform] to use.
   ///

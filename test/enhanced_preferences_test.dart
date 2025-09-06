@@ -46,7 +46,7 @@ class MockEnhancedPreferencesPlatform
   Future<bool?> getBool(String key) {
     return Future.value(_preferences[key] as bool?);
   }
-  
+
   @override
   Future<String?> setBool(String key, bool value) {
     _preferences[key] = value;
@@ -55,7 +55,8 @@ class MockEnhancedPreferencesPlatform
 }
 
 void main() {
-  final EnhancedPreferencesPlatform initialPlatform = EnhancedPreferencesPlatform.instance;
+  final EnhancedPreferencesPlatform initialPlatform =
+      EnhancedPreferencesPlatform.instance;
 
   test('$MethodChannelEnhancedPreferences is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelEnhancedPreferences>());
@@ -63,7 +64,8 @@ void main() {
 
   test('String', () async {
     EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
-    MockEnhancedPreferencesPlatform fakePlatform = MockEnhancedPreferencesPlatform();
+    MockEnhancedPreferencesPlatform fakePlatform =
+        MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
 
     final String key = "stringKey";
@@ -75,7 +77,8 @@ void main() {
 
   test('Int', () async {
     EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
-    MockEnhancedPreferencesPlatform fakePlatform = MockEnhancedPreferencesPlatform();
+    MockEnhancedPreferencesPlatform fakePlatform =
+        MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
 
     final String key = "intKey";
@@ -87,7 +90,8 @@ void main() {
 
   test('Double', () async {
     EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
-    MockEnhancedPreferencesPlatform fakePlatform = MockEnhancedPreferencesPlatform();
+    MockEnhancedPreferencesPlatform fakePlatform =
+        MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
 
     final String key = "doubleKey";
@@ -99,7 +103,8 @@ void main() {
 
   test('Bool', () async {
     EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
-    MockEnhancedPreferencesPlatform fakePlatform = MockEnhancedPreferencesPlatform();
+    MockEnhancedPreferencesPlatform fakePlatform =
+        MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
 
     final String key = "boolKey";

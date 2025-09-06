@@ -1,4 +1,3 @@
-
 import 'enhanced_preferences_platform_interface.dart';
 
 class EnhancedPreferences {

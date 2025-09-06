@@ -1,0 +1,7 @@
+[*]
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+
+[*.{kt,java,gradle,kts,swift,h,m}]
+indent_size = 4

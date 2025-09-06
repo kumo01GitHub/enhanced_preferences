@@ -18,29 +18,25 @@ const val ENHANCED_PREFERENCES_NAME = "FlutterEnhancedPreferences"
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(ENHANCED_PREFERENCES_NAME)
 
 /** EnhancedPreferencesPlugin */
-class EnhancedPreferencesPlugin :
-    FlutterPlugin,
-    MethodCallHandler {
+class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var channel: MethodChannel
     private lateinit var repository: EnhancedPreferencesRepository
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "enhanced_preferences")
         channel.setMethodCallHandler(this)
-        repository = EnhancedPreferencesRepository(flutterPluginBinding.applicationContext.dataStore)
+        repository =
+                EnhancedPreferencesRepository(flutterPluginBinding.applicationContext.dataStore)
     }
 
-    override fun onMethodCall(
-        call: MethodCall,
-        result: Result
-    ) {
+    override fun onMethodCall(call: MethodCall, result: Result) {
         Log.d(TAG, "${call.method} called")
 
         when (call.method) {
             "getString" -> {
                 try {
                     result.success(getString(call.argument<String>("key")))
-                } catch(e: EnhancedPreferencesError) {
+                } catch (e: EnhancedPreferencesError) {
                     result.error(e.code.name, e.message, null)
                 } catch (e: Exception) {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
@@ -48,8 +44,10 @@ class EnhancedPreferencesPlugin :
             }
             "setString" -> {
                 try {
-                    result.success(setString(call.argument<String>("key"), call.argument<String>("value")))
-                } catch(e: EnhancedPreferencesError) {
+                    result.success(
+                            setString(call.argument<String>("key"), call.argument<String>("value"))
+                    )
+                } catch (e: EnhancedPreferencesError) {
                     result.error(e.code.name, e.message, null)
                 } catch (e: Exception) {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
@@ -58,7 +56,7 @@ class EnhancedPreferencesPlugin :
             "getInt" -> {
                 try {
                     result.success(getInt(call.argument<String>("key")))
-                } catch(e: EnhancedPreferencesError) {
+                } catch (e: EnhancedPreferencesError) {
                     result.error(e.code.name, e.message, null)
                 } catch (e: Exception) {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
@@ -66,8 +64,10 @@ class EnhancedPreferencesPlugin :
             }
             "setInt" -> {
                 try {
-                    result.success(setInt(call.argument<String>("key"), call.argument<Int>("value")))
-                } catch(e: EnhancedPreferencesError) {
+                    result.success(
+                            setInt(call.argument<String>("key"), call.argument<Int>("value"))
+                    )
+                } catch (e: EnhancedPreferencesError) {
                     result.error(e.code.name, e.message, null)
                 } catch (e: Exception) {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
@@ -76,7 +76,7 @@ class EnhancedPreferencesPlugin :
             "getDouble" -> {
                 try {
                     result.success(getDouble(call.argument<String>("key")))
-                } catch(e: EnhancedPreferencesError) {
+                } catch (e: EnhancedPreferencesError) {
                     result.error(e.code.name, e.message, null)
                 } catch (e: Exception) {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
@@ -84,8 +84,10 @@ class EnhancedPreferencesPlugin :
             }
             "setDouble" -> {
                 try {
-                    result.success(setDouble(call.argument<String>("key"), call.argument<Double>("value")))
-                } catch(e: EnhancedPreferencesError) {
+                    result.success(
+                            setDouble(call.argument<String>("key"), call.argument<Double>("value"))
+                    )
+                } catch (e: EnhancedPreferencesError) {
                     result.error(e.code.name, e.message, null)
                 } catch (e: Exception) {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
@@ -94,7 +96,7 @@ class EnhancedPreferencesPlugin :
             "getBool" -> {
                 try {
                     result.success(getBool(call.argument<String>("key")))
-                } catch(e: EnhancedPreferencesError) {
+                } catch (e: EnhancedPreferencesError) {
                     result.error(e.code.name, e.message, null)
                 } catch (e: Exception) {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
@@ -102,8 +104,10 @@ class EnhancedPreferencesPlugin :
             }
             "setBool" -> {
                 try {
-                    result.success(setBool(call.argument<String>("key"), call.argument<Boolean>("value")))
-                } catch(e: EnhancedPreferencesError) {
+                    result.success(
+                            setBool(call.argument<String>("key"), call.argument<Boolean>("value"))
+                    )
+                } catch (e: EnhancedPreferencesError) {
                     result.error(e.code.name, e.message, null)
                 } catch (e: Exception) {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
@@ -121,21 +125,13 @@ class EnhancedPreferencesPlugin :
 
     private fun getString(key: String?): String {
         if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
 
-        val value: String? = runBlocking {
-            repository.getString(key).firstOrNull()
-        }
+        val value: String? = runBlocking { repository.getString(key).firstOrNull() }
 
         if (value == null) {
-            throw EnhancedPreferencesError(
-                ErrorCode.REFERENCE_ERROR,
-                "Value for '$key' is null."
-            )
+            throw EnhancedPreferencesError(ErrorCode.REFERENCE_ERROR, "Value for '$key' is null.")
         } else {
             return value
         }
@@ -143,42 +139,26 @@ class EnhancedPreferencesPlugin :
 
     private fun setString(key: String?, value: String?): String {
         if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
         if (value == null) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Value is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
         }
 
-        runBlocking {
-            repository.setString(key, value)
-        }
+        runBlocking { repository.setString(key, value) }
 
         return key
     }
 
     private fun getInt(key: String?): Int {
         if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
 
-        val value: Int? = runBlocking {
-            repository.getInt(key).firstOrNull()
-        }
+        val value: Int? = runBlocking { repository.getInt(key).firstOrNull() }
 
         if (value == null) {
-            throw EnhancedPreferencesError(
-                ErrorCode.REFERENCE_ERROR,
-                "Value for '$key' is null."
-            )
+            throw EnhancedPreferencesError(ErrorCode.REFERENCE_ERROR, "Value for '$key' is null.")
         } else {
             return value
         }
@@ -186,42 +166,26 @@ class EnhancedPreferencesPlugin :
 
     private fun setInt(key: String?, value: Int?): String {
         if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
         if (value == null) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Value is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
         }
 
-        runBlocking {
-            repository.setInt(key, value)
-        }
+        runBlocking { repository.setInt(key, value) }
 
         return key
     }
 
     private fun getDouble(key: String?): Double {
         if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
 
-        val value: Double? = runBlocking {
-            repository.getDouble(key).firstOrNull()
-        }
+        val value: Double? = runBlocking { repository.getDouble(key).firstOrNull() }
 
         if (value == null) {
-            throw EnhancedPreferencesError(
-                ErrorCode.REFERENCE_ERROR,
-                "Value for '$key' is null."
-            )
+            throw EnhancedPreferencesError(ErrorCode.REFERENCE_ERROR, "Value for '$key' is null.")
         } else {
             return value
         }
@@ -229,42 +193,26 @@ class EnhancedPreferencesPlugin :
 
     private fun setDouble(key: String?, value: Double?): String {
         if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
         if (value == null) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Value is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
         }
 
-        runBlocking {
-            repository.setDouble(key, value)
-        }
+        runBlocking { repository.setDouble(key, value) }
 
         return key
     }
 
     private fun getBool(key: String?): Boolean {
         if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
 
-        val value: Boolean? = runBlocking {
-            repository.getBoolean(key).firstOrNull()
-        }
+        val value: Boolean? = runBlocking { repository.getBoolean(key).firstOrNull() }
 
         if (value == null) {
-            throw EnhancedPreferencesError(
-                ErrorCode.REFERENCE_ERROR,
-                "Value for '$key' is null."
-            )
+            throw EnhancedPreferencesError(ErrorCode.REFERENCE_ERROR, "Value for '$key' is null.")
         } else {
             return value
         }
@@ -272,21 +220,13 @@ class EnhancedPreferencesPlugin :
 
     private fun setBool(key: String?, value: Boolean?): String {
         if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Key is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
         if (value == null) {
-            throw EnhancedPreferencesError(
-                ErrorCode.INVALID_ARGUMENT,
-                "Value is null or blank."
-            )
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
         }
 
-        runBlocking {
-            repository.setBoolean(key, value)
-        }
+        runBlocking { repository.setBoolean(key, value) }
 
         return key
     }
