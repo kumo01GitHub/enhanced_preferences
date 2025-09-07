@@ -120,4 +120,12 @@ class EnhancedPreferences {
         return key;
       });
   }
+
+  Future<String?> remove(String key) {
+    return EnhancedPreferencesPlatform.instance.remove(key)
+      .then((String? key) {
+        _cache.remove(key);
+        return key;
+      });
+  }
 }

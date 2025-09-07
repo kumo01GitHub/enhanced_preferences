@@ -74,4 +74,12 @@ class MethodChannelEnhancedPreferences extends EnhancedPreferencesPlatform {
     });
     return result;
   }
+
+  @override
+  Future<String?> remove(String key) async {
+    final result = await methodChannel.invokeMethod<String>('remove', {
+      'key': key,
+    });
+    return result;
+  }
 }

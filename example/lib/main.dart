@@ -102,6 +102,8 @@ class _MyAppState extends State<MyApp> {
                             }
                           } on Exception catch (e) {
                             result = e.toString();
+                          } on Error catch (e) {
+                            result = e.toString();
                           }
 
                           setState(() { _result = result; });
@@ -131,11 +133,33 @@ class _MyAppState extends State<MyApp> {
                             }
                           } on Exception catch (e) {
                             result = e.toString();
+                          } on Error catch (e) {
+                            result = e.toString();
                           }
 
                           setState(() { _result = result; });
                         },
                         child: Text('SET'),
+                      ),
+                      // REMOVE
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_keyController.text.isEmpty) {
+                            return;
+                          }
+
+                          dynamic result;
+                          try {
+                            result = await _enhancedPreferencesPlugin.remove(_keyController.text);
+                          } on Exception catch (e) {
+                            result = e.toString();
+                          } on Error catch (e) {
+                            result = e.toString();
+                          }
+
+                          setState(() { _result = result; });
+                        },
+                        child: Text('REMOVE'),
                       ),
                     ],
                   ),

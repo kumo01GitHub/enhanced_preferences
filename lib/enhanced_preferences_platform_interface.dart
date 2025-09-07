@@ -55,4 +55,8 @@ abstract class EnhancedPreferencesPlatform extends PlatformInterface {
   Future<String?> setBool(String key, bool value) {
     throw UnimplementedError('setBool() has not been implemented.');
   }
+
+  Future<String?> remove(String key) {
+    throw UnimplementedError('remove() has not been implemented.');
+  }
 }

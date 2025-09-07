@@ -52,6 +52,12 @@ class MockEnhancedPreferencesPlatform
     _preferences[key] = value;
     return Future.value(key);
   }
+
+  @override
+  Future<String?> remove(String key) {
+    _preferences.remove(key);
+    return Future.value(key);
+  }
 }
 
 void main() {

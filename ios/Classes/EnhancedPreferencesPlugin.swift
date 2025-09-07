@@ -123,6 +123,20 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 let e = EnhancedPreferencesError.unknownError(message: error.localizedDescription)
                 result(FlutterError(code: e.code, message: e.localizedDescription, details: nil))
             }
+        case "remove":
+            do {
+                guard let args = call.arguments as? [String: Any?] else {
+                    throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
+                }
+                result(try remove(key: args["key"] as? String))
+            } catch let error as EnhancedPreferencesError {
+                result(
+                    FlutterError(
+                        code: error.code, message: error.localizedDescription, details: nil))
+            } catch let error {
+                let e = EnhancedPreferencesError.unknownError(message: error.localizedDescription)
+                result(FlutterError(code: e.code, message: e.localizedDescription, details: nil))
+            }
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -227,6 +241,16 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
         }
 
         UserDefaults.standard.set(value, forKey: key)
+
+        return key
+    }
+
+    private func remove(key: String?) throws -> String {
+        guard let key = key else {
+            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
+        }
+
+        UserDefaults.standard.removeObject(forKey: key)
 
         return key
     }

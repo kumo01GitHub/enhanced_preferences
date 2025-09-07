@@ -113,6 +113,15 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
                 }
             }
+            "remove" -> {
+                try {
+                    result.success(remove(call.argument<String>("key")))
+                } catch (e: EnhancedPreferencesError) {
+                    result.error(e.code.name, e.message, null)
+                } catch (e: Exception) {
+                    result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
+                }
+            }
             else -> {
                 result.notImplemented()
             }
@@ -227,6 +236,16 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         runBlocking { repository.setBoolean(key, value) }
+
+        return key
+    }
+
+    private fun remove(key: String?): String {
+        if (key.isNullOrBlank()) {
+            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
+        }
+
+        runBlocking { repository.remove(key) }
 
         return key
     }
