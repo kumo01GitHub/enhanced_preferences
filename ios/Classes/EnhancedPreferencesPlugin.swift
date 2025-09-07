@@ -16,7 +16,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try getString(key: args["key"] as? String))
+                result(try UserDefaultsHandler.getString(key: args["key"] as? String))
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -30,7 +30,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try setString(key: args["key"] as? String, value: args["value"] as? String))
+                result(try UserDefaultsHandler.setString(key: args["key"] as? String, value: args["value"] as? String))
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -44,7 +44,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try getInt(key: args["key"] as? String))
+                result(try UserDefaultsHandler.getInt(key: args["key"] as? String))
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -58,7 +58,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try setInt(key: args["key"] as? String, value: args["value"] as? Int))
+                result(try UserDefaultsHandler.setInt(key: args["key"] as? String, value: args["value"] as? Int))
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -72,7 +72,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try getDouble(key: args["key"] as? String))
+                result(try UserDefaultsHandler.getDouble(key: args["key"] as? String))
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -86,7 +86,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try setDouble(key: args["key"] as? String, value: args["value"] as? Double))
+                result(try UserDefaultsHandler.setDouble(key: args["key"] as? String, value: args["value"] as? Double))
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -100,7 +100,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try getBool(key: args["key"] as? String))
+                result(try UserDefaultsHandler.getBool(key: args["key"] as? String))
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -114,7 +114,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try setBool(key: args["key"] as? String, value: args["value"] as? Bool))
+                result(try UserDefaultsHandler.setBool(key: args["key"] as? String, value: args["value"] as? Bool))
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -128,7 +128,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try remove(key: args["key"] as? String))
+                result(try UserDefaultsHandler.remove(key: args["key"] as? String))
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -140,118 +140,5 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
         default:
             result(FlutterMethodNotImplemented)
         }
-    }
-
-    private func getString(key: String?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-
-        guard let value = UserDefaults.standard.string(forKey: key) else {
-            throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
-        }
-
-        return value
-    }
-
-    private func setString(key: String?, value: String?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard let value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
-
-        UserDefaults.standard.set(value, forKey: key)
-
-        return key
-    }
-
-    private func getInt(key: String?) throws -> Int {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-
-        guard let value = UserDefaults.standard.object(forKey: key) as? Int else {
-            throw EnhancedPreferencesError.referenceError(
-                message: "Value for '\(key)' is nil or not Int.")
-        }
-
-        return value
-    }
-
-    private func setInt(key: String?, value: Int?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard let value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
-
-        UserDefaults.standard.set(value, forKey: key)
-
-        return key
-    }
-
-    private func getDouble(key: String?) throws -> Double {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-
-        guard let value = UserDefaults.standard.object(forKey: key) as? Double else {
-            throw EnhancedPreferencesError.referenceError(
-                message: "Value for '\(key)' is nil or not Double.")
-        }
-
-        return value
-    }
-
-    private func setDouble(key: String?, value: Double?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard let value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
-
-        UserDefaults.standard.set(value, forKey: key)
-
-        return key
-    }
-
-    private func getBool(key: String?) throws -> Bool {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-
-        guard let value = UserDefaults.standard.object(forKey: key) as? Bool else {
-            throw EnhancedPreferencesError.referenceError(
-                message: "Value for '\(key)' is nil or not Bool.")
-        }
-
-        return value
-    }
-
-    private func setBool(key: String?, value: Bool?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard let value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
-
-        UserDefaults.standard.set(value, forKey: key)
-
-        return key
-    }
-
-    private func remove(key: String?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-
-        UserDefaults.standard.removeObject(forKey: key)
-
-        return key
     }
 }
