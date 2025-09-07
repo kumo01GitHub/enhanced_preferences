@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 
 const val TAG = "EnhancedPreferencesPlugin"
-const val ENHANCED_PREFERENCES_NAME = "FlutterEnhancedPreferences"
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(ENHANCED_PREFERENCES_NAME)
 
 /** EnhancedPreferencesPlugin */
 class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
@@ -26,7 +24,7 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "enhanced_preferences")
         channel.setMethodCallHandler(this)
         repository =
-                EnhancedPreferencesRepository(flutterPluginBinding.applicationContext.dataStore)
+                EnhancedPreferencesRepository(flutterPluginBinding.applicationContext)
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {

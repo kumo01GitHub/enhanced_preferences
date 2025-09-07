@@ -1,15 +1,25 @@
 package io.kumo01.enhanced_preferences
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.nio.ByteBuffer
 
+const val ENHANCED_PREFERENCES_NAME = "FlutterEnhancedPreferences"
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(ENHANCED_PREFERENCES_NAME)
+
 /** EnhancedPreferencesRepository */
-class EnhancedPreferencesRepository(private val dataStore: DataStore<Preferences>) {
+class EnhancedPreferencesRepository(
+    context: Context
+) {
+    private val dataStore: DataStore<Preferences> = context.applicationContext.dataStore
+    private val cryptoHandler: CryptoHandler = CryptoHandler(context)
+
     fun getString(key: String): Flow<String?> {
         return this.dataStore.data.map { preferences: Preferences ->
             val bytes = preferences[byteArrayPreferencesKey(key)]
@@ -77,6 +87,31 @@ class EnhancedPreferencesRepository(private val dataStore: DataStore<Preferences
             val bytes = ByteArray(1)
             bytes[0] = if (value) 1.toByte() else 0.toByte()
             preferences[byteArrayPreferencesKey(key)] = bytes
+        }
+    }
+
+    fun getEncryptedString(key: String): Flow<String?> {
+        return this.dataStore.data.map { preferences: Preferences ->
+            val bytes = preferences[byteArrayPreferencesKey(key)]
+            if (bytes == null) {
+                null
+            } else {
+                val decrypted = this.cryptoHandler.decrypt(bytes)
+                if (decrypted == null) {
+                    null
+                } else {
+                    String(decrypted)
+                }
+            }
+        }
+    }
+
+    suspend fun setEncryptedString(key: String, value: String) {
+        this.dataStore.edit { preferences ->
+            val encrypted = cryptoHandler.encrypt(value.toByteArray())
+            if (encrypted != null) {
+                preferences[byteArrayPreferencesKey(key)] = encrypted
+            }
         }
     }
 
