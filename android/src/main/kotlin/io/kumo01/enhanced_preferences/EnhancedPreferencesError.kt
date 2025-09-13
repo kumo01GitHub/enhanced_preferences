@@ -6,6 +6,6 @@ class EnhancedPreferencesError(val code: ErrorCode, override val message: String
 enum class ErrorCode {
     INVALID_ARGUMENT,
     REFERENCE_ERROR,
-    INVALID_ACCESS,
+    ILLEGAL_ACCESS,
     UNKNOWN_ERROR,
 }

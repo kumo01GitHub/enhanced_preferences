@@ -24,35 +24,51 @@ abstract class EnhancedPreferencesPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getString(String key) {
+  Future<String?> getString(String key, [bool enableEncryption = false]) {
     throw UnimplementedError('getString() has not been implemented.');
   }
 
-  Future<String?> setString(String key, String value) {
+  Future<String?> setString(
+    String key,
+    String value, [
+    bool enableEncryption = false,
+  ]) {
     throw UnimplementedError('setString() has not been implemented.');
   }
 
-  Future<int?> getInt(String key) {
+  Future<int?> getInt(String key, [bool enableEncryption = false]) {
     throw UnimplementedError('getInt() has not been implemented.');
   }
 
-  Future<String?> setInt(String key, int value) {
+  Future<String?> setInt(
+    String key,
+    int value, [
+    bool enableEncryption = false,
+  ]) {
     throw UnimplementedError('setInt() has not been implemented.');
   }
 
-  Future<double?> getDouble(String key) {
+  Future<double?> getDouble(String key, [bool enableEncryption = false]) {
     throw UnimplementedError('getDouble() has not been implemented.');
   }
 
-  Future<String?> setDouble(String key, double value) {
+  Future<String?> setDouble(
+    String key,
+    double value, [
+    bool enableEncryption = false,
+  ]) {
     throw UnimplementedError('setDouble() has not been implemented.');
   }
 
-  Future<bool?> getBool(String key) {
+  Future<bool?> getBool(String key, [bool enableEncryption = false]) {
     throw UnimplementedError('getBool() has not been implemented.');
   }
 
-  Future<String?> setBool(String key, bool value) {
+  Future<String?> setBool(
+    String key,
+    bool value, [
+    bool enableEncryption = false,
+  ]) {
     throw UnimplementedError('setBool() has not been implemented.');
   }
 

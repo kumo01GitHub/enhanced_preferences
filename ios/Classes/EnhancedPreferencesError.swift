@@ -3,7 +3,7 @@ import Foundation
 enum EnhancedPreferencesError: Error, LocalizedError {
     case invalidArgument(message: String)
     case referenceError(message: String)
-    case invalidAccess(message: String)
+    case illegalAccess(message: String)
     case unknownError(message: String)
 
     var code: String {
@@ -12,8 +12,8 @@ enum EnhancedPreferencesError: Error, LocalizedError {
             return "INVALID_ARGUMENT"
         case .referenceError:
             return "REFERENCE_ERROR"
-        case .invalidAccess:
-            return "INVALID_ACCESS"
+        case .illegalAccess:
+            return "ILLEGAL_ACCESS"
         case .unknownError:
             return "UNKNOWN_ERROR"
         }
@@ -25,7 +25,7 @@ enum EnhancedPreferencesError: Error, LocalizedError {
             return message
         case .referenceError(let message):
             return message
-        case .invalidAccess(let message):
+        case .illegalAccess(let message):
             return message
         case .unknownError(let message):
             return message
