@@ -74,7 +74,7 @@ class EnhancedPreferencesRepository(context: Context) {
     fun getBoolean(key: String): Flow<Boolean?> {
         return this.dataStore.data.map { preferences: Preferences ->
             val bytes = preferences[byteArrayPreferencesKey(key)]
-            if (bytes == null) {
+            if (bytes == null || bytes.size != 1) {
                 null
             } else {
                 bytes[0] != 0.toByte()
@@ -172,7 +172,7 @@ class EnhancedPreferencesRepository(context: Context) {
                 null
             } else {
                 val decrypted = this.cryptoHandler.decrypt(bytes)
-                if (decrypted == null) {
+                if (decrypted == null || decrypted.size != 1) {
                     null
                 } else {
                     decrypted[0] != 0.toByte()
