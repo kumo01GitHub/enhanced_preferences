@@ -1,7 +1,8 @@
 name: enhanced_preferences
-description: "A new Flutter plugin project."
+description: "Enhanced shared preferences plugin"
 version: 0.0.1
-homepage:
+homepage: https://github.com/kumo01GitHub
+repository: https://github.com/kumo01GitHub/enhanced_preferences
 
 environment:
   sdk: ^3.9.0
