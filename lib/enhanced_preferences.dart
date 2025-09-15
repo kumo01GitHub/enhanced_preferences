@@ -4,10 +4,9 @@ class EnhancedPreferencesOptions {
   final bool enableCache;
   final bool enableEncryption;
 
-  // TODO: Fix default values
   const EnhancedPreferencesOptions({
-    this.enableCache = false,
-    this.enableEncryption = true,
+    this.enableCache = true,
+    this.enableEncryption = false,
   });
 }
 
