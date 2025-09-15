@@ -67,3 +67,7 @@ await prefs.remove('hello');
 | REFERENCE_ERROR | Failed to obtain the value for key. |
 | ILLEGAL_ACCESS | Failed to encrypt / decrypt the value for key. |
 | UNKNOWN_ERROR | Other causes. |
+
+---
+
+<a href="https://www.buymeacoffee.com/kumo01" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
