@@ -54,10 +54,10 @@ await prefs.remove('hello');
 
 ### Options
 
-| Option | Type | Detail |
-| ---- | ---- | ---- |
-| enableCache | bool | When the option is true, cache the key-value. |
-| enableEncryption | bool | When the option is true, encrypt the value and store it. |
+| Option | Type | Detail | Default |
+| ---- | ---- | ---- | ---- |
+| enableCache | bool | When the option is true, cache the key-value. | true |
+| enableEncryption | bool | When the option is true, encrypt the value and store it. | false |
 
 ## Errors
 

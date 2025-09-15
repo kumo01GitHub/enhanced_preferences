@@ -16,7 +16,11 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try UserDefaultsHandler.getString(key: args["key"] as? String))
+                if args["enableEncryption"] as? Bool == true {
+                    result(try UserDefaultsHandler.getEncryptedString(key: args["key"] as? String))
+                } else {
+                    result(try UserDefaultsHandler.getString(key: args["key"] as? String))
+                }
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -30,7 +34,15 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try UserDefaultsHandler.setString(key: args["key"] as? String, value: args["value"] as? String))
+                if args["enableEncryption"] as? Bool == true {
+                    result(
+                        try UserDefaultsHandler.setEncryptedString(
+                            key: args["key"] as? String, value: args["value"] as? String))
+                } else {
+                    result(
+                        try UserDefaultsHandler.setString(
+                            key: args["key"] as? String, value: args["value"] as? String))
+                }
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -44,7 +56,11 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try UserDefaultsHandler.getInt(key: args["key"] as? String))
+                if args["enableEncryption"] as? Bool == true {
+                    result(try UserDefaultsHandler.getEncryptedInt(key: args["key"] as? String))
+                } else {
+                    result(try UserDefaultsHandler.getInt(key: args["key"] as? String))
+                }
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -58,7 +74,15 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try UserDefaultsHandler.setInt(key: args["key"] as? String, value: args["value"] as? Int))
+                if args["enableEncryption"] as? Bool == true {
+                    result(
+                        try UserDefaultsHandler.setEncryptedInt(
+                            key: args["key"] as? String, value: args["value"] as? Int))
+                } else {
+                    result(
+                        try UserDefaultsHandler.setInt(
+                            key: args["key"] as? String, value: args["value"] as? Int))
+                }
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -72,7 +96,11 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try UserDefaultsHandler.getDouble(key: args["key"] as? String))
+                if args["enableEncryption"] as? Bool == true {
+                    result(try UserDefaultsHandler.getEncryptedDouble(key: args["key"] as? String))
+                } else {
+                    result(try UserDefaultsHandler.getDouble(key: args["key"] as? String))
+                }
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -86,7 +114,15 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try UserDefaultsHandler.setDouble(key: args["key"] as? String, value: args["value"] as? Double))
+                if args["enableEncryption"] as? Bool == true {
+                    result(
+                        try UserDefaultsHandler.setEncryptedDouble(
+                            key: args["key"] as? String, value: args["value"] as? Double))
+                } else {
+                    result(
+                        try UserDefaultsHandler.setDouble(
+                            key: args["key"] as? String, value: args["value"] as? Double))
+                }
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -100,7 +136,11 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try UserDefaultsHandler.getBool(key: args["key"] as? String))
+                if args["enableEncryption"] as? Bool == true {
+                    result(try UserDefaultsHandler.getEncryptedBool(key: args["key"] as? String))
+                } else {
+                    result(try UserDefaultsHandler.getBool(key: args["key"] as? String))
+                }
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
@@ -114,7 +154,15 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 guard let args = call.arguments as? [String: Any?] else {
                     throw EnhancedPreferencesError.invalidArgument(message: "Invalid arguments.")
                 }
-                result(try UserDefaultsHandler.setBool(key: args["key"] as? String, value: args["value"] as? Bool))
+                if args["enableEncryption"] as? Bool == true {
+                    result(
+                        try UserDefaultsHandler.setEncryptedBool(
+                            key: args["key"] as? String, value: args["value"] as? Bool))
+                } else {
+                    result(
+                        try UserDefaultsHandler.setBool(
+                            key: args["key"] as? String, value: args["value"] as? Bool))
+                }
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(

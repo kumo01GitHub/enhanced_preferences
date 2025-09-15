@@ -44,11 +44,17 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
                 try {
                     if (call.argument<Boolean>("enableEncryption") == true) {
                         result.success(
-                            setEncryptedString(call.argument<String>("key"), call.argument<String>("value"))
+                                setEncryptedString(
+                                        call.argument<String>("key"),
+                                        call.argument<String>("value")
+                                )
                         )
                     } else {
                         result.success(
-                            setString(call.argument<String>("key"), call.argument<String>("value"))
+                                setString(
+                                        call.argument<String>("key"),
+                                        call.argument<String>("value")
+                                )
                         )
                     }
                 } catch (e: EnhancedPreferencesError) {
@@ -74,11 +80,14 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
                 try {
                     if (call.argument<Boolean>("enableEncryption") == true) {
                         result.success(
-                            setEncryptedInt(call.argument<String>("key"), call.argument<Int>("value"))
+                                setEncryptedInt(
+                                        call.argument<String>("key"),
+                                        call.argument<Int>("value")
+                                )
                         )
                     } else {
                         result.success(
-                            setInt(call.argument<String>("key"), call.argument<Int>("value"))
+                                setInt(call.argument<String>("key"), call.argument<Int>("value"))
                         )
                     }
                 } catch (e: EnhancedPreferencesError) {
@@ -104,11 +113,17 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
                 try {
                     if (call.argument<Boolean>("enableEncryption") == true) {
                         result.success(
-                            setEncryptedDouble(call.argument<String>("key"), call.argument<Double>("value"))
+                                setEncryptedDouble(
+                                        call.argument<String>("key"),
+                                        call.argument<Double>("value")
+                                )
                         )
                     } else {
                         result.success(
-                            setDouble(call.argument<String>("key"), call.argument<Double>("value"))
+                                setDouble(
+                                        call.argument<String>("key"),
+                                        call.argument<Double>("value")
+                                )
                         )
                     }
                 } catch (e: EnhancedPreferencesError) {
@@ -134,11 +149,17 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
                 try {
                     if (call.argument<Boolean>("enableEncryption") == true) {
                         result.success(
-                            setEncryptedBool(call.argument<String>("key"), call.argument<Boolean>("value"))
+                                setEncryptedBool(
+                                        call.argument<String>("key"),
+                                        call.argument<Boolean>("value")
+                                )
                         )
                     } else {
                         result.success(
-                            setBool(call.argument<String>("key"), call.argument<Boolean>("value"))
+                                setBool(
+                                        call.argument<String>("key"),
+                                        call.argument<Boolean>("value")
+                                )
                         )
                     }
                 } catch (e: EnhancedPreferencesError) {
