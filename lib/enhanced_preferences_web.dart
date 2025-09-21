@@ -108,7 +108,7 @@ class EnhancedPreferencesWeb extends EnhancedPreferencesPlatform {
   }
 
   String _setItem(String key, String value) {
-    if (key.isEmpty || value.isEmpty) {
+    if (key.isEmpty) {
       throw Exception('INVALID_ARGUMENT');
     }
 
