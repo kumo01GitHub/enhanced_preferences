@@ -1,3 +1,8 @@
+## 0.1.1
+
+* chore(android): Fix build.gradle indent.
+* chore: Ignore .vscode folder.
+
 ## 0.1.0
 
 * feat(web): Support web.
