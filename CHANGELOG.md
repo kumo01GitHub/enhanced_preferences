@@ -1,6 +1,7 @@
-## 0.0.2
+## 0.1.0
 
-* feat(web): support web.
+* feat(web): Support web.
+* fix(android): Remove unused dependency.
 * ci: Fix test scripts.
 * doc: Update readme.
 
