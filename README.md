@@ -58,7 +58,7 @@ await prefs.remove('hello');
 | Option | Type | Detail | Default |
 | ---- | ---- | ---- | ---- |
 | `enableCache` | `bool` | Whether to enable cache. | `true` |
-| `enableEncryption` | `bool` | Whether to enable encryption. Only supported for Android and iOS. | `false` |
+| `enableEncryption` | `bool` | Whether to enable encryption. It is not supported on the web platform because sensitive data must be stored on the server for security reasons and it is unable to manage keys safely in browsers. | `false` |
 
 ## Errors
 
