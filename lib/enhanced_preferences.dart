@@ -1,7 +1,11 @@
 import 'enhanced_preferences_platform_interface.dart';
 
+/// Options for EnhancedPreferences.
 class EnhancedPreferencesOptions {
+  /// Whether to enable cache. Default is true.
   final bool enableCache;
+
+  /// Whether to enable encryption. Default is false.
   final bool enableEncryption;
 
   const EnhancedPreferencesOptions({
@@ -10,9 +14,12 @@ class EnhancedPreferencesOptions {
   });
 }
 
+/// A implementation of the EnhancedPreferencesPlatform.
 class EnhancedPreferences {
+  /// Cache.
   final Map<String, dynamic> _cache = {};
 
+  /// Get the string value for the given key.
   Future<String?> getString(String key, [EnhancedPreferencesOptions? options]) {
     final EnhancedPreferencesOptions opts =
         options ?? EnhancedPreferencesOptions();
@@ -31,6 +38,7 @@ class EnhancedPreferences {
     }
   }
 
+  /// Set the string value for the given key.
   Future<String?> setString(
     String key,
     String value, [
@@ -49,6 +57,7 @@ class EnhancedPreferences {
         });
   }
 
+  /// Get the integer value for the given key.
   Future<int?> getInt(String key, [EnhancedPreferencesOptions? options]) {
     final EnhancedPreferencesOptions opts =
         options ?? EnhancedPreferencesOptions();
@@ -67,6 +76,7 @@ class EnhancedPreferences {
     }
   }
 
+  /// Set the integer value for the given key.
   Future<String?> setInt(
     String key,
     int value, [
@@ -85,6 +95,7 @@ class EnhancedPreferences {
         });
   }
 
+  /// Get the double value for the given key.
   Future<double?> getDouble(String key, [EnhancedPreferencesOptions? options]) {
     final EnhancedPreferencesOptions opts =
         options ?? EnhancedPreferencesOptions();
@@ -103,6 +114,7 @@ class EnhancedPreferences {
     }
   }
 
+  /// Set the double value for the given key.
   Future<String?> setDouble(
     String key,
     double value, [
@@ -121,6 +133,7 @@ class EnhancedPreferences {
         });
   }
 
+  /// Get the boolean value for the given key.
   Future<bool?> getBool(String key, [EnhancedPreferencesOptions? options]) {
     final EnhancedPreferencesOptions opts =
         options ?? EnhancedPreferencesOptions();
@@ -139,6 +152,7 @@ class EnhancedPreferences {
     }
   }
 
+  /// Set the boolean value for the given key.
   Future<String?> setBool(
     String key,
     bool value, [
@@ -157,6 +171,7 @@ class EnhancedPreferences {
         });
   }
 
+  /// Remove the key.
   Future<String?> remove(String key) {
     return EnhancedPreferencesPlatform.instance.remove(key).then((String? key) {
       _cache.remove(key);

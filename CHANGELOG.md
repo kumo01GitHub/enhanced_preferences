@@ -2,6 +2,7 @@
 
 * feat(ios): Support SwiftPM.
 * doc: Update podspec.yaml description.
+* chore: Add dart docs.
 * chore(android): Fix build.gradle indent.
 * chore: Ignore .vscode folder.
 

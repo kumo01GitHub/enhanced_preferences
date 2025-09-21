@@ -57,8 +57,8 @@ await prefs.remove('hello');
 
 | Option | Type | Detail | Default |
 | ---- | ---- | ---- | ---- |
-| enableCache | bool | When the option is true, cache the key-value. | true |
-| enableEncryption | bool | When the option is true, encrypt the value and store it. Only supports Android and iOS. | false |
+| enableCache | bool | Whether to enable cache. | true |
+| enableEncryption | bool | Whether to enable encryption. Only supported for Android and iOS. | false |
 
 ## Errors
 
