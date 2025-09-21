@@ -1,3 +1,7 @@
+## 0.1.2
+
+* doc: Update readme.
+
 ## 0.1.1
 
 * feat(ios): Support SwiftPM.
