@@ -1,7 +1,7 @@
 ## 0.0.2
 
-* ci: fix test scripts.
-* doc: update readme.
+* ci: Fix test scripts.
+* doc: Update readme.
 
 ## 0.0.1
 
