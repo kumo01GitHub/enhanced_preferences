@@ -2,6 +2,7 @@
 
 * doc: Update readme.
 * doc(ios): Update podspec document.
+* ci: Add CodeQL.
 
 ## 0.1.1
 
