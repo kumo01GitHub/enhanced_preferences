@@ -57,17 +57,17 @@ await prefs.remove('hello');
 
 | Option | Type | Detail | Default |
 | ---- | ---- | ---- | ---- |
-| enableCache | `bool` | Whether to enable cache. | `true` |
-| enableEncryption | `bool` | Whether to enable encryption. Only supported for Android and iOS. | `false` |
+| `enableCache` | `bool` | Whether to enable cache. | `true` |
+| `enableEncryption` | `bool` | Whether to enable encryption. Only supported for Android and iOS. | `false` |
 
 ## Errors
 
 | Error code | Detail |
 | ---- | ---- |
-| INVALID_ARGUMENT | Invalid arguments such as the key is blank. |
-| REFERENCE_ERROR | Failed to obtain the value for key. |
-| ILLEGAL_ACCESS | Failed to encrypt / decrypt the value for key. |
-| UNKNOWN_ERROR | Other causes. |
+| `INVALID_ARGUMENT` | Invalid arguments such as the key is blank. |
+| `REFERENCE_ERROR` | Failed to obtain the value for key. |
+| `ILLEGAL_ACCESS` | Failed to encrypt / decrypt the value for key. |
+| `UNKNOWN_ERROR` | Other causes. |
 
 ---
 
