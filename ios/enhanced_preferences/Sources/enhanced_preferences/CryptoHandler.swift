@@ -1,4 +1,5 @@
 import CryptoKit
+import Foundation
 
 public class CryptoHandler {
     private static let keySize: Int = 256

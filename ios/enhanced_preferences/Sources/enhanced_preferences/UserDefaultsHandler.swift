@@ -1,3 +1,5 @@
+import Foundation
+
 public class UserDefaultsHandler {
     private static func getInstance() -> UserDefaults {
         return UserDefaults.standard

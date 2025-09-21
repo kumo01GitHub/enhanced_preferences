@@ -1,5 +1,6 @@
 ## 0.1.1
 
+* feat(ios): Support SwiftPM.
 * chore(android): Fix build.gradle indent.
 * chore: Ignore .vscode folder.
 
