@@ -21,10 +21,10 @@ final EnhancedPreferencesOptions options = EnhancedPreferencesOptions();
 await prefs.setString('hello', 'World', options);
 // Save an integer value to 'counter' key.
 await prefs.setInt('counter', 10, options);
-// Save an boolean value to 'isActive' key.
-await prefs.setBool('isActive', true, options);
 // Save an double value to 'rate' key.
 await prefs.setDouble('rate', 0.9, options);
+// Save an boolean value to 'isActive' key.
+await prefs.setBool('isActive', true, options);
 ```
 
 ### Read data
@@ -39,10 +39,10 @@ final EnhancedPreferencesOptions options = EnhancedPreferencesOptions();
 final String? hello = await prefs.getString('hello', options);
 // Try reading data from the 'counter' key.
 final int? counter = await prefs.getInt('counter', options);
-// Try reading data from the 'isActive' key.
-final bool? isActive = await prefs.getBool('isActive', options);
 // Try reading data from the 'rate' key.
 final double? rate = await prefs.getDouble('rate', options);
+// Try reading data from the 'isActive' key.
+final bool? isActive = await prefs.getBool('isActive', options);
 ```
 
 ### Remove an entry

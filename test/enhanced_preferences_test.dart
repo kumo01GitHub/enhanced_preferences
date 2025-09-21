@@ -10,45 +10,61 @@ class MockEnhancedPreferencesPlatform
   final Map<String, dynamic> _preferences = {};
 
   @override
-  Future<String?> getString(String key) {
+  Future<String?> getString(String key, [bool enableEncryption = false]) {
     return Future.value(_preferences[key] as String?);
   }
 
   @override
-  Future<String?> setString(String key, String value) {
+  Future<String?> setString(
+    String key,
+    String value, [
+    bool enableEncryption = false,
+  ]) {
     _preferences[key] = value;
     return Future.value(key);
   }
 
   @override
-  Future<int?> getInt(String key) {
+  Future<int?> getInt(String key, [bool enableEncryption = false]) {
     return Future.value(_preferences[key] as int?);
   }
 
   @override
-  Future<String?> setInt(String key, int value) {
+  Future<String?> setInt(
+    String key,
+    int value, [
+    bool enableEncryption = false,
+  ]) {
     _preferences[key] = value;
     return Future.value(key);
   }
 
   @override
-  Future<double?> getDouble(String key) {
+  Future<double?> getDouble(String key, [bool enableEncryption = false]) {
     return Future.value(_preferences[key] as double?);
   }
 
   @override
-  Future<String?> setDouble(String key, double value) {
+  Future<String?> setDouble(
+    String key,
+    double value, [
+    bool enableEncryption = false,
+  ]) {
     _preferences[key] = value;
     return Future.value(key);
   }
 
   @override
-  Future<bool?> getBool(String key) {
+  Future<bool?> getBool(String key, [bool enableEncryption = false]) {
     return Future.value(_preferences[key] as bool?);
   }
 
   @override
-  Future<String?> setBool(String key, bool value) {
+  Future<String?> setBool(
+    String key,
+    bool value, [
+    bool enableEncryption = false,
+  ]) {
     _preferences[key] = value;
     return Future.value(key);
   }
