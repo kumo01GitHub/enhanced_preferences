@@ -1,7 +1,6 @@
 package io.kumo01.enhanced_preferences
 
 import android.content.Context
-import java.security.GeneralSecurityException
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator

@@ -2,6 +2,7 @@
 
 * doc: Update readme.
 * doc(ios): Update podspec document.
+* chore(android): Remove unused import.
 
 ## 0.1.1
 
