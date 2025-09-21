@@ -1,6 +1,7 @@
 ## 0.1.1
 
 * feat(ios): Support SwiftPM.
+* doc: Update podspec.yaml description.
 * chore(android): Fix build.gradle indent.
 * chore: Ignore .vscode folder.
 
