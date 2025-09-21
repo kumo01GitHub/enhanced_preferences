@@ -6,6 +6,7 @@ Wraps platform-specific persistent storage for simple data. Supported data types
 | ---- | ---- | ---- |
 | Android | DataStore Preferences | Android Keystore |
 | iOS | NSUserDefaults | Keychain |
+| Web | localStorage | NOT SUPPORTED |
 
 ## Usage
 
@@ -57,7 +58,7 @@ await prefs.remove('hello');
 | Option | Type | Detail | Default |
 | ---- | ---- | ---- | ---- |
 | enableCache | bool | When the option is true, cache the key-value. | true |
-| enableEncryption | bool | When the option is true, encrypt the value and store it. | false |
+| enableEncryption | bool | When the option is true, encrypt the value and store it. Only supports Android and iOS. | false |
 
 ## Errors
 
