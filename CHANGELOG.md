@@ -1,6 +1,7 @@
 ## 0.1.2
 
 * doc: Update readme.
+* doc(ios): Update podspec document.
 
 ## 0.1.1
 

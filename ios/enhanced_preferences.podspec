@@ -5,13 +5,12 @@
 Pod::Spec.new do |s|
   s.name              = 'enhanced_preferences'
   s.version           = '0.1.1'
-  s.summary           = 'A new Flutter plugin project.'
+  s.summary           = 'Wraps platform-specific persistent storage for simple data.'
   s.description       = <<-DESC
-A new Flutter plugin project.
+Wraps platform-specific persistent storage for simple data.
                         DESC
-  s.homepage          = 'http://example.com'
+  s.homepage          = 'https://github.com/kumo01GitHub/enhanced_preferences'
   s.license           = { :file => '../LICENSE' }
-  s.author            = { 'Your Company' => 'email@example.com' }
   s.source            = { :path => '.' }
   s.source_files      = 'enhanced_preferences/Sources/enhanced_preferences/**/*.swift'
   s.resource_bundles  = {'enhanced_preferences_privacy' => ['enhanced_preferences/Sources/enhanced_preferences/PrivacyInfo.xcprivacy']}
