@@ -1,5 +1,4 @@
 import Flutter
-import UIKit
 
 public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
