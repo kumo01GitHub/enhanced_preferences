@@ -3,7 +3,6 @@ package io.kumo01.enhanced_preferences
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import android.util.Base64
 import java.security.Key
 import java.security.KeyPairGenerator
 import java.security.KeyStore
@@ -15,7 +14,7 @@ import javax.crypto.spec.PSource
 
 class EnvelopeEncryptionHandler(context: Context) {
     companion object {
-        private const val PREFIX: String = "FEP_"
+        private const val KEY_PREFIX: String = "FEPMasterKey@"
         private const val KEY_STORE_PROVIDER: String = "AndroidKeyStore"
         private const val TRANSFORMATION: String = "RSA/ECB/OAEPwithSHA-256andMGF1Padding"
         private const val KEY_SIZE: Int = 2048
@@ -25,11 +24,7 @@ class EnvelopeEncryptionHandler(context: Context) {
         KeyStore.getInstance(KEY_STORE_PROVIDER).apply { load(null) }
     }
     private val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION) }
-    private val masterKeyAlias: String =
-            Base64.encodeToString(
-                    "${PREFIX}mk@${context.packageName}".toByteArray(),
-                    Base64.DEFAULT
-            )
+    private val masterKeyAlias: String = "${KEY_PREFIX}${context.packageName}"
 
     private fun getPublicKey(): PublicKey {
         if (keyStore.containsAlias(masterKeyAlias)) {

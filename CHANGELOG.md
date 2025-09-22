@@ -1,6 +1,7 @@
 ## 0.1.2
 
 * feat(darwin): Supports macOS.
+* feat(android): Implements type check.
 * doc: Update readme.
 * doc(darwin): Update podspec document.
 * chore: Remove unused import.

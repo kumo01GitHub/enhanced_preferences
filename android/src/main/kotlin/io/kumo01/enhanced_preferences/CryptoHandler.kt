@@ -15,7 +15,6 @@ class CryptoHandler(context: Context) {
         private const val KEY_SIZE = 256
         private const val IV_LENGTH = 16
         private const val GCM_TAG_LENGTH = 128
-        private const val ENCRYPTED_KEYS_SIZE = 256
     }
 
     private val cipher: Cipher by lazy { Cipher.getInstance(TRANSFORMATION) }
@@ -35,30 +34,41 @@ class CryptoHandler(context: Context) {
         return iv
     }
 
-    fun encrypt(plain: ByteArray): ByteArray? {
+    fun encrypt(plain: ByteArray): CryptoData {
         val key = generateKey()
         val iv = generateIv()
 
         return synchronized(this.cipher) {
-            this.cipher.init(Cipher.ENCRYPT_MODE, key, GCMParameterSpec(GCM_TAG_LENGTH, iv))
-            envelopeEncryptionHandler.encrypt(key.encoded).plus(iv).plus(cipher.doFinal(plain))
+            this.cipher.init(
+                Cipher.ENCRYPT_MODE,
+                key,
+                GCMParameterSpec(GCM_TAG_LENGTH, iv)
+            )
+            CryptoData(
+                cipher.doFinal(plain),
+                envelopeEncryptionHandler.encrypt(key.encoded),
+                iv
+            )
         }
     }
 
-    fun decrypt(encrypted: ByteArray): ByteArray? {
+    fun decrypt(encrypted: CryptoData): ByteArray {
         val key =
             SecretKeySpec(
-                envelopeEncryptionHandler.decrypt(
-                    encrypted.sliceArray(0..ENCRYPTED_KEYS_SIZE - 1)
-                ),
+                envelopeEncryptionHandler.decrypt(encrypted.key),
                 ALGORITHM
             )
-        val iv = encrypted.sliceArray(ENCRYPTED_KEYS_SIZE..ENCRYPTED_KEYS_SIZE + IV_LENGTH - 1)
-        val data = encrypted.sliceArray(ENCRYPTED_KEYS_SIZE + IV_LENGTH..encrypted.size - 1)
+        val param = GCMParameterSpec(GCM_TAG_LENGTH, encrypted.iv)
 
         return synchronized(this.cipher) {
-            this.cipher.init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(GCM_TAG_LENGTH, iv))
-            this.cipher.doFinal(data)
+            this.cipher.init(Cipher.DECRYPT_MODE, key, param)
+            this.cipher.doFinal(encrypted.data)
         }
     }
 }
+
+class CryptoData (
+    val data: ByteArray,
+    val key: ByteArray,
+    val iv: ByteArray
+)

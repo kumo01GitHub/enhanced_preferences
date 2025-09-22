@@ -1,10 +1,13 @@
 package io.kumo01.enhanced_preferences
 
 import android.content.Context
+import android.util.Base64
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import java.nio.ByteBuffer
 import kotlinx.coroutines.flow.Flow
@@ -19,8 +22,7 @@ class EnhancedPreferencesRepository(context: Context) {
     private val cryptoHandler: CryptoHandler = CryptoHandler(context)
 
     fun getString(key: String): Flow<String?> {
-        return this.dataStore.data.map { preferences: Preferences ->
-            val bytes = preferences[byteArrayPreferencesKey(key)]
+        return getItem(key, EnhancedPreferencesType.STRING, false).map { bytes ->
             if (bytes == null) {
                 null
             } else {
@@ -30,14 +32,11 @@ class EnhancedPreferencesRepository(context: Context) {
     }
 
     suspend fun setString(key: String, value: String) {
-        this.dataStore.edit { preferences ->
-            preferences[byteArrayPreferencesKey(key)] = value.toByteArray(Charsets.UTF_8)
-        }
+        setItem(key, value.toByteArray(Charsets.UTF_8), EnhancedPreferencesType.STRING, false)
     }
 
     fun getInt(key: String): Flow<Int?> {
-        return this.dataStore.data.map { preferences: Preferences ->
-            val bytes = preferences[byteArrayPreferencesKey(key)]
+        return getItem(key, EnhancedPreferencesType.INT, false).map { bytes ->
             if (bytes == null) {
                 null
             } else {
@@ -47,15 +46,12 @@ class EnhancedPreferencesRepository(context: Context) {
     }
 
     suspend fun setInt(key: String, value: Int) {
-        this.dataStore.edit { preferences ->
-            preferences[byteArrayPreferencesKey(key)] =
-                    ByteBuffer.allocate(Int.SIZE_BYTES).putInt(value).array()
-        }
+        val bytes = ByteBuffer.allocate(Int.SIZE_BYTES).putInt(value).array()
+        setItem(key, bytes,EnhancedPreferencesType.INT, false)
     }
 
     fun getDouble(key: String): Flow<Double?> {
-        return this.dataStore.data.map { preferences: Preferences ->
-            val bytes = preferences[byteArrayPreferencesKey(key)]
+        return getItem(key, EnhancedPreferencesType.DOUBLE, false).map { bytes ->
             if (bytes == null) {
                 null
             } else {
@@ -65,15 +61,12 @@ class EnhancedPreferencesRepository(context: Context) {
     }
 
     suspend fun setDouble(key: String, value: Double) {
-        this.dataStore.edit { preferences ->
-            preferences[byteArrayPreferencesKey(key)] =
-                    ByteBuffer.allocate(Double.SIZE_BYTES).putDouble(value).array()
-        }
+        val bytes = ByteBuffer.allocate(Double.SIZE_BYTES).putDouble(value).array()
+        setItem(key, bytes, EnhancedPreferencesType.DOUBLE, false)
     }
 
     fun getBoolean(key: String): Flow<Boolean?> {
-        return this.dataStore.data.map { preferences: Preferences ->
-            val bytes = preferences[byteArrayPreferencesKey(key)]
+        return getItem(key, EnhancedPreferencesType.BOOL, false).map { bytes ->
             if (bytes == null || bytes.size != 1) {
                 null
             } else {
@@ -83,116 +76,114 @@ class EnhancedPreferencesRepository(context: Context) {
     }
 
     suspend fun setBoolean(key: String, value: Boolean) {
-        this.dataStore.edit { preferences ->
-            val bytes = ByteArray(1)
-            bytes[0] = if (value) 1.toByte() else 0.toByte()
-            preferences[byteArrayPreferencesKey(key)] = bytes
-        }
+        val bytes = ByteArray(1)
+        bytes[0] = if (value) 1.toByte() else 0.toByte()
+        setItem(key, bytes, EnhancedPreferencesType.BOOL, false)
     }
 
     fun getEncryptedString(key: String): Flow<String?> {
-        return this.dataStore.data.map { preferences: Preferences ->
-            val bytes = preferences[byteArrayPreferencesKey(key)]
+        return getItem(key, EnhancedPreferencesType.STRING, true).map { bytes ->
             if (bytes == null) {
                 null
             } else {
-                val decrypted = this.cryptoHandler.decrypt(bytes)
-                if (decrypted == null) {
-                    null
-                } else {
-                    String(decrypted, Charsets.UTF_8)
-                }
+                String(bytes, Charsets.UTF_8)
             }
         }
     }
 
     suspend fun setEncryptedString(key: String, value: String) {
-        this.dataStore.edit { preferences ->
-            val encrypted = cryptoHandler.encrypt(value.toByteArray(Charsets.UTF_8))
-            if (encrypted != null) {
-                preferences[byteArrayPreferencesKey(key)] = encrypted
-            }
-        }
+        setItem(key, value.toByteArray(Charsets.UTF_8), EnhancedPreferencesType.STRING, true)
     }
 
     fun getEncryptedInt(key: String): Flow<Int?> {
-        return this.dataStore.data.map { preferences: Preferences ->
-            val bytes = preferences[byteArrayPreferencesKey(key)]
+        return getItem(key, EnhancedPreferencesType.INT, true).map { bytes ->
             if (bytes == null) {
                 null
             } else {
-                val decrypted = this.cryptoHandler.decrypt(bytes)
-                if (decrypted == null) {
-                    null
-                } else {
-                    ByteBuffer.wrap(decrypted).int
-                }
+                ByteBuffer.wrap(bytes).int
             }
         }
     }
 
     suspend fun setEncryptedInt(key: String, value: Int) {
-        this.dataStore.edit { preferences ->
-            val encrypted = cryptoHandler.encrypt(ByteBuffer.allocate(Int.SIZE_BYTES).putInt(value).array())
-            if (encrypted != null) {
-                preferences[byteArrayPreferencesKey(key)] = encrypted
-            }
-        }
+        val bytes = ByteBuffer.allocate(Int.SIZE_BYTES).putInt(value).array()
+        setItem(key, bytes,EnhancedPreferencesType.INT, true)
     }
 
     fun getEncryptedDouble(key: String): Flow<Double?> {
-        return this.dataStore.data.map { preferences: Preferences ->
-            val bytes = preferences[byteArrayPreferencesKey(key)]
+        return getItem(key, EnhancedPreferencesType.DOUBLE, true).map { bytes ->
             if (bytes == null) {
                 null
             } else {
-                val decrypted = this.cryptoHandler.decrypt(bytes)
-                if (decrypted == null) {
-                    null
-                } else {
-                    ByteBuffer.wrap(decrypted).double
-                }
+                ByteBuffer.wrap(bytes).double
             }
         }
     }
 
     suspend fun setEncryptedDouble(key: String, value: Double) {
-        this.dataStore.edit { preferences ->
-            val encrypted = cryptoHandler.encrypt(ByteBuffer.allocate(Double.SIZE_BYTES).putDouble(value).array())
-            if (encrypted != null) {
-                preferences[byteArrayPreferencesKey(key)] = encrypted
-            }
-        }
+        val bytes = ByteBuffer.allocate(Double.SIZE_BYTES).putDouble(value).array()
+        setItem(key, bytes, EnhancedPreferencesType.DOUBLE, true)
     }
 
     fun getEncryptedBoolean(key: String): Flow<Boolean?> {
-        return this.dataStore.data.map { preferences: Preferences ->
-            val bytes = preferences[byteArrayPreferencesKey(key)]
-            if (bytes == null) {
+        return getItem(key, EnhancedPreferencesType.BOOL, true).map { bytes ->
+            if (bytes == null || bytes.size != 1) {
                 null
             } else {
-                val decrypted = this.cryptoHandler.decrypt(bytes)
-                if (decrypted == null || decrypted.size != 1) {
-                    null
-                } else {
-                    decrypted[0] != 0.toByte()
-                }
+                bytes[0] != 0.toByte()
             }
         }
     }
 
     suspend fun setEncryptedBoolean(key: String, value: Boolean) {
-        this.dataStore.edit { preferences ->
-            val bytes = ByteArray(1)
-            bytes[0] = if (value) 1.toByte() else 0.toByte()
-            val encrypted = cryptoHandler.encrypt(bytes)
-            if (encrypted != null) {
-                preferences[byteArrayPreferencesKey(key)] = encrypted
+        val bytes = ByteArray(1)
+        bytes[0] = if (value) 1.toByte() else 0.toByte()
+        setItem(key, bytes, EnhancedPreferencesType.BOOL, true)
+    }
+
+    suspend fun remove(key: String) {
+        this.dataStore.edit { preferences: MutablePreferences ->
+            preferences.remove(stringPreferencesKey(key))
+        }
+    }
+
+    private fun getItem(key: String, type: EnhancedPreferencesType, enableEncryption: Boolean): Flow<ByteArray?> {
+        return this.dataStore.data.map { preferences: Preferences ->
+            val value: String? = preferences[stringPreferencesKey(key)]
+            val regex: Regex = if (enableEncryption) {
+                Regex("^$type:[A-Za-z0-9+/=\n]+:[A-Za-z0-9+/=\n]+:[A-Za-z0-9+/=\n]+$")
+            } else {
+                Regex("^$type:[A-Za-z0-9+/=\n]+$")
+            }
+
+            if (value == null) {
+                null
+            } else if (value.matches(regex) && enableEncryption) {
+                val splitValues = value.split(":")
+                cryptoHandler.decrypt(CryptoData(
+                    Base64.decode(splitValues[1], Base64.DEFAULT),
+                    Base64.decode(splitValues[2], Base64.DEFAULT),
+                    Base64.decode(splitValues[3], Base64.DEFAULT),
+                ))
+            } else if (value.matches(regex)) {
+                Base64.decode(value.split(":")[1], Base64.DEFAULT)
+            } else {
+                null
             }
         }
     }
 
-    suspend fun remove(key: String) {
-        this.dataStore.edit { preferences -> preferences.remove(byteArrayPreferencesKey(key)) }
+    private suspend fun setItem(key: String, value: ByteArray, type: EnhancedPreferencesType, enableEncryption: Boolean) {
+        this.dataStore.edit { preferences: MutablePreferences ->
+            if (enableEncryption) {
+                val cryptoData = cryptoHandler.encrypt(value)
+                val data = Base64.encodeToString(cryptoData.data, Base64.DEFAULT)
+                val dataKey = Base64.encodeToString(cryptoData.key, Base64.DEFAULT)
+                val iv = Base64.encodeToString(cryptoData.iv, Base64.DEFAULT)
+                preferences[stringPreferencesKey(key)] = "$type:$data:$dataKey:$iv"
+            } else {
+                preferences[stringPreferencesKey(key)] = "$type:${Base64.encodeToString(value, Base64.DEFAULT)}"
+            }
+        }
     }
 }
