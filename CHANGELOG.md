@@ -1,7 +1,8 @@
 ## 0.1.2
 
+* feat(darwin): Supports macOS.
 * doc: Update readme.
-* doc(ios): Update podspec document.
+* doc(darwin): Update podspec document.
 * chore: Remove unused import.
 
 ## 0.1.1

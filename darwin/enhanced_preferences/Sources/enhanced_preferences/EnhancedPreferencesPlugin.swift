@@ -1,9 +1,18 @@
+#if os(macOS)
+import FlutterMacOS
+#else
 import Flutter
+#endif
 
 public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
+        #if os(macOS)
+        let messenger = registrar.messenger
+        #else
+        let messenger = registrar.messenger()
+        #endif
         let channel = FlutterMethodChannel(
-            name: "enhanced_preferences", binaryMessenger: registrar.messenger())
+            name: "enhanced_preferences", binaryMessenger: messenger)
         let instance = EnhancedPreferencesPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }

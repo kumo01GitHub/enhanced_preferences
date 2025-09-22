@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "enhanced_preferences",
     platforms: [
-        .iOS("13.0")
+        .iOS("13.0"),
+        .macOS("10.15")
     ],
     products: [
         .library(name: "enhanced-preferences", targets: ["enhanced_preferences"])

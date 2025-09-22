@@ -43,6 +43,10 @@ flutter:
         pluginClass: EnhancedPreferencesPlugin
       ios:
         pluginClass: EnhancedPreferencesPlugin
+        sharedDarwinSource: true
+      macos:
+        pluginClass: EnhancedPreferencesPlugin
+        sharedDarwinSource: true
       web:
         pluginClass: EnhancedPreferencesWeb
         fileName: enhanced_preferences_web.dart
