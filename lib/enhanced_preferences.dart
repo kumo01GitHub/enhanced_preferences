@@ -38,7 +38,7 @@ class EnhancedPreferences {
     if (opts.enableCache &&
         _cache.containsKey(key) &&
         _cache[key]?.type == PrefCacheType.string) {
-      return Future.value(_cache[key] as String?);
+      return Future.value(_cache[key]?.value as String?);
     } else {
       return EnhancedPreferencesPlatform.instance
           .getString(key, opts.enableEncryption)
@@ -78,7 +78,7 @@ class EnhancedPreferences {
     if (opts.enableCache &&
         _cache.containsKey(key) &&
         _cache[key]?.type == PrefCacheType.int) {
-      return Future.value(_cache[key] as int?);
+      return Future.value(_cache[key]?.value as int?);
     } else {
       return EnhancedPreferencesPlatform.instance
           .getInt(key, opts.enableEncryption)
@@ -118,7 +118,7 @@ class EnhancedPreferences {
     if (opts.enableCache &&
         _cache.containsKey(key) &&
         _cache[key]?.type == PrefCacheType.double) {
-      return Future.value(_cache[key] as double?);
+      return Future.value(_cache[key]?.value as double?);
     } else {
       return EnhancedPreferencesPlatform.instance
           .getDouble(key, opts.enableEncryption)
@@ -158,7 +158,7 @@ class EnhancedPreferences {
     if (opts.enableCache &&
         _cache.containsKey(key) &&
         _cache[key]?.type == PrefCacheType.bool) {
-      return Future.value(_cache[key] as bool?);
+      return Future.value(_cache[key]?.value as bool?);
     } else {
       return EnhancedPreferencesPlatform.instance
           .getBool(key, opts.enableEncryption)

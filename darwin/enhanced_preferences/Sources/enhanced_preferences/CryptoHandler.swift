@@ -5,10 +5,10 @@ public class CryptoHandler {
     private static let keySize: Int = 256
 
     private static let kAlgorithm: SecKeyAlgorithm = .rsaEncryptionOAEPSHA512
-    private static let kTag = (Bundle.main.bundleIdentifier! + ".fep-keystore").data(
+    private static let kTag = (Bundle.main.bundleIdentifier! + ".FEPKeystore").data(
         using: .utf8)!
-    private static let kPublicKey: String = "fep-public-key"
-    private static let kPrivateKey: String = "fep-private-key"
+    private static let kPublicKey: String = "FEPPublicKey"
+    private static let kPrivateKey: String = "FEPPrivateKey"
 
     public static func encrypt(plain: Data) throws -> Data {
         let key = SymmetricKey(size: .bits256)
