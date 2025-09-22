@@ -1,286 +1,179 @@
 import Foundation
 
 public class UserDefaultsHandler {
+    private static let keyPrefix = "FEP@"
+
     private static func getInstance() -> UserDefaults {
         return UserDefaults.standard
     }
 
-    public static func getString(key: String?) throws -> String {
+    private static func getItem(key: String?, type: EnhancedPreferencesType, enableEncryption: Bool) throws -> Data {
         guard let key = key else {
             throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
         }
+        if (key.isEmpty) {
+            throw EnhancedPreferencesError.invalidArgument(message: "Key is empty.")
+        }
 
-        guard let value = UserDefaultsHandler.getInstance().data(forKey: key) else {
+        guard let value = UserDefaultsHandler.getInstance().string(forKey: keyPrefix + key) else {
             throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
         }
-        guard let stringData = String(data: value, encoding: .utf8) else {
+
+        if (enableEncryption) {
+            let regex = try! NSRegularExpression(pattern: "^\(type):[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]+$")
+            if (regex.matches(in: value, range: NSRange(0..<value.utf16.count)).count == 0) {
+                throw EnhancedPreferencesError.referenceError(message: "Invalid value.")
+            }
+            let components = value.components(separatedBy: ":")
+            guard let data = Data(base64Encoded: components[1]) else {
+                throw EnhancedPreferencesError.referenceError(message: "Invalid value.")
+            }
+            guard let dataKey = Data(base64Encoded: components[2]) else {
+                throw EnhancedPreferencesError.referenceError(message: "Invalid value.")
+            }
+
+            return try CryptoHandler.decrypt(encrypted: CryptoData(data: data, key: dataKey))!
+        } else {
+            let regex = try! NSRegularExpression(pattern: "^\(type):[A-Za-z0-9+/=]+$")
+            if (regex.matches(in: value, range: NSRange(0..<value.utf16.count)).count == 0) {
+                throw EnhancedPreferencesError.referenceError(message: "Invalid value.")
+            }
+
+            return Data(base64Encoded: value.components(separatedBy: ":")[1])!
+        }
+    }
+    
+    private static func setItem(key: String?, value: Data?, type: EnhancedPreferencesType, enableEncryption: Bool) throws {
+        guard let key = key else {
+            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
+        }
+        if (key.isEmpty) {
+            throw EnhancedPreferencesError.invalidArgument(message: "Key is empty.")
+        }
+        guard let value = value else {
+            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
+        }
+
+        if (enableEncryption) {
+            do {
+                let cryptoData = try CryptoHandler.encrypt(plain: value)
+                UserDefaultsHandler.getInstance().set("\(type):\(cryptoData.data.base64EncodedString()):\(cryptoData.key.base64EncodedString())", forKey: keyPrefix + key)
+            } catch {
+                throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
+            }
+        } else {
+            UserDefaultsHandler.getInstance().set("\(type):\(value.base64EncodedString())", forKey: keyPrefix + key)
+        }
+    }
+
+    public static func getString(key: String?) throws -> String {
+        let data = try getItem(key: key, type: EnhancedPreferencesType.string, enableEncryption: false)
+        guard let value = String(data: data, encoding: .utf8) else {
             throw EnhancedPreferencesError.referenceError(
                 message: "Value for '\(key)' is not a string.")
         }
 
-        return stringData
+        return value
     }
 
     public static func setString(key: String?, value: String?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard let value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
+        try setItem(key: key, value: value?.data(using: .utf8), type: EnhancedPreferencesType.string, enableEncryption: false)
 
-        UserDefaultsHandler.getInstance().set(value.data(using: .utf8), forKey: key)
-
-        return key
+        return key!
     }
 
     public static func getInt(key: String?) throws -> Int {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
+        let data = try getItem(key: key, type: EnhancedPreferencesType.int, enableEncryption: false)
 
-        guard let value = UserDefaultsHandler.getInstance().data(forKey: key) else {
-            throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
-        }
-
-        // TODO: Fix faital error when value size is not invalid
-        return value.withUnsafeBytes({ $0.load(as: Int.self) })
+        return data.withUnsafeBytes({ $0.load(as: Int.self) })
     }
 
     public static func setInt(key: String?, value: Int?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard var value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
+        var value = value
+        try setItem(key: key, value: Data(bytes: &value, count: MemoryLayout.size(ofValue: value)), type: EnhancedPreferencesType.int, enableEncryption: false)
 
-        // TODO: Fix faital error when value size is not invalid
-        UserDefaultsHandler.getInstance().set(
-            Data(bytes: &value, count: MemoryLayout.size(ofValue: value)), forKey: key)
-
-        return key
+        return key!
     }
 
     public static func getDouble(key: String?) throws -> Double {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
+        let data = try getItem(key: key, type: EnhancedPreferencesType.double, enableEncryption: false)
 
-        guard let value = UserDefaultsHandler.getInstance().data(forKey: key) else {
-            throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
-        }
-
-        // TODO: Fix faital error when value size is not invalid
-        return value.withUnsafeBytes({ $0.load(as: Double.self) })
+        return data.withUnsafeBytes({ $0.load(as: Double.self) })
     }
 
     public static func setDouble(key: String?, value: Double?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard var value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
+        var value = value
+        try setItem(key: key, value: Data(bytes: &value, count: MemoryLayout.size(ofValue: value)), type: EnhancedPreferencesType.double, enableEncryption: false)
 
-        // TODO: Fix faital error when value size is not invalid
-        UserDefaultsHandler.getInstance().set(
-            Data(bytes: &value, count: MemoryLayout.size(ofValue: value)), forKey: key)
-
-        return key
+        return key!
     }
 
     public static func getBool(key: String?) throws -> Bool {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
+        let data = try getItem(key: key, type: EnhancedPreferencesType.bool, enableEncryption: false)
 
-        guard let value = UserDefaultsHandler.getInstance().data(forKey: key) else {
-            throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
-        }
-
-        // TODO: Fix faital error when value size is not invalid
-        return value.withUnsafeBytes({ $0.load(as: Bool.self) })
+        return data.withUnsafeBytes({ $0.load(as: Bool.self) })
     }
 
     public static func setBool(key: String?, value: Bool?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard var value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
+        var value = value
+        try setItem(key: key, value: Data(bytes: &value, count: MemoryLayout.size(ofValue: value)), type: EnhancedPreferencesType.bool, enableEncryption: false)
 
-        // TODO: Fix faital error when value size is not invalid
-        UserDefaultsHandler.getInstance().set(
-            Data(bytes: &value, count: MemoryLayout.size(ofValue: value)), forKey: key)
-
-        return key
+        return key!
     }
 
     public static func getEncryptedString(key: String?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-
-        guard let value = UserDefaultsHandler.getInstance().data(forKey: key) else {
-            throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
-        }
-
-        var decrypted: Data? = nil
-        do {
-            decrypted = try CryptoHandler.decrypt(encrypted: value)
-        } catch {
-            throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
-        }
-
-        guard let stringData = String(data: decrypted!, encoding: .utf8) else {
+        let data = try getItem(key: key, type: EnhancedPreferencesType.string, enableEncryption: true)
+        guard let value = String(data: data, encoding: .utf8) else {
             throw EnhancedPreferencesError.referenceError(
                 message: "Value for '\(key)' is not a string.")
         }
 
-        return stringData
+        return value
     }
-
+    
     public static func setEncryptedString(key: String?, value: String?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard let value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
+        try setItem(key: key, value: value?.data(using: .utf8), type: EnhancedPreferencesType.string, enableEncryption: true)
 
-        do {
-            try UserDefaultsHandler.getInstance().set(
-                CryptoHandler.encrypt(plain: value.data(using: .utf8)!), forKey: key)
-        } catch {
-            throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
-        }
-
-        return key
+        return key!
     }
 
     public static func getEncryptedInt(key: String?) throws -> Int {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
+        let data = try getItem(key: key, type: EnhancedPreferencesType.int, enableEncryption: true)
 
-        guard let value = UserDefaultsHandler.getInstance().data(forKey: key) else {
-            throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
-        }
-
-        var decrypted: Data? = nil
-        do {
-            decrypted = try CryptoHandler.decrypt(encrypted: value)
-        } catch {
-            throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
-        }
-
-        // TODO: Fix faital error when value size is not invalid
-        return decrypted!.withUnsafeBytes({ $0.load(as: Int.self) })
+        return data.withUnsafeBytes({ $0.load(as: Int.self) })
     }
 
     public static func setEncryptedInt(key: String?, value: Int?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard var value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
+        var value = value
+        try setItem(key: key, value: Data(bytes: &value, count: MemoryLayout.size(ofValue: value)), type: EnhancedPreferencesType.int, enableEncryption: true)
 
-        // TODO: Fix faital error when value size is not invalid
-        do {
-            UserDefaultsHandler.getInstance().set(
-                try CryptoHandler.encrypt(
-                    plain: Data(bytes: &value, count: MemoryLayout.size(ofValue: value))),
-                forKey: key)
-        } catch {
-            throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
-        }
-
-        return key
+        return key!
     }
 
     public static func getEncryptedDouble(key: String?) throws -> Double {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
+        let data = try getItem(key: key, type: EnhancedPreferencesType.double, enableEncryption: true)
 
-        guard let value = UserDefaultsHandler.getInstance().data(forKey: key) else {
-            throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
-        }
-
-        var decrypted: Data? = nil
-        do {
-            decrypted = try CryptoHandler.decrypt(encrypted: value)
-        } catch {
-            throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
-        }
-
-        // TODO: Fix faital error when value size is not invalid
-        return decrypted!.withUnsafeBytes({ $0.load(as: Double.self) })
+        return data.withUnsafeBytes({ $0.load(as: Double.self) })
     }
 
     public static func setEncryptedDouble(key: String?, value: Double?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard var value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
+        var value = value
+        try setItem(key: key, value: Data(bytes: &value, count: MemoryLayout.size(ofValue: value)), type: EnhancedPreferencesType.double, enableEncryption: true)
 
-        // TODO: Fix faital error when value size is not invalid
-        do {
-            UserDefaultsHandler.getInstance().set(
-                try CryptoHandler.encrypt(
-                    plain: Data(bytes: &value, count: MemoryLayout.size(ofValue: value))),
-                forKey: key)
-        } catch {
-            throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
-        }
-
-        return key
+        return key!
     }
 
     public static func getEncryptedBool(key: String?) throws -> Bool {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
+        let data = try getItem(key: key, type: EnhancedPreferencesType.bool, enableEncryption: true)
 
-        guard let value = UserDefaultsHandler.getInstance().data(forKey: key) else {
-            throw EnhancedPreferencesError.referenceError(message: "Value for '\(key)' is nil.")
-        }
-
-        var decrypted: Data? = nil
-        do {
-            decrypted = try CryptoHandler.decrypt(encrypted: value)
-        } catch {
-            throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
-        }
-
-        // TODO: Fix faital error when value size is not invalid
-        return decrypted!.withUnsafeBytes({ $0.load(as: Bool.self) })
+        return data.withUnsafeBytes({ $0.load(as: Bool.self) })
     }
 
     public static func setEncryptedBool(key: String?, value: Bool?) throws -> String {
-        guard let key = key else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
-        }
-        guard var value = value else {
-            throw EnhancedPreferencesError.invalidArgument(message: "Value is nil.")
-        }
+        var value = value
+        try setItem(key: key, value: Data(bytes: &value, count: MemoryLayout.size(ofValue: value)), type: EnhancedPreferencesType.bool, enableEncryption: true)
 
-        // TODO: Fix faital error when value size is not invalid
-        do {
-            UserDefaultsHandler.getInstance().set(
-                try CryptoHandler.encrypt(
-                    plain: Data(bytes: &value, count: MemoryLayout.size(ofValue: value))),
-                forKey: key)
-        } catch {
-            throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
-        }
-
-        return key
+        return key!
     }
 
     public static func remove(key: String?) throws -> String {
@@ -288,7 +181,7 @@ public class UserDefaultsHandler {
             throw EnhancedPreferencesError.invalidArgument(message: "Key is nil.")
         }
 
-        UserDefaultsHandler.getInstance().removeObject(forKey: key)
+        UserDefaultsHandler.getInstance().removeObject(forKey: keyPrefix + key)
 
         return key
     }

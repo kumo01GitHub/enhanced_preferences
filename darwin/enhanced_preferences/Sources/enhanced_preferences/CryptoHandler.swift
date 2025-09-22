@@ -2,25 +2,22 @@ import CryptoKit
 import Foundation
 
 public class CryptoHandler {
-    private static let keySize: Int = 256
-
     private static let kAlgorithm: SecKeyAlgorithm = .rsaEncryptionOAEPSHA512
     private static let kTag = (Bundle.main.bundleIdentifier! + ".FEPKeystore").data(
         using: .utf8)!
     private static let kPublicKey: String = "FEPPublicKey"
     private static let kPrivateKey: String = "FEPPrivateKey"
 
-    public static func encrypt(plain: Data) throws -> Data {
+    public static func encrypt(plain: Data) throws -> CryptoData {
         let key = SymmetricKey(size: .bits256)
         let nonce = AES.GCM.Nonce()
         let sealedBox = try AES.GCM.seal(plain, using: key, nonce: nonce)
-        return try encryptKey(key: key.withUnsafeBytes { body in Data(body) }) + sealedBox.combined!
+        return CryptoData(data: sealedBox.combined!, key: try encryptKey(key: key.withUnsafeBytes { body in Data(body) }))
     }
 
-    public static func decrypt(encrypted: Data) throws -> Data? {
-        let key = SymmetricKey(data: try decryptKey(encryptedKey: encrypted[0...keySize - 1]))
-        let data = encrypted[keySize...]
-        let sealedBox = try AES.GCM.SealedBox(combined: data)
+    public static func decrypt(encrypted: CryptoData) throws -> Data? {
+        let key = SymmetricKey(data: try decryptKey(encryptedKey: encrypted.key))
+        let sealedBox = try AES.GCM.SealedBox(combined: encrypted.data)
         return try AES.GCM.open(sealedBox, using: key)
     }
 
