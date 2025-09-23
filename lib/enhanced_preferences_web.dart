@@ -13,6 +13,9 @@ class EnhancedPreferencesWeb extends EnhancedPreferencesPlatform {
   /// Constructs a EnhancedPreferencesWeb
   EnhancedPreferencesWeb();
 
+  /// Prefix for keys to avoid collision.
+  static const String _keyPrefix = 'FEP@';
+
   static void registerWith(Registrar registrar) {
     EnhancedPreferencesPlatform.instance = EnhancedPreferencesWeb();
   }
@@ -98,7 +101,7 @@ class EnhancedPreferencesWeb extends EnhancedPreferencesPlatform {
       throw Exception('INVALID_ARGUMENT');
     }
 
-    String? value = web.window.localStorage.getItem(key);
+    String? value = web.window.localStorage.getItem("$_keyPrefix$key");
 
     if (value == null) {
       throw Exception('REFERENCE_ERROR');
@@ -112,7 +115,7 @@ class EnhancedPreferencesWeb extends EnhancedPreferencesPlatform {
       throw Exception('INVALID_ARGUMENT');
     }
 
-    web.window.localStorage.setItem(key, value);
+    web.window.localStorage.setItem("$_keyPrefix$key", value);
     return key;
   }
 
@@ -121,7 +124,7 @@ class EnhancedPreferencesWeb extends EnhancedPreferencesPlatform {
       throw Exception('INVALID_ARGUMENT');
     }
 
-    web.window.localStorage.removeItem(key);
+    web.window.localStorage.removeItem("$_keyPrefix$key");
     return key;
   }
 }
