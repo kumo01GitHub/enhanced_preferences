@@ -4,6 +4,7 @@
 
 ## 0.2.0
 
+* feat: Implements `keys()`.
 * feat(darwin): Supports macOS.
 * feat: Implements type check.
 * feat(web): Add key prefix.

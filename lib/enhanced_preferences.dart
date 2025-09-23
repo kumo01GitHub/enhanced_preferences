@@ -197,4 +197,9 @@ class EnhancedPreferences {
       return key;
     });
   }
+
+  /// Get keys.
+  Future<List<String>?> keys() {
+    return EnhancedPreferencesPlatform.instance.keys();
+  }
 }

@@ -96,6 +96,11 @@ class EnhancedPreferencesWeb extends EnhancedPreferencesPlatform {
     return Future<String?>.value(_removeItem(key));
   }
 
+  @override
+  Future<List<String>?> keys() {
+    return Future<List<String>?>.value(_keys());
+  }
+
   String _getItem(String key) {
     if (key.isEmpty) {
       throw Exception('INVALID_ARGUMENT');
@@ -126,5 +131,16 @@ class EnhancedPreferencesWeb extends EnhancedPreferencesPlatform {
 
     web.window.localStorage.removeItem("$_keyPrefix$key");
     return key;
+  }
+
+  List<String> _keys() {
+    List<String> keys = [];
+    final regexp = RegExp("^$_keyPrefix");
+    for (int i = 0; i < web.window.localStorage.length; i++) {
+      if (regexp.hasMatch(web.window.localStorage.key(i)!)) {
+        keys.add(web.window.localStorage.key(i)!.replaceFirst(_keyPrefix, ''));
+      }
+    }
+    return keys;
   }
 }
