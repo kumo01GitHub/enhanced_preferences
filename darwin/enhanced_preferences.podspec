@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name              = 'enhanced_preferences'
-  s.version           = '0.1.1'
+  s.version           = '0.2.0'
   s.summary           = 'Wraps platform-specific persistent storage for simple data.'
   s.description       = <<-DESC
 Wraps platform-specific persistent storage for simple data.

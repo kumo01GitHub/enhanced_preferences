@@ -1,4 +1,4 @@
-## 0.1.2
+## 0.2.0
 
 * feat(darwin): Supports macOS.
 * feat: Implements type check.
