@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -111,7 +113,7 @@ class MethodChannelEnhancedPreferences extends EnhancedPreferencesPlatform {
 
   @override
   Future<List<String>?> keys() async {
-    final result = await methodChannel.invokeMethod<List<String>>('keys');
-    return result;
+    final result = await methodChannel.invokeMethod<List<Object?>>('keys');
+    return result?.map((e) => e.toString()).toList();
   }
 }

@@ -146,6 +146,16 @@ class EnhancedPreferencesRepository(context: Context) {
         }
     }
 
+    fun keys(): Flow<List<String>> {
+        return this.dataStore.data.map { preferences: Preferences ->
+            val keys = ArrayList<String>()
+            for (key in preferences.asMap().keys) {
+                keys.add(key.name)
+            }
+            keys
+        }
+    }
+
     private fun getItem(key: String, type: EnhancedPreferencesType, enableEncryption: Boolean): Flow<ByteArray?> {
         return this.dataStore.data.map { preferences: Preferences ->
             val value: String? = preferences[stringPreferencesKey(key)]
