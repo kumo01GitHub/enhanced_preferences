@@ -195,7 +195,7 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
             }
         case "keys":
             do {
-                result(try UserDefaultsHandler.keys())
+                result(UserDefaultsHandler.keys())
             } catch let error as EnhancedPreferencesError {
                 result(
                     FlutterError(
