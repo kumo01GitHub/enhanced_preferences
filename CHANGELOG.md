@@ -1,7 +1,7 @@
 ## 0.2.1
 
 * feat: Implements `keys()`.
-* chore(android): Remove unused import.
+* chore: Remove unused import.
 
 ## 0.2.0
 
