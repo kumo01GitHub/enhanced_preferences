@@ -6,6 +6,7 @@
 
 * feat(darwin): Supports macOS.
 * feat: Implements type check.
+* feat(web): Add key prefix.
 * fix(darwin): Change key name.
 * doc: Update readme.
 * doc(darwin): Update podspec document.
