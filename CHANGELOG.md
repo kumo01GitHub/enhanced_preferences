@@ -1,3 +1,7 @@
+## 0.2.1
+
+* chore(android): Remove unused import.
+
 ## 0.2.0
 
 * feat(darwin): Supports macOS.
