@@ -1,10 +1,10 @@
 ## 0.2.1
 
+* feat: Implements `keys()`.
 * chore(android): Remove unused import.
 
 ## 0.2.0
 
-* feat: Implements `keys()`.
 * feat(darwin): Supports macOS.
 * feat: Implements type check.
 * feat(web): Add key prefix.
