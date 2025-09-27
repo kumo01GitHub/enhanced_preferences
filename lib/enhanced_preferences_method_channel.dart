@@ -108,4 +108,10 @@ class MethodChannelEnhancedPreferences extends EnhancedPreferencesPlatform {
     });
     return result;
   }
+
+  @override
+  Future<List<String>?> keys() async {
+    final result = await methodChannel.invokeMethod<List<Object?>>('keys');
+    return result?.map((e) => e.toString()).toList();
+  }
 }

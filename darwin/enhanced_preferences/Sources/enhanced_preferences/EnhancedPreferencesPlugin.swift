@@ -193,6 +193,17 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
                 let e = EnhancedPreferencesError.unknownError(message: error.localizedDescription)
                 result(FlutterError(code: e.code, message: e.localizedDescription, details: nil))
             }
+        case "keys":
+            do {
+                result(UserDefaultsHandler.keys())
+            } catch let error as EnhancedPreferencesError {
+                result(
+                    FlutterError(
+                        code: error.code, message: error.localizedDescription, details: nil))
+            } catch let error {
+                let e = EnhancedPreferencesError.unknownError(message: error.localizedDescription)
+                result(FlutterError(code: e.code, message: e.localizedDescription, details: nil))
+            }
         default:
             result(FlutterMethodNotImplemented)
         }

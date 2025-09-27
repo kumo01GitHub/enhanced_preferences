@@ -177,6 +177,15 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
                     result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
                 }
             }
+            "keys" -> {
+                try {
+                    result.success(keys())
+                } catch (e: EnhancedPreferencesError) {
+                    result.error(e.code.name, e.message, null)
+                } catch (e: Exception) {
+                    result.error(ErrorCode.UNKNOWN_ERROR.name, e.message, null)
+                }
+            }
             else -> {
                 result.notImplemented()
             }
@@ -451,5 +460,11 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
         runBlocking { repository.remove(key) }
 
         return key
+    }
+
+    private fun keys(): List<String> {
+        val value: List<String>? = runBlocking { repository.keys().firstOrNull() }
+
+        return value ?: ArrayList(0)
     }
 }

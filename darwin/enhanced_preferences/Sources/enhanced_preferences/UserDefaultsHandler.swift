@@ -185,4 +185,14 @@ public class UserDefaultsHandler {
 
         return key
     }
+
+    public static func keys() -> [String] {
+        var keys: [String] = []
+        for key in UserDefaultsHandler.getInstance().dictionaryRepresentation().keys {
+            if (key.hasPrefix(keyPrefix)) {
+                keys.append(String(key.dropFirst(keyPrefix.count)))
+            }
+        }
+        return keys
+    }
 }

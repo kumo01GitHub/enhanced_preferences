@@ -75,4 +75,8 @@ abstract class EnhancedPreferencesPlatform extends PlatformInterface {
   Future<String?> remove(String key) {
     throw UnimplementedError('remove() has not been implemented.');
   }
+
+  Future<List<String>?> keys() {
+    throw UnimplementedError('keys() has not been implemented.');
+  }
 }
