@@ -70,7 +70,7 @@ public class UserDefaultsHandler {
         let data = try getItem(key: key, type: EnhancedPreferencesType.string, enableEncryption: false)
         guard let value = String(data: data, encoding: .utf8) else {
             throw EnhancedPreferencesError.referenceError(
-                message: "Value for '\(key)' is not a string.")
+                message: "Value for '\(key!)' is not a string.")
         }
 
         return value
@@ -125,7 +125,7 @@ public class UserDefaultsHandler {
         let data = try getItem(key: key, type: EnhancedPreferencesType.string, enableEncryption: true)
         guard let value = String(data: data, encoding: .utf8) else {
             throw EnhancedPreferencesError.referenceError(
-                message: "Value for '\(key)' is not a string.")
+                message: "Value for '\(key!)' is not a string.")
         }
 
         return value
@@ -186,7 +186,7 @@ public class UserDefaultsHandler {
         return key
     }
 
-    public static func keys() -> [String] {
+    public static func keys() throws -> [String] {
         var keys: [String] = []
         for key in UserDefaultsHandler.getInstance().dictionaryRepresentation().keys {
             if (key.hasPrefix(keyPrefix)) {

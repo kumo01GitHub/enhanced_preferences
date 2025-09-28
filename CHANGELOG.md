@@ -8,6 +8,7 @@
 * chore: Remove unused import.
 * doc: Add badges.
 * doc(darwin): Add macOS.
+* doc(darwin): Update podspec document.
 
 ## 0.2.0
 

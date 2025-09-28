@@ -7,11 +7,11 @@ Pod::Spec.new do |s|
   s.version           = '0.2.0'
   s.summary           = 'Wraps platform-specific persistent storage for simple data.'
   s.description       = <<-DESC
-Wraps platform-specific persistent storage for simple data.
+Wraps platform-specific persistent storage for simple data. Supported data types are `String`, `int`, `double` and `bool`.
                         DESC
   s.homepage          = 'https://github.com/kumo01GitHub/enhanced_preferences'
   s.authors           = 'TAICHI'
-  s.license           = { :file => '../LICENSE' }
+  s.license           = { :type => "BSD-3-Clause", :file => "../LICENSE" }
   s.source            = { :path => '.' }
   s.source_files      = 'enhanced_preferences/Sources/enhanced_preferences/**/*.swift'
   s.resource_bundles  = {'enhanced_preferences_privacy' => ['enhanced_preferences/Sources/enhanced_preferences/PrivacyInfo.xcprivacy']}
