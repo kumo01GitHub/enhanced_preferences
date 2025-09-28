@@ -125,13 +125,10 @@ void main() {
 
     expect(await platform.setInt(key1, value1), key1);
     expect(await platform.setDouble(key2, value2), key2);
-    List<String>? keys = await platform.keys();
-    expect(keys?.contains(key1), true);
-    expect(keys?.contains(key2), true);
+    expect(await platform.keys(), containsAll([key1, key2]));
 
     expect(await platform.remove(key1), key1);
-    keys = await platform.keys();
-    expect(keys?.contains(key1), false);
-    expect(keys?.contains(key2), true);
+    expect((await platform.keys())?.contains(key1), false);
+    expect(await platform.keys(), containsAll([key2]));
   });
 }

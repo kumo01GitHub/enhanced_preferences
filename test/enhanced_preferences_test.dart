@@ -186,5 +186,9 @@ void main() {
     expect(await enhancedPreferencesPlugin.setInt(key1, value1), key1);
     expect(await enhancedPreferencesPlugin.setBool(key2, value2), key2);
     expect(await enhancedPreferencesPlugin.keys(), containsAll([key1, key2]));
+
+    expect(await enhancedPreferencesPlugin.remove(key1), key1);
+    expect((await enhancedPreferencesPlugin.keys())?.contains(key1), false);
+    expect(await enhancedPreferencesPlugin.keys(), containsAll([key2]));
   });
 }
