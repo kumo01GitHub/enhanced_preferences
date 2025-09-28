@@ -3,6 +3,7 @@
 * feat: Implements `keys()`.
 * ci: Improve tests.
 * ci: Add GitHub Actions.
+* chore: Bump flutter_lints.
 * chore: Remove unused import.
 * doc: Add badges.
 
