@@ -10,12 +10,15 @@ Pod::Spec.new do |s|
 Wraps platform-specific persistent storage for simple data.
                         DESC
   s.homepage          = 'https://github.com/kumo01GitHub/enhanced_preferences'
+  s.authors           = 'TAICHI'
   s.license           = { :file => '../LICENSE' }
   s.source            = { :path => '.' }
   s.source_files      = 'enhanced_preferences/Sources/enhanced_preferences/**/*.swift'
   s.resource_bundles  = {'enhanced_preferences_privacy' => ['enhanced_preferences/Sources/enhanced_preferences/PrivacyInfo.xcprivacy']}
-  s.dependency 'Flutter'
-  s.platform = :ios, '13.0'
+  s.ios.dependency 'Flutter'
+  s.osx.dependency 'FlutterMacOS'
+  s.ios.deployment_target = '13.0'
+  s.osx.deployment_target = '10.15'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }

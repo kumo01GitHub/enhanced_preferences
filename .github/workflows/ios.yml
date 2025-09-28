@@ -51,10 +51,10 @@ jobs:
 
       - name: Set Package Manager Configuration
         run: |
-          if [ "${{ matrix.package-manager }}" == "cocoapods" ]; then
-            flutter config --no-enable-swift-package-manager
-          else
+          if [ "${{ matrix.package-manager }}" == "swiftpm" ]; then
             flutter config --enable-swift-package-manager
+          else
+            flutter config --no-enable-swift-package-manager
           fi
 
       - name: Run Integration Test
