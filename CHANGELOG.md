@@ -1,6 +1,7 @@
 ## 0.2.1
 
 * feat: Implements `keys()`.
+* ci: Improve tests.
 * chore: Remove unused import.
 
 ## 0.2.0

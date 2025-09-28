@@ -10,38 +10,60 @@ void main() {
   const MethodChannel channel = MethodChannel('enhanced_preferences');
   Map<String, dynamic> mockPreferences = <String, dynamic>{};
 
+  T getItem<T>(String key) {
+    if (mockPreferences.containsKey(key)) {
+      return mockPreferences[key] as T;
+    } else {
+      throw PlatformException(
+        code: 'REFERENCE_ERROR',
+        message: 'Reference Error',
+      );
+    }
+  }
+
+  String setItem<T>(String key, T value) {
+    mockPreferences[key] = value;
+    return key;
+  }
+
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
           switch (methodCall.method) {
             case 'getString':
-              final String key = methodCall.arguments['key'];
-              return mockPreferences[key] as String?;
+              return getItem<String>(methodCall.arguments['key']);
             case 'setString':
-              final String key = methodCall.arguments['key'];
-              mockPreferences[key] = methodCall.arguments['value'] as String;
-              return key;
+              return setItem<String>(
+                methodCall.arguments['key'],
+                methodCall.arguments['value'],
+              );
             case 'getInt':
-              final String key = methodCall.arguments['key'];
-              return mockPreferences[key] as int?;
+              return getItem<int>(methodCall.arguments['key']);
             case 'setInt':
-              final String key = methodCall.arguments['key'];
-              mockPreferences[key] = methodCall.arguments['value'] as int;
-              return key;
+              return setItem<int>(
+                methodCall.arguments['key'],
+                methodCall.arguments['value'],
+              );
             case 'getDouble':
-              final String key = methodCall.arguments['key'];
-              return mockPreferences[key] as double?;
+              return getItem<double>(methodCall.arguments['key']);
             case 'setDouble':
-              final String key = methodCall.arguments['key'];
-              mockPreferences[key] = methodCall.arguments['value'] as double;
-              return key;
+              return setItem<double>(
+                methodCall.arguments['key'],
+                methodCall.arguments['value'],
+              );
             case 'getBool':
-              final String key = methodCall.arguments['key'];
-              return mockPreferences[key] as bool?;
+              return getItem<bool>(methodCall.arguments['key']);
             case 'setBool':
+              return setItem<bool>(
+                methodCall.arguments['key'],
+                methodCall.arguments['value'],
+              );
+            case 'remove':
               final String key = methodCall.arguments['key'];
-              mockPreferences[key] = methodCall.arguments['value'] as bool;
+              mockPreferences.remove(key);
               return key;
+            case 'keys':
+              return mockPreferences.keys.toList();
             default:
               throw UnimplementedError();
           }
@@ -83,5 +105,33 @@ void main() {
 
     expect(await platform.setBool(key, value), key);
     expect(await platform.getBool(key), value);
+  });
+
+  test('Remove', () async {
+    final String key = "keytoRemove";
+    final String value = "valueToRemove";
+
+    expect(await platform.setString(key, value), key);
+    expect(await platform.getString(key), value);
+    expect(await platform.remove(key), key);
+    expect(() => platform.getString(key), throwsA(isA<PlatformException>()));
+  });
+
+  test('Keys', () async {
+    final String key1 = "key1";
+    final int value1 = 1;
+    final String key2 = "key2";
+    final double value2 = 2.0;
+
+    expect(await platform.setInt(key1, value1), key1);
+    expect(await platform.setDouble(key2, value2), key2);
+    List<String>? keys = await platform.keys();
+    expect(keys?.contains(key1), true);
+    expect(keys?.contains(key2), true);
+
+    expect(await platform.remove(key1), key1);
+    keys = await platform.keys();
+    expect(keys?.contains(key1), false);
+    expect(keys?.contains(key2), true);
   });
 }
