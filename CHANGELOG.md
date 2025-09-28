@@ -1,12 +1,13 @@
 ## 0.3.0
 
 * feat: Implements `keys()`.
-* fix: Support CocoaPods.
+* fix(darwin): Support CocoaPods.
 * ci: Improve tests.
 * ci: Add GitHub Actions.
 * chore: Bump flutter_lints.
 * chore: Remove unused import.
 * doc: Add badges.
+* doc(darwin): Add macOS.
 
 ## 0.2.0
 
