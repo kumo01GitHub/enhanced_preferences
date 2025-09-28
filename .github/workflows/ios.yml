@@ -37,7 +37,7 @@ jobs:
       - name: Flutter Version
         run: flutter doctor -v
 
-      - name: Install dependencies
+      - name: Install Dependencies
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: flutter pub get
 
@@ -57,6 +57,6 @@ jobs:
             flutter config --no-enable-swift-package-manager
           fi
 
-      - name: Run Integration Test
+      - name: Run Integration Tests
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: flutter test integration_test

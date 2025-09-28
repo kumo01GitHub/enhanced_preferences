@@ -30,10 +30,10 @@ jobs:
       - name: Flutter Version
         run: flutter doctor -v
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: flutter pub get
 
-      - name: Run tests
+      - name: Run Tests
         run: flutter test
 
       - name: Analyze

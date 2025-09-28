@@ -36,17 +36,17 @@ jobs:
       - name: Flutter Version
         run: flutter doctor -v
 
-      - name: Install dependencies
+      - name: Install Dependencies
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: flutter pub get
 
-      - name: Set up JDK
+      - name: Setup JDK
         uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: temurin
 
-      - name: Gradle cache
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
       - name: Enable KVM
@@ -55,7 +55,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: AVD cache
+      - name: AVD Cache
         uses: actions/cache@v4
         id: avd-cache
         with:
@@ -64,7 +64,7 @@ jobs:
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
 
-      - name: Run Integration Test
+      - name: Run Integration Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: ${{ env.WORKING_DIRECTORY }}
