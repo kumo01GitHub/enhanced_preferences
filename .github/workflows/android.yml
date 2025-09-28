@@ -37,8 +37,8 @@ jobs:
         run: flutter doctor -v
 
       - name: Install dependencies
-        run: flutter pub get
         working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: flutter pub get
 
       - name: Set up JDK
         uses: actions/setup-java@v5
@@ -64,7 +64,7 @@ jobs:
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
 
-      - name: Run integration test
+      - name: Run Integration Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: ${{ env.WORKING_DIRECTORY }}

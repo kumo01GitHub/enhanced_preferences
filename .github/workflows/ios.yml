@@ -1,0 +1,62 @@
+name: iOS Test
+
+on:
+  push:
+    paths-ignore:
+      - "**.md"
+      - "LICENSE"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "LICENSE"
+
+permissions:
+  contents: read
+
+env:
+  WORKING_DIRECTORY: example
+
+jobs:
+  integration-test:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        os-version: [18, 17, 16, 15, 14, 13]
+        package-manager: [cocoapods, swiftpm]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter Version
+        run: flutter doctor -v
+
+      - name: Install dependencies
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: flutter pub get
+
+      - name: Launch iOS Simulator
+        uses: futureware-tech/simulator-action@v4
+        with:
+          os: iOS
+          os_version: ^${{ matrix.os-version }}
+          wait_for_boot: true
+          erase_before_boot: true
+
+      - name: Set Package Manager Configuration
+        run: |
+          if [ "${{ matrix.package-manager }}" == "cocoapods" ]; then
+            flutter config --no-enable-swift-package-manager
+          else
+            flutter config --enable-swift-package-manager
+          fi
+
+      - name: Run Integration Test
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: futter test integration_test
