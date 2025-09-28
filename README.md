@@ -1,6 +1,7 @@
 # Enhanced shared preferences plugin
 
 [![pub package](https://img.shields.io/pub/v/enhanced_preferences.svg)](https://pub.dev/packages/enhanced_preferences)
+[![pub points](https://img.shields.io/pub/points/enhanced_preferences?label=pub%20points)](https://pub.dev/packages/enhanced_preferences/score)
 
 Wraps platform-specific persistent storage for simple data. Supported data types are `String`, `int`, `double` and `bool`.
 
