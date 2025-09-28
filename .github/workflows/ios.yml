@@ -59,4 +59,4 @@ jobs:
 
       - name: Run Integration Test
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: futter test integration_test
+        run: flutter test integration_test
