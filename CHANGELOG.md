@@ -3,6 +3,7 @@
 * feat: Implements `keys()`.
 * ci: Improve tests.
 * chore: Remove unused import.
+* doc: Add badge.
 
 ## 0.2.0
 
