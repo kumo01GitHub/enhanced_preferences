@@ -2,6 +2,7 @@
 
 * feat: Implements `keys()`.
 * ci: Improve tests.
+* ci: Add GitHub Actions.
 * chore: Remove unused import.
 * doc: Add badges.
 
