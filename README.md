@@ -57,6 +57,13 @@ final bool? isActive = await prefs.getBool('isActive', options);
 await prefs.remove('hello');
 ```
 
+### Get keys
+
+```dart
+// Get all keys.
+final List<String>? keys = await prefs.keys();
+```
+
 ### Options
 
 | Option | Type | Detail | Default |
