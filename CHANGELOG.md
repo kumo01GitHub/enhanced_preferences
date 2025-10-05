@@ -1,6 +1,7 @@
 ## 0.3.1
 
 * ci: Improve tests.
+* doc: Add badges.
 
 ## 0.3.0
 

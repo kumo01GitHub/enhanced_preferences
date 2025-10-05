@@ -3,6 +3,7 @@
 [![pub package](https://img.shields.io/pub/v/enhanced_preferences.svg)](https://pub.dev/packages/enhanced_preferences)
 [![pub points](https://img.shields.io/pub/points/enhanced_preferences?label=pub%20points)](https://pub.dev/packages/enhanced_preferences/score)
 [![CI](https://github.com/kumo01GitHub/enhanced_preferences/actions/workflows/ci.yml/badge.svg)](https://github.com/kumo01GitHub/enhanced_preferences/actions/workflows/ci.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2512599c04184b75a2cf6fc1d44424cb)](https://app.codacy.com/gh/kumo01GitHub/enhanced_preferences/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 Wraps platform-specific persistent storage for simple data. Supported data types are `String`, `int`, `double` and `bool`.
 
