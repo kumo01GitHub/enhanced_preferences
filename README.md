@@ -42,7 +42,7 @@ final EnhancedPreferences prefs = EnhancedPreferences();
 // Specify options.
 final EnhancedPreferencesOptions options = EnhancedPreferencesOptions();
 
-// Try reading data from the 'Hello' key.
+// Try reading data from the 'hello' key.
 final String? hello = await prefs.getString('hello', options);
 // Try reading data from the 'counter' key.
 final int? counter = await prefs.getInt('counter', options);

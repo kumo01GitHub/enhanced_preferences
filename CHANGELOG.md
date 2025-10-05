@@ -4,6 +4,7 @@
 * ci: Add report coverage.
 * ci: Pin third-party GitHub Actions.
 * doc: Add badges.
+* doc: Fix typo.
 
 ## 0.3.0
 
