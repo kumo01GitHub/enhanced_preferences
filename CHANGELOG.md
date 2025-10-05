@@ -1,6 +1,7 @@
 ## 0.3.1
 
 * ci: Improve tests.
+* ci: Add report coverage.
 * ci: Pin third-party GitHub Actions.
 * doc: Add badges.
 
