@@ -103,7 +103,7 @@ void main() {
   });
 
   test('String', () async {
-    EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
+    EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
@@ -111,12 +111,12 @@ void main() {
     final String key = "stringKey";
     final String value = "stringValue";
 
-    expect(await enhancedPreferencesPlugin.setString(key, value), key);
-    expect(await enhancedPreferencesPlugin.getString(key), value);
+    expect(await prefs.setString(key, value), key);
+    expect(await prefs.getString(key), value);
   });
 
   test('Int', () async {
-    EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
+    EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
@@ -124,12 +124,12 @@ void main() {
     final String key = "intKey";
     final int value = 999;
 
-    expect(await enhancedPreferencesPlugin.setInt(key, value), key);
-    expect(await enhancedPreferencesPlugin.getInt(key), value);
+    expect(await prefs.setInt(key, value), key);
+    expect(await prefs.getInt(key), value);
   });
 
   test('Double', () async {
-    EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
+    EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
@@ -137,12 +137,12 @@ void main() {
     final String key = "doubleKey";
     final double value = 999.99;
 
-    expect(await enhancedPreferencesPlugin.setDouble(key, value), key);
-    expect(await enhancedPreferencesPlugin.getDouble(key), value);
+    expect(await prefs.setDouble(key, value), key);
+    expect(await prefs.getDouble(key), value);
   });
 
   test('Bool', () async {
-    EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
+    EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
@@ -150,12 +150,12 @@ void main() {
     final String key = "boolKey";
     final bool value = true;
 
-    expect(await enhancedPreferencesPlugin.setBool(key, value), key);
-    expect(await enhancedPreferencesPlugin.getBool(key), value);
+    expect(await prefs.setBool(key, value), key);
+    expect(await prefs.getBool(key), value);
   });
 
   test('Remove', () async {
-    EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
+    EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
@@ -163,17 +163,14 @@ void main() {
     final String key = "keyToRemove";
     final String value = "valueToRemove";
 
-    expect(await enhancedPreferencesPlugin.setString(key, value), key);
-    expect(await enhancedPreferencesPlugin.getString(key), value);
-    expect(await enhancedPreferencesPlugin.remove(key), key);
-    expect(
-      () => enhancedPreferencesPlugin.getString(key),
-      throwsA(isA<PlatformException>()),
-    );
+    expect(await prefs.setString(key, value), key);
+    expect(await prefs.getString(key), value);
+    expect(await prefs.remove(key), key);
+    expect(() => prefs.getString(key), throwsA(isA<PlatformException>()));
   });
 
   test('Keys', () async {
-    EnhancedPreferences enhancedPreferencesPlugin = EnhancedPreferences();
+    EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
@@ -183,12 +180,46 @@ void main() {
     final String key2 = "key2";
     final bool value2 = false;
 
-    expect(await enhancedPreferencesPlugin.setInt(key1, value1), key1);
-    expect(await enhancedPreferencesPlugin.setBool(key2, value2), key2);
-    expect(await enhancedPreferencesPlugin.keys(), containsAll([key1, key2]));
+    expect(await prefs.setInt(key1, value1), key1);
+    expect(await prefs.setBool(key2, value2), key2);
+    expect(await prefs.keys(), containsAll([key1, key2]));
 
-    expect(await enhancedPreferencesPlugin.remove(key1), key1);
-    expect((await enhancedPreferencesPlugin.keys())?.contains(key1), false);
-    expect(await enhancedPreferencesPlugin.keys(), containsAll([key2]));
+    expect(await prefs.remove(key1), key1);
+    expect((await prefs.keys())?.contains(key1), false);
+    expect(await prefs.keys(), containsAll([key2]));
+  });
+
+  test('Options', () async {
+    final EnhancedPreferencesOptions options = EnhancedPreferencesOptions();
+
+    expect(options.enableCache, true);
+    expect(options.enableEncryption, false);
+  });
+
+  test('Cache', () async {
+    EnhancedPreferences prefs = EnhancedPreferences();
+    MockEnhancedPreferencesPlatform fakePlatform =
+        MockEnhancedPreferencesPlatform();
+    EnhancedPreferencesPlatform.instance = fakePlatform;
+
+    final String key1 = "cachedKey";
+    final String value1 = "cachedValue";
+
+    await prefs.setString(
+      key1,
+      value1,
+      EnhancedPreferencesOptions(enableCache: true),
+    );
+    expect(prefs.cache.containsKey(key1), true);
+
+    final String key2 = "nonCachedKey";
+    final String value2 = "nonCachedValue";
+
+    await prefs.setString(
+      key2,
+      value2,
+      EnhancedPreferencesOptions(enableCache: false),
+    );
+    expect(prefs.cache.containsKey(key2), false);
   });
 }

@@ -1,3 +1,7 @@
+## 0.3.1
+
+* ci: Improve tests.
+
 ## 0.3.0
 
 * feat: Implements `keys()`.

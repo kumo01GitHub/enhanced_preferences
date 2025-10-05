@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _enhancedPreferencesPlugin = EnhancedPreferences();
+  final _prefs = EnhancedPreferences();
 
   String? _type;
   final TextEditingController _keyController = TextEditingController();
@@ -99,21 +99,17 @@ class _MyAppState extends State<MyApp> {
                         dynamic result;
                         try {
                           if (_type == "String") {
-                            result = await _enhancedPreferencesPlugin.getString(
+                            result = await _prefs.getString(
                               _keyController.text,
                             );
                           } else if (_type == "Int") {
-                            result = await _enhancedPreferencesPlugin.getInt(
-                              _keyController.text,
-                            );
+                            result = await _prefs.getInt(_keyController.text);
                           } else if (_type == "Double") {
-                            result = await _enhancedPreferencesPlugin.getDouble(
+                            result = await _prefs.getDouble(
                               _keyController.text,
                             );
                           } else if (_type == "Bool") {
-                            result = await _enhancedPreferencesPlugin.getBool(
-                              _keyController.text,
-                            );
+                            result = await _prefs.getBool(_keyController.text);
                           }
                         } on Exception catch (e) {
                           result = e.toString();
@@ -137,28 +133,28 @@ class _MyAppState extends State<MyApp> {
                         dynamic result;
                         try {
                           if (_type == "String") {
-                            result = await _enhancedPreferencesPlugin.setString(
+                            result = await _prefs.setString(
                               _keyController.text,
                               _valueController.text,
                             );
                           } else if (_type == "Int") {
                             final intValue =
                                 int.tryParse(_valueController.text) ?? 0;
-                            result = await _enhancedPreferencesPlugin.setInt(
+                            result = await _prefs.setInt(
                               _keyController.text,
                               intValue,
                             );
                           } else if (_type == "Double") {
                             final doubleValue =
                                 double.tryParse(_valueController.text) ?? 0.0;
-                            result = await _enhancedPreferencesPlugin.setDouble(
+                            result = await _prefs.setDouble(
                               _keyController.text,
                               doubleValue,
                             );
                           } else if (_type == "Bool") {
                             final boolValue =
                                 (_valueController.text.toLowerCase() == 'true');
-                            result = await _enhancedPreferencesPlugin.setBool(
+                            result = await _prefs.setBool(
                               _keyController.text,
                               boolValue,
                             );
@@ -184,9 +180,7 @@ class _MyAppState extends State<MyApp> {
 
                         dynamic result;
                         try {
-                          result = await _enhancedPreferencesPlugin.remove(
-                            _keyController.text,
-                          );
+                          result = await _prefs.remove(_keyController.text);
                         } on Exception catch (e) {
                           result = e.toString();
                         } on Error catch (e) {
@@ -204,7 +198,7 @@ class _MyAppState extends State<MyApp> {
                       onPressed: () async {
                         dynamic result;
                         try {
-                          result = await _enhancedPreferencesPlugin.keys();
+                          result = await _prefs.keys();
                         } on Exception catch (e) {
                           result = e.toString();
                         } on Error catch (e) {

@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'enhanced_preferences_platform_interface.dart';
 
 /// Options for EnhancedPreferences.
@@ -28,7 +30,8 @@ class PrefCacheItem {
 /// A implementation of the EnhancedPreferencesPlatform.
 class EnhancedPreferences {
   /// Cache.
-  final Map<String, PrefCacheItem> _cache = {};
+  @visibleForTesting
+  final Map<String, PrefCacheItem> cache = {};
 
   /// Get the string value for the given key.
   Future<String?> getString(String key, [EnhancedPreferencesOptions? options]) {
@@ -36,15 +39,15 @@ class EnhancedPreferences {
         options ?? EnhancedPreferencesOptions();
 
     if (opts.enableCache &&
-        _cache.containsKey(key) &&
-        _cache[key]?.type == PrefCacheType.string) {
-      return Future.value(_cache[key]?.value as String?);
+        cache.containsKey(key) &&
+        cache[key]?.type == PrefCacheType.string) {
+      return Future.value(cache[key]?.value as String?);
     } else {
       return EnhancedPreferencesPlatform.instance
           .getString(key, opts.enableEncryption)
           .then((String? value) {
             if (opts.enableCache) {
-              _cache[key] = PrefCacheItem(PrefCacheType.string, value);
+              cache[key] = PrefCacheItem(PrefCacheType.string, value);
             }
             return value;
           });
@@ -64,7 +67,7 @@ class EnhancedPreferences {
         .setString(key, value, opts.enableEncryption)
         .then((String? key) {
           if (opts.enableCache && key != null) {
-            _cache[key] = PrefCacheItem(PrefCacheType.string, value);
+            cache[key] = PrefCacheItem(PrefCacheType.string, value);
           }
           return key;
         });
@@ -76,15 +79,15 @@ class EnhancedPreferences {
         options ?? EnhancedPreferencesOptions();
 
     if (opts.enableCache &&
-        _cache.containsKey(key) &&
-        _cache[key]?.type == PrefCacheType.int) {
-      return Future.value(_cache[key]?.value as int?);
+        cache.containsKey(key) &&
+        cache[key]?.type == PrefCacheType.int) {
+      return Future.value(cache[key]?.value as int?);
     } else {
       return EnhancedPreferencesPlatform.instance
           .getInt(key, opts.enableEncryption)
           .then((int? value) {
             if (opts.enableCache) {
-              _cache[key] = PrefCacheItem(PrefCacheType.int, value);
+              cache[key] = PrefCacheItem(PrefCacheType.int, value);
             }
             return value;
           });
@@ -104,7 +107,7 @@ class EnhancedPreferences {
         .setInt(key, value, opts.enableEncryption)
         .then((String? key) {
           if (opts.enableCache && key != null) {
-            _cache[key] = PrefCacheItem(PrefCacheType.int, value);
+            cache[key] = PrefCacheItem(PrefCacheType.int, value);
           }
           return key;
         });
@@ -116,15 +119,15 @@ class EnhancedPreferences {
         options ?? EnhancedPreferencesOptions();
 
     if (opts.enableCache &&
-        _cache.containsKey(key) &&
-        _cache[key]?.type == PrefCacheType.double) {
-      return Future.value(_cache[key]?.value as double?);
+        cache.containsKey(key) &&
+        cache[key]?.type == PrefCacheType.double) {
+      return Future.value(cache[key]?.value as double?);
     } else {
       return EnhancedPreferencesPlatform.instance
           .getDouble(key, opts.enableEncryption)
           .then((double? value) {
             if (opts.enableCache) {
-              _cache[key] = PrefCacheItem(PrefCacheType.double, value);
+              cache[key] = PrefCacheItem(PrefCacheType.double, value);
             }
             return value;
           });
@@ -144,7 +147,7 @@ class EnhancedPreferences {
         .setDouble(key, value, opts.enableEncryption)
         .then((String? key) {
           if (opts.enableCache && key != null) {
-            _cache[key] = PrefCacheItem(PrefCacheType.double, value);
+            cache[key] = PrefCacheItem(PrefCacheType.double, value);
           }
           return key;
         });
@@ -156,15 +159,15 @@ class EnhancedPreferences {
         options ?? EnhancedPreferencesOptions();
 
     if (opts.enableCache &&
-        _cache.containsKey(key) &&
-        _cache[key]?.type == PrefCacheType.bool) {
-      return Future.value(_cache[key]?.value as bool?);
+        cache.containsKey(key) &&
+        cache[key]?.type == PrefCacheType.bool) {
+      return Future.value(cache[key]?.value as bool?);
     } else {
       return EnhancedPreferencesPlatform.instance
           .getBool(key, opts.enableEncryption)
           .then((bool? value) {
             if (opts.enableCache) {
-              _cache[key] = PrefCacheItem(PrefCacheType.bool, value);
+              cache[key] = PrefCacheItem(PrefCacheType.bool, value);
             }
             return value;
           });
@@ -184,16 +187,16 @@ class EnhancedPreferences {
         .setBool(key, value, opts.enableEncryption)
         .then((String? key) {
           if (opts.enableCache && key != null) {
-            _cache[key] = PrefCacheItem(PrefCacheType.bool, value);
+            cache[key] = PrefCacheItem(PrefCacheType.bool, value);
           }
           return key;
         });
   }
 
-  /// Remove the key.
+  /// Remove an entry.
   Future<String?> remove(String key) {
     return EnhancedPreferencesPlatform.instance.remove(key).then((String? key) {
-      _cache.remove(key);
+      cache.remove(key);
       return key;
     });
   }
