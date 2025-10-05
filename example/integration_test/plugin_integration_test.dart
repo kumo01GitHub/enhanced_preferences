@@ -107,14 +107,14 @@ void main() {
     );
 
     expect(
-      await prefs.getString(
+      prefs.getString(
         key1,
         EnhancedPreferencesOptions(enableCache: false, enableEncryption: false),
       ),
-      value1,
+      completion(value1),
     );
     expect(
-      () => prefs.getString(
+      prefs.getString(
         key1,
         EnhancedPreferencesOptions(enableCache: false, enableEncryption: true),
       ),
@@ -122,14 +122,14 @@ void main() {
     );
 
     expect(
-      await prefs.getString(
+      prefs.getString(
         key2,
         EnhancedPreferencesOptions(enableCache: false, enableEncryption: true),
       ),
-      value2,
+      completion(value2),
     );
     expect(
-      () => prefs.getString(
+      prefs.getString(
         key2,
         EnhancedPreferencesOptions(enableCache: false, enableEncryption: false),
       ),
