@@ -1,6 +1,7 @@
 ## 0.3.1
 
 * ci: Improve tests.
+* ci: Pin third-party GitHub Actions.
 * doc: Add badges.
 
 ## 0.3.0
