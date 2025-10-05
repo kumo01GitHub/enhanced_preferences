@@ -1,5 +1,6 @@
 # Enhanced shared preferences plugin
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fdb0c1047550484d8735106106e54240)](https://app.codacy.com/gh/kumo01GitHub/enhanced_preferences?utm_source=github.com&utm_medium=referral&utm_content=kumo01GitHub/enhanced_preferences&utm_campaign=Badge_Grade)
 [![pub package](https://img.shields.io/pub/v/enhanced_preferences.svg)](https://pub.dev/packages/enhanced_preferences)
 [![pub points](https://img.shields.io/pub/points/enhanced_preferences?label=pub%20points)](https://pub.dev/packages/enhanced_preferences/score)
 [![CI](https://github.com/kumo01GitHub/enhanced_preferences/actions/workflows/ci.yml/badge.svg)](https://github.com/kumo01GitHub/enhanced_preferences/actions/workflows/ci.yml)
