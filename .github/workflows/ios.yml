@@ -19,6 +19,7 @@ env:
 jobs:
   integration-test:
     runs-on: macos-latest
+    timeout-minutes: 60
     strategy:
       matrix:
         os-version: [26, 18]
@@ -59,7 +60,7 @@ jobs:
 
       - name: Run Integration Tests
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: flutter test integration_test
+        run: flutter test integration_test --ignore-timeouts
 
       - name: CocoaPods Lint
         if: matrix.package-manager == 'cocoapods'

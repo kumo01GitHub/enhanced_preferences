@@ -22,7 +22,7 @@ void main() {
 
     expect(await prefs.setString(key, value), key);
     expect(await prefs.getString(key), value);
-  }, timeout: Timeout.none);
+  });
 
   test('setInt/getInt', () async {
     final String key = "counter";
@@ -30,7 +30,7 @@ void main() {
 
     expect(await prefs.setInt(key, value), key);
     expect(await prefs.getInt(key), value);
-  }, timeout: Timeout.none);
+  });
 
   test('setDouble/getDouble', () async {
     final String key = "rate";
@@ -38,7 +38,7 @@ void main() {
 
     expect(await prefs.setDouble(key, value), key);
     expect(await prefs.getDouble(key), value);
-  }, timeout: Timeout.none);
+  });
 
   test('setBool/getBool', () async {
     final String key = "isActive";
@@ -46,7 +46,7 @@ void main() {
 
     expect(await prefs.setBool(key, value), key);
     expect(await prefs.getBool(key), value);
-  }, timeout: Timeout.none);
+  });
 
   test('keys', () async {
     final EnhancedPreferencesOptions options = EnhancedPreferencesOptions(
@@ -65,7 +65,7 @@ void main() {
     expect(await prefs.remove(key1), key1);
     expect((await prefs.keys())?.contains(key1), false);
     expect((await prefs.keys())?.contains(key2), true);
-  }, timeout: Timeout.none);
+  });
 
   test('Cache', () async {
     final String key1 = "cachedKey";
@@ -87,70 +87,53 @@ void main() {
       EnhancedPreferencesOptions(enableCache: false),
     );
     expect(prefs.cache.containsKey(key2), false);
-  }, timeout: Timeout.none);
+  });
 
-  test(
-    'Encryption',
-    () async {
-      final String key1 = "plainKey";
-      final String value1 = "plainValue";
-      await prefs.setString(
+  test('Encryption', () async {
+    final String key1 = "plainKey";
+    final String value1 = "plainValue";
+    await prefs.setString(
+      key1,
+      value1,
+      EnhancedPreferencesOptions(enableCache: false, enableEncryption: false),
+    );
+
+    final String key2 = "encryptedKey";
+    final String value2 = "encryptedValue";
+    await prefs.setString(
+      key2,
+      value2,
+      EnhancedPreferencesOptions(enableCache: false, enableEncryption: true),
+    );
+
+    expect(
+      prefs.getString(
         key1,
-        value1,
         EnhancedPreferencesOptions(enableCache: false, enableEncryption: false),
-      );
-
-      final String key2 = "encryptedKey";
-      final String value2 = "encryptedValue";
-      await prefs.setString(
-        key2,
-        value2,
+      ),
+      completion(value1),
+    );
+    expect(
+      prefs.getString(
+        key1,
         EnhancedPreferencesOptions(enableCache: false, enableEncryption: true),
-      );
+      ),
+      throwsA(isA<PlatformException>()),
+    );
 
-      expect(
-        prefs.getString(
-          key1,
-          EnhancedPreferencesOptions(
-            enableCache: false,
-            enableEncryption: false,
-          ),
-        ),
-        completion(value1),
-      );
-      expect(
-        prefs.getString(
-          key1,
-          EnhancedPreferencesOptions(
-            enableCache: false,
-            enableEncryption: true,
-          ),
-        ),
-        throwsA(isA<PlatformException>()),
-      );
-
-      expect(
-        prefs.getString(
-          key2,
-          EnhancedPreferencesOptions(
-            enableCache: false,
-            enableEncryption: true,
-          ),
-        ),
-        completion(value2),
-      );
-      expect(
-        prefs.getString(
-          key2,
-          EnhancedPreferencesOptions(
-            enableCache: false,
-            enableEncryption: false,
-          ),
-        ),
-        throwsA(isA<PlatformException>()),
-      );
-    },
-    timeout: Timeout.none,
-    skip: true,
-  );
+    expect(
+      prefs.getString(
+        key2,
+        EnhancedPreferencesOptions(enableCache: false, enableEncryption: true),
+      ),
+      completion(value2),
+    );
+    expect(
+      prefs.getString(
+        key2,
+        EnhancedPreferencesOptions(enableCache: false, enableEncryption: false),
+      ),
+      throwsA(isA<PlatformException>()),
+    );
+  }, skip: true);
 }
