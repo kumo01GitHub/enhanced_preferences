@@ -102,7 +102,7 @@ void main() {
     expect(initialPlatform, isInstanceOf<MethodChannelEnhancedPreferences>());
   });
 
-  test('String', () async {
+  test('setString/getString', () async {
     EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
@@ -115,7 +115,7 @@ void main() {
     expect(await prefs.getString(key), value);
   });
 
-  test('Int', () async {
+  test('setInt/getInt', () async {
     EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
@@ -128,7 +128,7 @@ void main() {
     expect(await prefs.getInt(key), value);
   });
 
-  test('Double', () async {
+  test('setDouble/getDouble', () async {
     EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
@@ -141,7 +141,7 @@ void main() {
     expect(await prefs.getDouble(key), value);
   });
 
-  test('Bool', () async {
+  test('setBool/getBool', () async {
     EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
@@ -154,7 +154,7 @@ void main() {
     expect(await prefs.getBool(key), value);
   });
 
-  test('Remove', () async {
+  test('remove', () async {
     EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
@@ -169,7 +169,7 @@ void main() {
     expect(() => prefs.getString(key), throwsA(isA<PlatformException>()));
   });
 
-  test('Keys', () async {
+  test('keys', () async {
     EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
@@ -186,7 +186,7 @@ void main() {
 
     expect(await prefs.remove(key1), key1);
     expect((await prefs.keys())?.contains(key1), false);
-    expect(await prefs.keys(), containsAll([key2]));
+    expect((await prefs.keys())?.contains(key2), true);
   });
 
   test('Options', () async {
@@ -203,9 +203,9 @@ void main() {
     EnhancedPreferencesPlatform.instance = fakePlatform;
 
     final String key1 = "cachedKey";
-    final String value1 = "cachedValue";
+    final double value1 = 1.23;
 
-    await prefs.setString(
+    await prefs.setDouble(
       key1,
       value1,
       EnhancedPreferencesOptions(enableCache: true),
@@ -213,9 +213,9 @@ void main() {
     expect(prefs.cache.containsKey(key1), true);
 
     final String key2 = "nonCachedKey";
-    final String value2 = "nonCachedValue";
+    final double value2 = 98.76;
 
-    await prefs.setString(
+    await prefs.setDouble(
       key2,
       value2,
       EnhancedPreferencesOptions(enableCache: false),
