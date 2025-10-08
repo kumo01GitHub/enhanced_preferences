@@ -5,6 +5,7 @@
 * ci: Pin third-party GitHub Actions.
 * doc: Add badges.
 * doc: Fix typo.
+* doc: Remove homepage.
 
 ## 0.3.0
 
