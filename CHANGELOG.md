@@ -6,6 +6,7 @@
 * doc: Add badges.
 * doc: Fix typo.
 * doc: Remove homepage.
+* doc: Remove comments.
 
 ## 0.3.0
 
