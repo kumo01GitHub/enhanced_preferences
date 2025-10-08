@@ -20,7 +20,7 @@ public class UserDefaultsHandler {
         }
 
         if (enableEncryption) {
-            let regex = try! NSRegularExpression(pattern: "^\(type):[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]+$")
+            let regex = try NSRegularExpression(pattern: "^\(type):[A-Za-z0-9+/=]+:[A-Za-z0-9+/=]+$")
             if (regex.matches(in: value, range: NSRange(0..<value.utf16.count)).count == 0) {
                 throw EnhancedPreferencesError.referenceError(message: "Invalid value.")
             }
@@ -34,7 +34,7 @@ public class UserDefaultsHandler {
 
             return try CryptoHandler.decrypt(encrypted: CryptoData(data: data, key: dataKey))!
         } else {
-            let regex = try! NSRegularExpression(pattern: "^\(type):[A-Za-z0-9+/=]+$")
+            let regex = try NSRegularExpression(pattern: "^\(type):[A-Za-z0-9+/=]+$")
             if (regex.matches(in: value, range: NSRange(0..<value.utf16.count)).count == 0) {
                 throw EnhancedPreferencesError.referenceError(message: "Invalid value.")
             }

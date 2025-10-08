@@ -1,5 +1,6 @@
 ## 0.3.1
 
+* fix(darwin): Remove force try.
 * ci: Improve tests.
 * ci: Add report coverage.
 * ci: Pin third-party GitHub Actions.
