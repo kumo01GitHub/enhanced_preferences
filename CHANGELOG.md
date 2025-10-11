@@ -1,7 +1,7 @@
 ## 0.3.1
 
+* fix: Remove duplications.
 * fix(darwin): Remove force try.
-* fix(darwin): Remove duplications.
 * ci: Improve tests.
 * ci: Add report coverage.
 * ci: Pin third-party GitHub Actions.
