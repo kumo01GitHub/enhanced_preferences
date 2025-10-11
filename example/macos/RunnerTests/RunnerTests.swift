@@ -13,18 +13,18 @@ import XCTest
 
 class RunnerTests: XCTestCase {
 
-  func testGetPlatformVersion() {
-    let plugin = EnhancedPreferencesPlugin()
+    func testGetPlatformVersion() {
+        let plugin = EnhancedPreferencesPlugin()
 
-    let call = FlutterMethodCall(methodName: "getPlatformVersion", arguments: [])
+        let call = FlutterMethodCall(methodName: "getPlatformVersion", arguments: [])
 
-    let resultExpectation = expectation(description: "result block must be called.")
-    plugin.handle(call) { result in
-      XCTAssertEqual(result as! String,
-                     "macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
-      resultExpectation.fulfill()
+        let resultExpectation = expectation(description: "result block must be called.")
+        plugin.handle(call) { result in
+            XCTAssertEqual(result as! String,
+                "macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
+            resultExpectation.fulfill()
+        }
+        waitForExpectations(timeout: 1)
     }
-    waitForExpectations(timeout: 1)
-  }
 
 }
