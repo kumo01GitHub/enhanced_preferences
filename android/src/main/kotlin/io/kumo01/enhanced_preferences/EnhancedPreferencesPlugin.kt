@@ -29,97 +29,56 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
         try {
             when (call.method) {
                 "getString" -> {
-                    if (call.argument<Boolean>("enableEncryption") == true) {
-                        result.success(getEncryptedString(call.argument<String>("key")))
-                    } else {
-                        result.success(getString(call.argument<String>("key")))
-                    }
+                    result.success(getString(
+                        call.argument<String>("key"),
+                        call.argument<Boolean>("enableEncryption")
+                    ))
                 }
                 "setString" -> {
-                    if (call.argument<Boolean>("enableEncryption") == true) {
-                        result.success(
-                            setEncryptedString(
-                                call.argument<String>("key"),
-                                call.argument<String>("value")
-                            )
-                        )
-                    } else {
-                        result.success(
-                            setString(
-                                call.argument<String>("key"),
-                                call.argument<String>("value")
-                            )
-                        )
-                    }
+                    result.success(setString(
+                        call.argument<String>("key"),
+                        call.argument<String>("value"),
+                        call.argument<Boolean>("enableEncryption")
+                    ))
                 }
                 "getInt" -> {
-                    if (call.argument<Boolean>("enableEncryption") == true) {
-                        result.success(getEncryptedInt(call.argument<String>("key")))
-                    } else {
-                        result.success(getInt(call.argument<String>("key")))
-                    }
+                    result.success(getInt(
+                        call.argument<String>("key"),
+                        call.argument<Boolean>("enableEncryption")
+                    ))
                 }
                 "setInt" -> {
-                    if (call.argument<Boolean>("enableEncryption") == true) {
-                        result.success(
-                            setEncryptedInt(
-                                call.argument<String>("key"),
-                                call.argument<Int>("value")
-                            )
-                        )
-                    } else {
-                        result.success(
-                            setInt(call.argument<String>("key"), call.argument<Int>("value"))
-                        )
-                    }
+                    result.success(setInt(
+                        call.argument<String>("key"),
+                        call.argument<Int>("value"),
+                        call.argument<Boolean>("enableEncryption")
+                    ))
                 }
                 "getDouble" -> {
-                    if (call.argument<Boolean>("enableEncryption") == true) {
-                        result.success(getEncryptedDouble(call.argument<String>("key")))
-                    } else {
-                        result.success(getDouble(call.argument<String>("key")))
-                    }
+                    result.success(getDouble(
+                        call.argument<String>("key"),
+                        call.argument<Boolean>("enableEncryption")
+                    ))
                 }
                 "setDouble" -> {
-                    if (call.argument<Boolean>("enableEncryption") == true) {
-                        result.success(
-                            setEncryptedDouble(
-                                call.argument<String>("key"),
-                                call.argument<Double>("value")
-                            )
-                        )
-                    } else {
-                        result.success(
-                            setDouble(
-                                call.argument<String>("key"),
-                                call.argument<Double>("value")
-                            )
-                        )
-                    }
+                    result.success(setDouble(
+                        call.argument<String>("key"),
+                        call.argument<Double>("value"),
+                        call.argument<Boolean>("enableEncryption")
+                    ))
                 }
                 "getBool" -> {
-                    if (call.argument<Boolean>("enableEncryption") == true) {
-                        result.success(getEncryptedBool(call.argument<String>("key")))
-                    } else {
-                        result.success(getBool(call.argument<String>("key")))
-                    }
+                    result.success(getBool(
+                        call.argument<String>("key"),
+                        call.argument<Boolean>("enableEncryption")
+                    ))
                 }
                 "setBool" -> {
-                    if (call.argument<Boolean>("enableEncryption") == true) {
-                        result.success(
-                            setEncryptedBool(
-                                call.argument<String>("key"),
-                                call.argument<Boolean>("value")
-                            )
-                        )
-                    } else {
-                        result.success(
-                            setBool(
-                                call.argument<String>("key"),
-                                call.argument<Boolean>("value")
-                            )
-                        )
-                    }
+                    result.success(setBool(
+                        call.argument<String>("key"),
+                        call.argument<Boolean>("value"),
+                        call.argument<Boolean>("enableEncryption")
+                    ))
                 }
                 "remove" -> {
                     result.success(remove(call.argument<String>("key")))
@@ -142,125 +101,19 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
         channel.setMethodCallHandler(null)
     }
 
-    private fun getString(key: String?): String {
+    private fun getString(key: String?, enableEncryption: Boolean?): String {
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
 
-        val value: String? = runBlocking { repository.getString(key).firstOrNull() }
-
-        if (value == null) {
-            throw EnhancedPreferencesError(ErrorCode.REFERENCE_ERROR, "Value for '$key' is null.")
+        val value: String? = if (enableEncryption == true) {
+            try {
+                runBlocking { repository.getEncryptedString(key).firstOrNull() }
+            } catch (e: GeneralSecurityException) {
+                throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+            }
         } else {
-            return value
-        }
-    }
-
-    private fun setString(key: String?, value: String?): String {
-        if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
-        }
-        if (value == null) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
-        }
-
-        runBlocking { repository.setString(key, value) }
-
-        return key
-    }
-
-    private fun getInt(key: String?): Int {
-        if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
-        }
-
-        val value: Int? = runBlocking { repository.getInt(key).firstOrNull() }
-
-        if (value == null) {
-            throw EnhancedPreferencesError(ErrorCode.REFERENCE_ERROR, "Value for '$key' is null.")
-        } else {
-            return value
-        }
-    }
-
-    private fun setInt(key: String?, value: Int?): String {
-        if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
-        }
-        if (value == null) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
-        }
-
-        runBlocking { repository.setInt(key, value) }
-
-        return key
-    }
-
-    private fun getDouble(key: String?): Double {
-        if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
-        }
-
-        val value: Double? = runBlocking { repository.getDouble(key).firstOrNull() }
-
-        if (value == null) {
-            throw EnhancedPreferencesError(ErrorCode.REFERENCE_ERROR, "Value for '$key' is null.")
-        } else {
-            return value
-        }
-    }
-
-    private fun setDouble(key: String?, value: Double?): String {
-        if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
-        }
-        if (value == null) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
-        }
-
-        runBlocking { repository.setDouble(key, value) }
-
-        return key
-    }
-
-    private fun getBool(key: String?): Boolean {
-        if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
-        }
-
-        val value: Boolean? = runBlocking { repository.getBoolean(key).firstOrNull() }
-
-        if (value == null) {
-            throw EnhancedPreferencesError(ErrorCode.REFERENCE_ERROR, "Value for '$key' is null.")
-        } else {
-            return value
-        }
-    }
-
-    private fun setBool(key: String?, value: Boolean?): String {
-        if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
-        }
-        if (value == null) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
-        }
-
-        runBlocking { repository.setBoolean(key, value) }
-
-        return key
-    }
-
-    private fun getEncryptedString(key: String?): String {
-        if (key.isNullOrBlank()) {
-            throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
-        }
-
-        var value: String? = null
-
-        try {
-            value = runBlocking { repository.getEncryptedString(key).firstOrNull() }
-        } catch (e: GeneralSecurityException) {
-            throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+            runBlocking { repository.getString(key).firstOrNull() }
         }
 
         if (value == null) {
@@ -270,7 +123,7 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private fun setEncryptedString(key: String?, value: String?): String {
+    private fun setString(key: String?, value: String?, enableEncryption: Boolean?): String {
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
@@ -278,26 +131,32 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
         }
 
-        try {
-            runBlocking { repository.setEncryptedString(key, value) }
-        } catch (e: GeneralSecurityException) {
-            throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+        if (enableEncryption == true) {
+            try {
+                runBlocking { repository.setEncryptedString(key, value) }
+            } catch (e: GeneralSecurityException) {
+                throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+            }
+        } else {
+            runBlocking { repository.setString(key, value) }
         }
 
         return key
     }
 
-    private fun getEncryptedInt(key: String?): Int {
+    private fun getInt(key: String?, enableEncryption: Boolean?): Int {
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
 
-        var value: Int? = null
-
-        try {
-            value = runBlocking { repository.getEncryptedInt(key).firstOrNull() }
-        } catch (e: GeneralSecurityException) {
-            throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+        val value: Int? = if (enableEncryption == true) {
+            try {
+                runBlocking { repository.getEncryptedInt(key).firstOrNull() }
+            } catch (e: GeneralSecurityException) {
+                throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+            }
+        } else {
+            runBlocking { repository.getInt(key).firstOrNull() }
         }
 
         if (value == null) {
@@ -307,7 +166,7 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private fun setEncryptedInt(key: String?, value: Int?): String {
+    private fun setInt(key: String?, value: Int?, enableEncryption: Boolean?): String {
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
@@ -315,26 +174,32 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
         }
 
-        try {
-            runBlocking { repository.setEncryptedInt(key, value) }
-        } catch (e: GeneralSecurityException) {
-            throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+        if (enableEncryption == true) {
+            try {
+                runBlocking { repository.setEncryptedInt(key, value) }
+            } catch (e: GeneralSecurityException) {
+                throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+            }
+        } else {
+            runBlocking { repository.setInt(key, value) }
         }
 
         return key
     }
 
-    private fun getEncryptedDouble(key: String?): Double {
+    private fun getDouble(key: String?, enableEncryption: Boolean?): Double {
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
 
-        var value: Double? = null
-
-        try {
-            value = runBlocking { repository.getEncryptedDouble(key).firstOrNull() }
-        } catch (e: GeneralSecurityException) {
-            throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+        val value: Double? = if (enableEncryption == true) {
+            try {
+                runBlocking { repository.getEncryptedDouble(key).firstOrNull() }
+            } catch (e: GeneralSecurityException) {
+                throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+            }
+        } else {
+            runBlocking { repository.getDouble(key).firstOrNull() }
         }
 
         if (value == null) {
@@ -344,7 +209,7 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private fun setEncryptedDouble(key: String?, value: Double?): String {
+    private fun setDouble(key: String?, value: Double?, enableEncryption: Boolean?): String {
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
@@ -352,26 +217,33 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
         }
 
-        try {
-            runBlocking { repository.setEncryptedDouble(key, value) }
-        } catch (e: GeneralSecurityException) {
-            throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+        if (enableEncryption == true) {
+            try {
+                runBlocking { repository.setEncryptedDouble(key, value) }
+            } catch (e: GeneralSecurityException) {
+                throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+            }
+        } else {
+            runBlocking { repository.setDouble(key, value) }
         }
 
         return key
     }
 
-    private fun getEncryptedBool(key: String?): Boolean {
+    private fun getBool(key: String?, enableEncryption: Boolean?): Boolean {
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
 
-        var value: Boolean? = null
+        val value: Boolean? = if (enableEncryption == true) {
+            try {
+                runBlocking { repository.getEncryptedBoolean(key).firstOrNull() }
+            } catch (e: GeneralSecurityException) {
+                throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+            }
+        } else {
+            runBlocking { repository.getBoolean(key).firstOrNull() }
 
-        try {
-            value = runBlocking { repository.getEncryptedBoolean(key).firstOrNull() }
-        } catch (e: GeneralSecurityException) {
-            throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
         }
 
         if (value == null) {
@@ -381,7 +253,7 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private fun setEncryptedBool(key: String?, value: Boolean?): String {
+    private fun setBool(key: String?, value: Boolean?, enableEncryption: Boolean?): String {
         if (key.isNullOrBlank()) {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Key is null or blank.")
         }
@@ -389,10 +261,14 @@ class EnhancedPreferencesPlugin : FlutterPlugin, MethodCallHandler {
             throw EnhancedPreferencesError(ErrorCode.INVALID_ARGUMENT, "Value is null or blank.")
         }
 
-        try {
-            runBlocking { repository.setEncryptedBoolean(key, value) }
-        } catch (e: GeneralSecurityException) {
-            throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+        if (enableEncryption == true) {
+            try {
+                runBlocking { repository.setEncryptedBoolean(key, value) }
+            } catch (e: GeneralSecurityException) {
+                throw EnhancedPreferencesError(ErrorCode.ILLEGAL_ACCESS, e.message)
+            }
+        } else {
+            runBlocking { repository.setBoolean(key, value) }
         }
 
         return key
