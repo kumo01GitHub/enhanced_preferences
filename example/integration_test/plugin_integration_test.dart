@@ -25,6 +25,35 @@ void main() {
       expect(await prefs.setString(key, value, opts), key);
       expect(await prefs.getString(key, opts), value);
     });
+
+    test('encryption', () async {
+      final enableEncryptionOpts = EnhancedPreferencesOptions(
+        enableCache: false,
+        enableEncryption: true,
+      );
+      final disableEncryptionOpts = EnhancedPreferencesOptions(
+        enableCache: false,
+        enableEncryption: false,
+      );
+
+      String key1 = "encryptedStringKey";
+      String value1 = "encryptedStringValue";
+      expect(await prefs.setString(key1, value1, enableEncryptionOpts), key1);
+      expect(await prefs.getString(key1, enableEncryptionOpts), value1);
+      expect(
+        () => prefs.getString(key1, disableEncryptionOpts),
+        throwsA(isA<PlatformException>()),
+      );
+
+      String key2 = "plainStringKey";
+      String value2 = "plainStringValue";
+      expect(await prefs.setString(key2, value2, disableEncryptionOpts), key2);
+      expect(await prefs.getString(key2, disableEncryptionOpts), value2);
+      expect(
+        () => prefs.getString(key2, enableEncryptionOpts),
+        throwsA(isA<PlatformException>()),
+      );
+    });
   });
 
   group('int', () {
@@ -35,6 +64,35 @@ void main() {
 
       expect(await prefs.setInt(key, value, opts), key);
       expect(await prefs.getInt(key, opts), value);
+    });
+
+    test('encryption', () async {
+      final enableEncryptionOpts = EnhancedPreferencesOptions(
+        enableCache: false,
+        enableEncryption: true,
+      );
+      final disableEncryptionOpts = EnhancedPreferencesOptions(
+        enableCache: false,
+        enableEncryption: false,
+      );
+
+      String key1 = "encryptedIntKey";
+      int value1 = 999;
+      expect(await prefs.setInt(key1, value1, enableEncryptionOpts), key1);
+      expect(await prefs.getInt(key1, enableEncryptionOpts), value1);
+      expect(
+        () => prefs.getInt(key1, disableEncryptionOpts),
+        throwsA(isA<PlatformException>()),
+      );
+
+      String key2 = "plainIntKey";
+      int value2 = 1234;
+      expect(await prefs.setInt(key2, value2, disableEncryptionOpts), key2);
+      expect(await prefs.getInt(key2, disableEncryptionOpts), value2);
+      expect(
+        () => prefs.getInt(key2, enableEncryptionOpts),
+        throwsA(isA<PlatformException>()),
+      );
     });
   });
 
@@ -47,6 +105,35 @@ void main() {
       expect(await prefs.setDouble(key, value, opts), key);
       expect(await prefs.getDouble(key, opts), value);
     });
+
+    test('encryption', () async {
+      final enableEncryptionOpts = EnhancedPreferencesOptions(
+        enableCache: false,
+        enableEncryption: true,
+      );
+      final disableEncryptionOpts = EnhancedPreferencesOptions(
+        enableCache: false,
+        enableEncryption: false,
+      );
+
+      String key1 = "encryptedDoubleKey";
+      double value1 = 12.3;
+      expect(await prefs.setDouble(key1, value1, enableEncryptionOpts), key1);
+      expect(await prefs.getDouble(key1, enableEncryptionOpts), value1);
+      expect(
+        () => prefs.getDouble(key1, disableEncryptionOpts),
+        throwsA(isA<PlatformException>()),
+      );
+
+      String key2 = "plainDoubleKey";
+      double value2 = 0.987;
+      expect(await prefs.setDouble(key2, value2, disableEncryptionOpts), key2);
+      expect(await prefs.getDouble(key2, disableEncryptionOpts), value2);
+      expect(
+        () => prefs.getDouble(key2, enableEncryptionOpts),
+        throwsA(isA<PlatformException>()),
+      );
+    });
   });
 
   group('bool', () {
@@ -57,6 +144,35 @@ void main() {
 
       expect(await prefs.setBool(key, value, opts), key);
       expect(await prefs.getBool(key, opts), value);
+    });
+
+    test('encryption', () async {
+      final enableEncryptionOpts = EnhancedPreferencesOptions(
+        enableCache: false,
+        enableEncryption: true,
+      );
+      final disableEncryptionOpts = EnhancedPreferencesOptions(
+        enableCache: false,
+        enableEncryption: false,
+      );
+
+      String key1 = "encryptedBoolKey";
+      bool value1 = true;
+      expect(await prefs.setBool(key1, value1, enableEncryptionOpts), key1);
+      expect(await prefs.getBool(key1, enableEncryptionOpts), value1);
+      expect(
+        () => prefs.getBool(key1, disableEncryptionOpts),
+        throwsA(isA<PlatformException>()),
+      );
+
+      String key2 = "plainBoolKey";
+      bool value2 = false;
+      expect(await prefs.setBool(key2, value2, disableEncryptionOpts), key2);
+      expect(await prefs.getBool(key2, disableEncryptionOpts), value2);
+      expect(
+        () => prefs.getBool(key2, enableEncryptionOpts),
+        throwsA(isA<PlatformException>()),
+      );
     });
   });
 
@@ -83,53 +199,5 @@ void main() {
     expect(await prefs.remove(key1), key1);
     expect((await prefs.keys())?.contains(key1), false);
     expect((await prefs.keys())?.contains(key2), true);
-  });
-
-  test('Encryption', () async {
-    final String key1 = "plainKey";
-    final String value1 = "plainValue";
-    await prefs.setString(
-      key1,
-      value1,
-      EnhancedPreferencesOptions(enableCache: false, enableEncryption: false),
-    );
-
-    final String key2 = "encryptedKey";
-    final String value2 = "encryptedValue";
-    await prefs.setString(
-      key2,
-      value2,
-      EnhancedPreferencesOptions(enableCache: false, enableEncryption: true),
-    );
-
-    expect(
-      prefs.getString(
-        key1,
-        EnhancedPreferencesOptions(enableCache: false, enableEncryption: false),
-      ),
-      completion(value1),
-    );
-    expect(
-      prefs.getString(
-        key1,
-        EnhancedPreferencesOptions(enableCache: false, enableEncryption: true),
-      ),
-      throwsA(isA<PlatformException>()),
-    );
-
-    expect(
-      prefs.getString(
-        key2,
-        EnhancedPreferencesOptions(enableCache: false, enableEncryption: true),
-      ),
-      completion(value2),
-    );
-    expect(
-      prefs.getString(
-        key2,
-        EnhancedPreferencesOptions(enableCache: false, enableEncryption: false),
-      ),
-      throwsA(isA<PlatformException>()),
-    );
   });
 }
