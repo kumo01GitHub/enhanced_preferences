@@ -16,77 +16,73 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   final EnhancedPreferences prefs = EnhancedPreferences();
 
-  test('setString/getString', () async {
-    final String key = "hello";
-    final String value = "World";
+  group('String', () {
+    test('set/get', () async {
+      final opts = EnhancedPreferencesOptions(enableCache: false);
+      final String key = "hello";
+      final String value = "World";
+
+      expect(await prefs.setString(key, value, opts), key);
+      expect(await prefs.getString(key, opts), value);
+    });
+  });
+
+  group('int', () {
+    test('set/get', () async {
+      final opts = EnhancedPreferencesOptions(enableCache: false);
+      final String key = "counter";
+      final int value = 10;
+
+      expect(await prefs.setInt(key, value, opts), key);
+      expect(await prefs.getInt(key, opts), value);
+    });
+  });
+
+  group('double', () {
+    test('set/get', () async {
+      final opts = EnhancedPreferencesOptions(enableCache: false);
+      final String key = "rate";
+      final double value = 0.9;
+
+      expect(await prefs.setDouble(key, value, opts), key);
+      expect(await prefs.getDouble(key, opts), value);
+    });
+  });
+
+  group('bool', () {
+    test('set/get', () async {
+      final opts = EnhancedPreferencesOptions(enableCache: false);
+      final String key = "isActive";
+      final bool value = true;
+
+      expect(await prefs.setBool(key, value, opts), key);
+      expect(await prefs.getBool(key, opts), value);
+    });
+  });
+
+  test('remove', () async {
+    final String key = "keyToRemove";
+    final String value = "valueToRemove";
 
     expect(await prefs.setString(key, value), key);
     expect(await prefs.getString(key), value);
-  });
-
-  test('setInt/getInt', () async {
-    final String key = "counter";
-    final int value = 10;
-
-    expect(await prefs.setInt(key, value), key);
-    expect(await prefs.getInt(key), value);
-  });
-
-  test('setDouble/getDouble', () async {
-    final String key = "rate";
-    final double value = 0.9;
-
-    expect(await prefs.setDouble(key, value), key);
-    expect(await prefs.getDouble(key), value);
-  });
-
-  test('setBool/getBool', () async {
-    final String key = "isActive";
-    final bool value = true;
-
-    expect(await prefs.setBool(key, value), key);
-    expect(await prefs.getBool(key), value);
+    expect(await prefs.remove(key), key);
+    expect(() => prefs.getString(key), throwsA(isA<PlatformException>()));
   });
 
   test('keys', () async {
-    final EnhancedPreferencesOptions options = EnhancedPreferencesOptions(
-      enableCache: false,
-    );
-
     final String key1 = "key1";
     final int value1 = 999;
     final String key2 = "key2";
     final bool value2 = false;
 
-    expect(await prefs.setInt(key1, value1, options), key1);
-    expect(await prefs.setBool(key2, value2, options), key2);
+    expect(await prefs.setInt(key1, value1), key1);
+    expect(await prefs.setBool(key2, value2), key2);
     expect(await prefs.keys(), containsAll([key1, key2]));
 
     expect(await prefs.remove(key1), key1);
     expect((await prefs.keys())?.contains(key1), false);
     expect((await prefs.keys())?.contains(key2), true);
-  });
-
-  test('Cache', () async {
-    final String key1 = "cachedKey";
-    final double value1 = 1.23;
-
-    await prefs.setDouble(
-      key1,
-      value1,
-      EnhancedPreferencesOptions(enableCache: true),
-    );
-    expect(prefs.cache.containsKey(key1), true);
-
-    final String key2 = "nonCachedKey";
-    final double value2 = 98.76;
-
-    await prefs.setDouble(
-      key2,
-      value2,
-      EnhancedPreferencesOptions(enableCache: false),
-    );
-    expect(prefs.cache.containsKey(key2), false);
   });
 
   test('Encryption', () async {

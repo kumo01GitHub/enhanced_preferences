@@ -3,8 +3,11 @@ import FlutterMacOS
 #else
 import Flutter
 #endif
+import OSLog
 
 public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
+    let log = OSLog(subsystem: "enhanced_preferences", category: "EnhancedPreferencesPlugin")
+
     public static func register(with registrar: FlutterPluginRegistrar) {
         #if os(macOS)
         let messenger = registrar.messenger
@@ -18,6 +21,8 @@ public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        os_log("%@", log: log, type: .debug, call.method)
+
         do {
             switch call.method {
             case "getString":
