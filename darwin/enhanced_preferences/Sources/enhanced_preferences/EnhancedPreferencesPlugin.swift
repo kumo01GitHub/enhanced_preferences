@@ -6,7 +6,7 @@ import Flutter
 import OSLog
 
 public class EnhancedPreferencesPlugin: NSObject, FlutterPlugin {
-    let log = OSLog(subsystem: "enhanced_preferences", category: "EnhancedPreferencesPlugin")
+    private let log = OSLog(subsystem: "enhanced_preferences", category: "EnhancedPreferencesPlugin")
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         #if os(macOS)
