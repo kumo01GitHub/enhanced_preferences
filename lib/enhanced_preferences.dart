@@ -16,42 +16,15 @@ class EnhancedPreferencesOptions {
   });
 }
 
-/// Cached preference type.
-enum PrefCacheType { string, int, double, bool }
-
-/// Chached preference item.
-class PrefCacheItem {
-  final PrefCacheType type;
-  final dynamic value;
-
-  PrefCacheItem(this.type, this.value);
-}
-
 /// A implementation of the EnhancedPreferencesPlatform.
 class EnhancedPreferences {
   /// Cache.
   @visibleForTesting
-  final Map<String, PrefCacheItem> cache = {};
+  final Map<String, dynamic> cache = {};
 
   /// Get the string value for the given key.
   Future<String?> getString(String key, [EnhancedPreferencesOptions? options]) {
-    final EnhancedPreferencesOptions opts =
-        options ?? EnhancedPreferencesOptions();
-
-    if (opts.enableCache &&
-        cache.containsKey(key) &&
-        cache[key]?.type == PrefCacheType.string) {
-      return Future.value(cache[key]?.value as String?);
-    } else {
-      return EnhancedPreferencesPlatform.instance
-          .getString(key, opts.enableEncryption)
-          .then((String? value) {
-            if (opts.enableCache) {
-              cache[key] = PrefCacheItem(PrefCacheType.string, value);
-            }
-            return value;
-          });
-    }
+    return _getItem<String>(key, options);
   }
 
   /// Set the string value for the given key.
@@ -60,38 +33,12 @@ class EnhancedPreferences {
     String value, [
     EnhancedPreferencesOptions? options,
   ]) {
-    final EnhancedPreferencesOptions opts =
-        options ?? EnhancedPreferencesOptions();
-
-    return EnhancedPreferencesPlatform.instance
-        .setString(key, value, opts.enableEncryption)
-        .then((String? key) {
-          if (opts.enableCache && key != null) {
-            cache[key] = PrefCacheItem(PrefCacheType.string, value);
-          }
-          return key;
-        });
+    return _setItem<String>(key, value, options);
   }
 
   /// Get the integer value for the given key.
   Future<int?> getInt(String key, [EnhancedPreferencesOptions? options]) {
-    final EnhancedPreferencesOptions opts =
-        options ?? EnhancedPreferencesOptions();
-
-    if (opts.enableCache &&
-        cache.containsKey(key) &&
-        cache[key]?.type == PrefCacheType.int) {
-      return Future.value(cache[key]?.value as int?);
-    } else {
-      return EnhancedPreferencesPlatform.instance
-          .getInt(key, opts.enableEncryption)
-          .then((int? value) {
-            if (opts.enableCache) {
-              cache[key] = PrefCacheItem(PrefCacheType.int, value);
-            }
-            return value;
-          });
-    }
+    return _getItem<int>(key, options);
   }
 
   /// Set the integer value for the given key.
@@ -100,38 +47,12 @@ class EnhancedPreferences {
     int value, [
     EnhancedPreferencesOptions? options,
   ]) {
-    final EnhancedPreferencesOptions opts =
-        options ?? EnhancedPreferencesOptions();
-
-    return EnhancedPreferencesPlatform.instance
-        .setInt(key, value, opts.enableEncryption)
-        .then((String? key) {
-          if (opts.enableCache && key != null) {
-            cache[key] = PrefCacheItem(PrefCacheType.int, value);
-          }
-          return key;
-        });
+    return _setItem<int>(key, value, options);
   }
 
   /// Get the double value for the given key.
   Future<double?> getDouble(String key, [EnhancedPreferencesOptions? options]) {
-    final EnhancedPreferencesOptions opts =
-        options ?? EnhancedPreferencesOptions();
-
-    if (opts.enableCache &&
-        cache.containsKey(key) &&
-        cache[key]?.type == PrefCacheType.double) {
-      return Future.value(cache[key]?.value as double?);
-    } else {
-      return EnhancedPreferencesPlatform.instance
-          .getDouble(key, opts.enableEncryption)
-          .then((double? value) {
-            if (opts.enableCache) {
-              cache[key] = PrefCacheItem(PrefCacheType.double, value);
-            }
-            return value;
-          });
-    }
+    return _getItem<double>(key, options);
   }
 
   /// Set the double value for the given key.
@@ -140,38 +61,12 @@ class EnhancedPreferences {
     double value, [
     EnhancedPreferencesOptions? options,
   ]) {
-    final EnhancedPreferencesOptions opts =
-        options ?? EnhancedPreferencesOptions();
-
-    return EnhancedPreferencesPlatform.instance
-        .setDouble(key, value, opts.enableEncryption)
-        .then((String? key) {
-          if (opts.enableCache && key != null) {
-            cache[key] = PrefCacheItem(PrefCacheType.double, value);
-          }
-          return key;
-        });
+    return _setItem<double>(key, value, options);
   }
 
   /// Get the boolean value for the given key.
   Future<bool?> getBool(String key, [EnhancedPreferencesOptions? options]) {
-    final EnhancedPreferencesOptions opts =
-        options ?? EnhancedPreferencesOptions();
-
-    if (opts.enableCache &&
-        cache.containsKey(key) &&
-        cache[key]?.type == PrefCacheType.bool) {
-      return Future.value(cache[key]?.value as bool?);
-    } else {
-      return EnhancedPreferencesPlatform.instance
-          .getBool(key, opts.enableEncryption)
-          .then((bool? value) {
-            if (opts.enableCache) {
-              cache[key] = PrefCacheItem(PrefCacheType.bool, value);
-            }
-            return value;
-          });
-    }
+    return _getItem<bool>(key, options);
   }
 
   /// Set the boolean value for the given key.
@@ -180,17 +75,7 @@ class EnhancedPreferences {
     bool value, [
     EnhancedPreferencesOptions? options,
   ]) {
-    final EnhancedPreferencesOptions opts =
-        options ?? EnhancedPreferencesOptions();
-
-    return EnhancedPreferencesPlatform.instance
-        .setBool(key, value, opts.enableEncryption)
-        .then((String? key) {
-          if (opts.enableCache && key != null) {
-            cache[key] = PrefCacheItem(PrefCacheType.bool, value);
-          }
-          return key;
-        });
+    return _setItem<bool>(key, value, options);
   }
 
   /// Remove an entry.
@@ -204,5 +89,109 @@ class EnhancedPreferences {
   /// Get keys.
   Future<List<String>?> keys() {
     return EnhancedPreferencesPlatform.instance.keys();
+  }
+
+  /// Get item.
+  Future<T?> _getItem<T>(String key, [EnhancedPreferencesOptions? options]) {
+    final EnhancedPreferencesOptions opts =
+        options ?? EnhancedPreferencesOptions();
+
+    if (opts.enableCache && cache.containsKey(key) && cache[key] is T) {
+      return Future.value(cache[key] as T?);
+    } else {
+      Future<T?> storedValue;
+
+      if (T == String) {
+        storedValue =
+            EnhancedPreferencesPlatform.instance.getString(
+                  key,
+                  opts.enableEncryption,
+                )
+                as Future<T?>;
+      } else if (T == int) {
+        storedValue =
+            EnhancedPreferencesPlatform.instance.getInt(
+                  key,
+                  opts.enableEncryption,
+                )
+                as Future<T?>;
+      } else if (T == double) {
+        storedValue =
+            EnhancedPreferencesPlatform.instance.getDouble(
+                  key,
+                  opts.enableEncryption,
+                )
+                as Future<T?>;
+      } else if (T == bool) {
+        storedValue =
+            EnhancedPreferencesPlatform.instance.getBool(
+                  key,
+                  opts.enableEncryption,
+                )
+                as Future<T?>;
+      } else {
+        throw TypeError();
+      }
+
+      if (opts.enableCache) {
+        return storedValue.then((T? value) {
+          cache[key] = value;
+          return value;
+        });
+      } else {
+        return storedValue;
+      }
+    }
+  }
+
+  /// Set item.
+  Future<String?> _setItem<T>(
+    String key,
+    T value, [
+    EnhancedPreferencesOptions? options,
+  ]) {
+    final EnhancedPreferencesOptions opts =
+        options ?? EnhancedPreferencesOptions();
+
+    Future<String?> storedKey;
+
+    if (T == String) {
+      storedKey = EnhancedPreferencesPlatform.instance.setString(
+        key,
+        value as String,
+        opts.enableEncryption,
+      );
+    } else if (T == int) {
+      storedKey = EnhancedPreferencesPlatform.instance.setInt(
+        key,
+        value as int,
+        opts.enableEncryption,
+      );
+    } else if (T == double) {
+      storedKey = EnhancedPreferencesPlatform.instance.setDouble(
+        key,
+        value as double,
+        opts.enableEncryption,
+      );
+    } else if (T == bool) {
+      storedKey = EnhancedPreferencesPlatform.instance.setBool(
+        key,
+        value as bool,
+        opts.enableEncryption,
+      );
+    } else {
+      throw TypeError();
+    }
+
+    if (opts.enableCache) {
+      return storedKey.then((String? key) {
+        if (key != null) {
+          cache[key] = value;
+        }
+        return key;
+      });
+    } else {
+      return storedKey;
+    }
   }
 }

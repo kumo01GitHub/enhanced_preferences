@@ -124,7 +124,7 @@ void main() {
       // Enable cache.
       await prefs.setString(key1, value1, enableCacheOpts);
       expect(prefs.cache.containsKey(key1), true);
-      expect(prefs.cache[key1]?.value, value1);
+      expect(prefs.cache[key1], value1);
       expect(await prefs.getString(key1, enableCacheOpts), value1);
 
       // Disable cache.
@@ -140,7 +140,7 @@ void main() {
       // Cache when get value.
       expect(await prefs.getString(key2, enableCacheOpts), value2);
       expect(prefs.cache.containsKey(key2), true);
-      expect(prefs.cache[key2]?.value, value2);
+      expect(prefs.cache[key2], value2);
       expect(await prefs.getString(key2, disableCacheOpts), value2);
     });
   });
@@ -167,7 +167,7 @@ void main() {
       // Enable cache.
       await prefs.setInt(key1, value1, enableCacheOpts);
       expect(prefs.cache.containsKey(key1), true);
-      expect(prefs.cache[key1]?.value, value1);
+      expect(prefs.cache[key1], value1);
       expect(await prefs.getInt(key1, enableCacheOpts), value1);
 
       // Disable cache.
@@ -183,7 +183,7 @@ void main() {
       // Cache when get value.
       expect(await prefs.getInt(key2, enableCacheOpts), value2);
       expect(prefs.cache.containsKey(key2), true);
-      expect(prefs.cache[key2]?.value, value2);
+      expect(prefs.cache[key2], value2);
       expect(await prefs.getInt(key2, disableCacheOpts), value2);
     });
   });
@@ -210,7 +210,7 @@ void main() {
       // Enable cache.
       await prefs.setDouble(key1, value1, enableCacheOpts);
       expect(prefs.cache.containsKey(key1), true);
-      expect(prefs.cache[key1]?.value, value1);
+      expect(prefs.cache[key1], value1);
       expect(await prefs.getDouble(key1, enableCacheOpts), value1);
 
       // Disable cache.
@@ -226,7 +226,7 @@ void main() {
       // Cache when get value.
       expect(await prefs.getDouble(key2, enableCacheOpts), value2);
       expect(prefs.cache.containsKey(key2), true);
-      expect(prefs.cache[key2]?.value, value2);
+      expect(prefs.cache[key2], value2);
       expect(await prefs.getDouble(key2, disableCacheOpts), value2);
     });
   });
@@ -253,7 +253,7 @@ void main() {
       // Enable cache.
       await prefs.setBool(key1, value1, enableCacheOpts);
       expect(prefs.cache.containsKey(key1), true);
-      expect(prefs.cache[key1]?.value, value1);
+      expect(prefs.cache[key1], value1);
       expect(await prefs.getBool(key1, enableCacheOpts), value1);
 
       // Disable cache.
@@ -269,7 +269,7 @@ void main() {
       // Cache when get value.
       expect(await prefs.getBool(key2, enableCacheOpts), value2);
       expect(prefs.cache.containsKey(key2), true);
-      expect(prefs.cache[key2]?.value, value2);
+      expect(prefs.cache[key2], value2);
       expect(await prefs.getBool(key2, disableCacheOpts), value2);
     });
   });
