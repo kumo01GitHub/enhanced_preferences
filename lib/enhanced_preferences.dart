@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 
 import 'enhanced_preferences_platform_interface.dart';
 
@@ -24,7 +24,7 @@ class EnhancedPreferences {
 
   /// Get the string value for the given key.
   Future<String?> getString(String key, [EnhancedPreferencesOptions? options]) {
-    return _getItem<String>(key, options);
+    return getItem<String>(key, options);
   }
 
   /// Set the string value for the given key.
@@ -33,12 +33,12 @@ class EnhancedPreferences {
     String value, [
     EnhancedPreferencesOptions? options,
   ]) {
-    return _setItem<String>(key, value, options);
+    return setItem<String>(key, value, options);
   }
 
   /// Get the integer value for the given key.
   Future<int?> getInt(String key, [EnhancedPreferencesOptions? options]) {
-    return _getItem<int>(key, options);
+    return getItem<int>(key, options);
   }
 
   /// Set the integer value for the given key.
@@ -47,12 +47,12 @@ class EnhancedPreferences {
     int value, [
     EnhancedPreferencesOptions? options,
   ]) {
-    return _setItem<int>(key, value, options);
+    return setItem<int>(key, value, options);
   }
 
   /// Get the double value for the given key.
   Future<double?> getDouble(String key, [EnhancedPreferencesOptions? options]) {
-    return _getItem<double>(key, options);
+    return getItem<double>(key, options);
   }
 
   /// Set the double value for the given key.
@@ -61,12 +61,12 @@ class EnhancedPreferences {
     double value, [
     EnhancedPreferencesOptions? options,
   ]) {
-    return _setItem<double>(key, value, options);
+    return setItem<double>(key, value, options);
   }
 
   /// Get the boolean value for the given key.
   Future<bool?> getBool(String key, [EnhancedPreferencesOptions? options]) {
-    return _getItem<bool>(key, options);
+    return getItem<bool>(key, options);
   }
 
   /// Set the boolean value for the given key.
@@ -75,7 +75,7 @@ class EnhancedPreferences {
     bool value, [
     EnhancedPreferencesOptions? options,
   ]) {
-    return _setItem<bool>(key, value, options);
+    return setItem<bool>(key, value, options);
   }
 
   /// Remove an entry.
@@ -92,7 +92,8 @@ class EnhancedPreferences {
   }
 
   /// Get item.
-  Future<T?> _getItem<T>(String key, [EnhancedPreferencesOptions? options]) {
+  @visibleForTesting
+  Future<T?> getItem<T>(String key, [EnhancedPreferencesOptions? options]) {
     final EnhancedPreferencesOptions opts =
         options ?? EnhancedPreferencesOptions();
 
@@ -145,7 +146,8 @@ class EnhancedPreferences {
   }
 
   /// Set item.
-  Future<String?> _setItem<T>(
+  @visibleForTesting
+  Future<String?> setItem<T>(
     String key,
     T value, [
     EnhancedPreferencesOptions? options,

@@ -315,4 +315,14 @@ void main() {
     expect(options.enableCache, true);
     expect(options.enableEncryption, false);
   });
+
+  test('Unsupported type', () {
+    EnhancedPreferences prefs = EnhancedPreferences();
+
+    expect(
+      () => prefs.setItem<Object>("key", Object()),
+      throwsA(isA<TypeError>()),
+    );
+    expect(() => prefs.getItem<Object>("key"), throwsA(isA<TypeError>()));
+  });
 }

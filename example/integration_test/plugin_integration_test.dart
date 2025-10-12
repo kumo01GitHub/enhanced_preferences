@@ -135,5 +135,5 @@ void main() {
       ),
       throwsA(isA<PlatformException>()),
     );
-  }, skip: true);
+  });
 }
