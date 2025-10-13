@@ -1,5 +1,6 @@
-## 0.3.2
+## 0.4.0
 
+* feat: Support Windows.
 * ci: Improve tests.
 * doc: Fix `REFERENCE_ERROR` description.
 
