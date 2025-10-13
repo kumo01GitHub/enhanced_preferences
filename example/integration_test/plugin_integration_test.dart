@@ -188,16 +188,49 @@ void main() {
 
   test('keys', () async {
     final String key1 = "key1";
-    final int value1 = 999;
+    final String value1 = "value1";
     final String key2 = "key2";
-    final bool value2 = false;
+    final int value2 = 999;
+    final String key3 = "key3";
+    final double value3 = 0.123;
+    final String key4 = "key4";
+    final bool value4 = false;
 
-    expect(await prefs.setInt(key1, value1), key1);
-    expect(await prefs.setBool(key2, value2), key2);
-    expect(await prefs.keys(), containsAll([key1, key2]));
+    await prefs.setString(
+      key1,
+      value1,
+      EnhancedPreferencesOptions(enableCache: true),
+    );
+    await prefs.setInt(
+      key2,
+      value2,
+      EnhancedPreferencesOptions(enableCache: true),
+    );
+    await prefs.setDouble(
+      key3,
+      value3,
+      EnhancedPreferencesOptions(enableCache: false),
+    );
+    await prefs.setBool(
+      key4,
+      value4,
+      EnhancedPreferencesOptions(enableCache: false),
+    );
+    final keys1 = await prefs.keys();
+    expect(keys1, containsAll([key1, key2, key3, key4]));
+    expect(prefs.cache.keys, containsAll([key1, key2]));
+    expect(prefs.cache.keys, isNot(contains(key3)));
+    expect(prefs.cache.keys, isNot(contains(key4)));
 
-    expect(await prefs.remove(key1), key1);
-    expect((await prefs.keys())?.contains(key1), false);
-    expect((await prefs.keys())?.contains(key2), true);
+    await prefs.remove(key1);
+    await prefs.remove(key3);
+    final keys2 = await prefs.keys();
+    expect(keys2, containsAll([key2, key4]));
+    expect(keys2, isNot(contains(key1)));
+    expect(keys2, isNot(contains(key3)));
+    expect(prefs.cache.keys, isNot(contains(key1)));
+    expect(prefs.cache.keys, contains(key2));
+    expect(prefs.cache.keys, isNot(contains(key3)));
+    expect(prefs.cache.keys, isNot(contains(key4)));
   });
 }
