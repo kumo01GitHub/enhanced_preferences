@@ -1,3 +1,7 @@
+## 0.4.0
+
+* feat: Support Windows.
+
 ## 0.3.1
 
 * fix: Remove duplications.
