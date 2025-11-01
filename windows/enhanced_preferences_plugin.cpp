@@ -1,4 +1,5 @@
 #include "enhanced_preferences_plugin.h"
+#include "registry_handler.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>
@@ -10,8 +11,10 @@
 #include <flutter/plugin_registrar_windows.h>
 #include <flutter/standard_method_codec.h>
 
+#include <codecvt>
 #include <memory>
-#include <sstream>
+
+using namespace std;
 
 namespace enhanced_preferences {
 
@@ -19,18 +22,18 @@ namespace enhanced_preferences {
 void EnhancedPreferencesPlugin::RegisterWithRegistrar(
     flutter::PluginRegistrarWindows *registrar) {
   auto channel =
-      std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+      make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
           registrar->messenger(), "enhanced_preferences",
           &flutter::StandardMethodCodec::GetInstance());
 
-  auto plugin = std::make_unique<EnhancedPreferencesPlugin>();
+  auto plugin = make_unique<EnhancedPreferencesPlugin>();
 
   channel->SetMethodCallHandler(
       [plugin_pointer = plugin.get()](const auto &call, auto result) {
-        plugin_pointer->HandleMethodCall(call, std::move(result));
+        plugin_pointer->HandleMethodCall(call, move(result));
       });
 
-  registrar->AddPlugin(std::move(plugin));
+  registrar->AddPlugin(move(plugin));
 }
 
 EnhancedPreferencesPlugin::EnhancedPreferencesPlugin() {}
@@ -39,18 +42,29 @@ EnhancedPreferencesPlugin::~EnhancedPreferencesPlugin() {}
 
 void EnhancedPreferencesPlugin::HandleMethodCall(
     const flutter::MethodCall<flutter::EncodableValue> &method_call,
-    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
-  if (method_call.method_name().compare("getPlatformVersion") == 0) {
-    std::ostringstream version_stream;
-    version_stream << "Windows ";
-    if (IsWindows10OrGreater()) {
-      version_stream << "10+";
-    } else if (IsWindows8OrGreater()) {
-      version_stream << "8";
-    } else if (IsWindows7OrGreater()) {
-      version_stream << "7";
+    unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+  const string method = method_call.method_name();
+  const flutter::EncodableMap *args = get_if<flutter::EncodableMap>(method_call.arguments());
+
+  if (method.compare("getString") == 0) {
+    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+
+    optional<string> res = RegistryHandler::GetString(key);
+    if (res) {
+      result->Success(flutter::EncodableValue(res.value()));
+    } else {
+      result->Error("UNKNOWN_ERROR", "Failure");
     }
-    result->Success(flutter::EncodableValue(version_stream.str()));
+  } else if (method.compare("setString") == 0) {
+    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+    const string value = get<string>(args->at(flutter::EncodableValue("value")));
+
+    optional<string> res = RegistryHandler::SetString(key, value);
+    if (res) {
+      result->Success(flutter::EncodableValue(res.value()));
+    } else {
+      result->Error("UNKNOWN_ERROR", "Failure");
+    }
   } else {
     result->NotImplemented();
   }

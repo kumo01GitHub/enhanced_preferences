@@ -6,6 +6,8 @@
 
 #include <memory>
 
+using namespace std;
+
 namespace enhanced_preferences {
 
 class EnhancedPreferencesPlugin : public flutter::Plugin {
@@ -23,7 +25,7 @@ class EnhancedPreferencesPlugin : public flutter::Plugin {
   // Called when a method is called on this plugin's channel from Dart.
   void HandleMethodCall(
       const flutter::MethodCall<flutter::EncodableValue> &method_call,
-      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+      unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 };
 
 }  // namespace enhanced_preferences

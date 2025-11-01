@@ -20,6 +20,8 @@ set(PLUGIN_NAME "enhanced_preferences_plugin")
 list(APPEND PLUGIN_SOURCES
   "enhanced_preferences_plugin.cpp"
   "enhanced_preferences_plugin.h"
+  "registry_handler.cpp"
+  "registry_handler.h"
 )
 
 # Define the plugin library target. Its name must not be changed (see comment
