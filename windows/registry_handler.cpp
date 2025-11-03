@@ -40,6 +40,10 @@ namespace enhanced_preferences {
     return result;
   }
 
+  vector<string> RegistryHandler::Keys() {
+    return {"Hoo", "Bar"};
+  }
+
   optional<HKEY*> RegistryHandler::Open() {
     HKEY hKey;
     DWORD dwDisposition;
@@ -69,16 +73,12 @@ namespace enhanced_preferences {
     }
   }
 
-  optional<string> RegistryHandler::GetItem(optional<string> key) {
-    if (!key) {
-      return nullopt;
-    }
-    
+  optional<string> RegistryHandler::GetItem(const string key) {
     DWORD dataSize{};
     LONG lResult = RegGetValueA(
       HKEY_CURRENT_USER,
       RegistryHandler::subKey.c_str(),
-      key.value().c_str(),
+      key.c_str(),
       RRF_RT_REG_SZ,
       nullptr,
       nullptr,
@@ -95,7 +95,7 @@ namespace enhanced_preferences {
     lResult = RegGetValueA(
       HKEY_CURRENT_USER,
       RegistryHandler::subKey.c_str(),
-      key.value().c_str(),
+      key.c_str(),
       RRF_RT_REG_SZ,
       nullptr,
       &data,
@@ -110,22 +110,18 @@ namespace enhanced_preferences {
   }
 
   optional<string> RegistryHandler::SetItem(
-    optional<string> key,
-    optional<string> value
+    const string key,
+    const string value
   ) {
-    if (!key || !value) {
-      return nullopt;
-    }
-
     const optional<HKEY*> hKey = Open();
     if (hKey) {
       LONG lResult = RegSetValueExA(
         *hKey.value(),
-        key.value().c_str(),
+        key.c_str(),
         0,
         REG_SZ,
-        (LPBYTE)value.value().c_str(),
-        (DWORD)value.value().size() * sizeof(char)
+        (LPBYTE)value.c_str(),
+        (DWORD)value.size() * sizeof(char)
       );
 
       Close(hKey);
@@ -140,18 +136,12 @@ namespace enhanced_preferences {
     }
   }
 
-  optional<string> RegistryHandler::RemoveItem(
-    optional<string> key
-  ) {
-    if (!key) {
-      return nullopt;
-    }
-
+  optional<string> RegistryHandler::RemoveItem(const string key) {
     const optional<HKEY*> hKey = Open();
     if (hKey) {
       LONG lResult = RegDeleteValueA(
         *hKey.value(),
-        key.value().c_str()
+        key.c_str()
       );
 
       Close(hKey);

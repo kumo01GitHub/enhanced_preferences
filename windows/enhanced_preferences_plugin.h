@@ -4,8 +4,6 @@
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar_windows.h>
 
-#include <memory>
-
 using namespace std;
 
 namespace enhanced_preferences {

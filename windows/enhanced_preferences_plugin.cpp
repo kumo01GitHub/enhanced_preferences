@@ -70,6 +70,13 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
     } else {
       result->Error("UNKNOWN_ERROR", "Failure");
     }
+  } else if (method.compare("keys") == 0) {
+    const vector<string> keys = RegistryHandler::Keys();
+    vector<flutter::EncodableValue> res;
+    for (string key : keys) {
+      res.push_back(flutter::EncodableValue(key));
+    }
+    result->Success(flutter::EncodableValue(res));
   } else {
     result->NotImplemented();
   }
