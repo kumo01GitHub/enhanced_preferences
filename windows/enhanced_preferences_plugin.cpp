@@ -11,9 +11,6 @@
 #include <flutter/plugin_registrar_windows.h>
 #include <flutter/standard_method_codec.h>
 
-#include <codecvt>
-#include <memory>
-
 using namespace std;
 
 namespace enhanced_preferences {
