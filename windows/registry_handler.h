@@ -1,9 +1,9 @@
 #ifndef REGISTRY_HANDLER_H_
 #define REGISTRY_HANDLER_H_
 
+#include <windows.h>
 #include <string>
 #include <optional>
-#include <windows.h>
 
 using namespace std;
 
@@ -11,6 +11,8 @@ namespace enhanced_preferences {
 
 class RegistryHandler {
 public:
+  inline static string subKey;
+  static void Initialize();
   static optional<string> GetString(
     const string key
   );

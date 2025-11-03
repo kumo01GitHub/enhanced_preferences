@@ -1,10 +1,22 @@
 #include "registry_handler.h"
 
 #include <windows.h>
+#include <psapi.h>
 
 using namespace std;
 
 namespace enhanced_preferences {
+  void RegistryHandler::Initialize() {
+    DWORD dwProcessId = GetCurrentProcessId();
+    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
+    if (NULL != hProcess) {
+      char baseName[MAX_PATH + 1];
+      GetModuleBaseNameA(hProcess, NULL, baseName, sizeof(baseName));
+      RegistryHandler::subKey = baseName;
+      CloseHandle(hProcess);
+    }
+  }
+
   optional<string> RegistryHandler::GetString(
     const string key
   ) {
@@ -26,7 +38,7 @@ namespace enhanced_preferences {
 
     LONG lResult = RegCreateKeyExA(
       HKEY_CURRENT_USER,
-      "FlutterEP",
+      RegistryHandler::subKey.c_str(),
       0,
       NULL,
       REG_OPTION_NON_VOLATILE,
@@ -57,7 +69,7 @@ namespace enhanced_preferences {
     DWORD dataSize{};
     LONG lResult = RegGetValueA(
       HKEY_CURRENT_USER,
-      "FlutterEP",
+      RegistryHandler::subKey.c_str(),
       key.value().c_str(),
       RRF_RT_REG_SZ,
       nullptr,
@@ -74,7 +86,7 @@ namespace enhanced_preferences {
 
     lResult = RegGetValueA(
       HKEY_CURRENT_USER,
-      "FlutterEP",
+      RegistryHandler::subKey.c_str(),
       key.value().c_str(),
       RRF_RT_REG_SZ,
       nullptr,

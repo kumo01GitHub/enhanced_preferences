@@ -30,7 +30,9 @@ void EnhancedPreferencesPlugin::RegisterWithRegistrar(
   registrar->AddPlugin(move(plugin));
 }
 
-EnhancedPreferencesPlugin::EnhancedPreferencesPlugin() {}
+EnhancedPreferencesPlugin::EnhancedPreferencesPlugin() {
+  RegistryHandler::Initialize();
+}
 
 EnhancedPreferencesPlugin::~EnhancedPreferencesPlugin() {}
 
