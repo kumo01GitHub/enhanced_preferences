@@ -13,6 +13,7 @@ namespace enhanced_preferences {
       char baseName[MAX_PATH + 1];
       GetModuleBaseNameA(hProcess, NULL, baseName, sizeof(baseName));
       RegistryHandler::subKey = baseName;
+      RegistryHandler::subKey += RegistryHandler::subKeySuffix;
       CloseHandle(hProcess);
     }
   }

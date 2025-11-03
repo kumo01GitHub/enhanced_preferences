@@ -11,7 +11,6 @@ namespace enhanced_preferences {
 
 class RegistryHandler {
 public:
-  inline static string subKey;
   static void Initialize();
   static optional<string> GetString(
     const string key
@@ -22,6 +21,8 @@ public:
   );
 
  private:
+  inline static string subKey;
+  inline static const string subKeySuffix = "\\FlutterEnhancedPreferences";
   static optional<HKEY*> Open();
   static void Close(optional<HKEY*> hKey);
   static optional<string> GetItem(optional<string> key);
