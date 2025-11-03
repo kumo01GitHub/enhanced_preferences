@@ -33,6 +33,13 @@ namespace enhanced_preferences {
     return result;
   }
 
+  optional<string> RegistryHandler::Remove(
+    const string key
+  ) {
+    const optional<string> result = RemoveItem(key);
+    return result;
+  }
+
   optional<HKEY*> RegistryHandler::Open() {
     HKEY hKey;
     DWORD dwDisposition;
@@ -119,6 +126,32 @@ namespace enhanced_preferences {
         REG_SZ,
         (LPBYTE)value.value().c_str(),
         (DWORD)value.value().size() * sizeof(char)
+      );
+
+      Close(hKey);
+
+      if (lResult == ERROR_SUCCESS) {
+        return key;
+      } else {
+        return nullopt;
+      }
+    } else {
+      return nullopt;
+    }
+  }
+
+  optional<string> RegistryHandler::RemoveItem(
+    optional<string> key
+  ) {
+    if (!key) {
+      return nullopt;
+    }
+
+    const optional<HKEY*> hKey = Open();
+    if (hKey) {
+      LONG lResult = RegDeleteValueA(
+        *hKey.value(),
+        key.value().c_str()
       );
 
       Close(hKey);

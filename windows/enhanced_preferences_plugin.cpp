@@ -61,6 +61,15 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
     } else {
       result->Error("UNKNOWN_ERROR", "Failure");
     }
+  } else if (method.compare("remove") == 0) {
+    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+
+    optional<string> res = RegistryHandler::Remove(key);
+    if (res) {
+      result->Success(flutter::EncodableValue(res.value()));
+    } else {
+      result->Error("UNKNOWN_ERROR", "Failure");
+    }
   } else {
     result->NotImplemented();
   }

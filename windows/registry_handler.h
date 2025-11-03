@@ -19,6 +19,9 @@ public:
     const string key,
     const string value
   );
+  static optional<string> Remove(
+    const string key
+  );
 
  private:
   inline static string subKey;
@@ -30,6 +33,7 @@ public:
     optional<string> key,
     optional<string> value
   );
+  static optional<string> RemoveItem(optional<string> key);
 };
 
 }  // namespace enhanced_preferences
