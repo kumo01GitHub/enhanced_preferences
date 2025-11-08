@@ -1,6 +1,7 @@
 ## 0.3.2
 
 * ci: Improve tests.
+* doc: Fix `REFERENCE_ERROR` description.
 
 ## 0.3.1
 

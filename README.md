@@ -79,7 +79,7 @@ final List<String>? keys = await prefs.keys();
 | Error code | Detail |
 | ---- | ---- |
 | `INVALID_ARGUMENT` | Invalid arguments such as the key is blank. |
-| `REFERENCE_ERROR` | Failed to obtain the value for key. |
+| `REFERENCE_ERROR` | Failed to retrieve the value for key. |
 | `ILLEGAL_ACCESS` | Failed to encrypt / decrypt the value for key. |
 | `UNKNOWN_ERROR` | Other causes. |
 
