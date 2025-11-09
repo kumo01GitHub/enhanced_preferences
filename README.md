@@ -74,6 +74,13 @@ await prefs.remove('hello');
 final List<String>? keys = await prefs.keys();
 ```
 
+### Clear all entries
+
+```dart
+// Clear all entries.
+await prefs.clear();
+```
+
 ### Options
 
 | Option | Type | Detail | Default |

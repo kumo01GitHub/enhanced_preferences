@@ -87,8 +87,45 @@ class EnhancedPreferences {
   }
 
   /// Get keys.
-  Future<List<String>?> keys() {
-    return EnhancedPreferencesPlatform.instance.keys();
+  Future<List<String>?> keys([bool onlyCache = false]) {
+    if (onlyCache) {
+      return Future.value(cache.keys.toList());
+    } else {
+      return EnhancedPreferencesPlatform.instance.keys();
+    }
+  }
+
+  /// Clear all entries.
+  Future<List<String>?> clear([bool onlyCache = false]) {
+    if (onlyCache) {
+      List<String> cachedKeys = cache.keys.toList();
+      cache.clear();
+      return Future.value(cachedKeys);
+    } else {
+      cache.clear();
+      return EnhancedPreferencesPlatform.instance.keys().then((
+        List<String>? keys,
+      ) async {
+        if (keys != null) {
+          List<Future<String?>> futures = [];
+          for (String key in keys) {
+            futures.add(EnhancedPreferencesPlatform.instance.remove(key));
+          }
+          return Future.wait(futures).then((List<String?> keys) {
+            List<String> removedKeys = [];
+            for (String? key in keys) {
+              if (key != null) {
+                removedKeys.add(key);
+              }
+            }
+
+            return removedKeys;
+          });
+        } else {
+          return null;
+        }
+      });
+    }
   }
 
   /// Get item.

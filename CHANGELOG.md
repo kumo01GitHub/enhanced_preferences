@@ -1,6 +1,8 @@
 ## 0.4.0
 
-* feat: Support Windows.
+* feat(windows): Support Windows.
+* feat: Support clear.
+* feat: Support `cacheOnly` option.
 * ci: Add option toggle buttons for example app.
 * ci: Improve tests.
 * doc: Fix `REFERENCE_ERROR` description.

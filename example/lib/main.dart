@@ -101,22 +101,31 @@ class _MyAppState extends State<MyApp> {
                     Text('CACHE:'),
                     Switch(
                       value: _enableCache,
-                      onChanged: (enable) async { setState(() { _enableCache = enable; }); },
+                      onChanged: (enable) async {
+                        setState(() {
+                          _enableCache = enable;
+                        });
+                      },
                     ),
                     // ENCRYPTION
                     Text('ENCRYPTION:'),
                     Switch(
                       value: _enableEncryption,
-                      onChanged: (enable) async { setState(() { _enableEncryption = enable; }); },
+                      onChanged: (enable) async {
+                        setState(() {
+                          _enableEncryption = enable;
+                        });
+                      },
                     ),
                     Text(''),
-                  ]
+                  ],
                 ),
                 // BUTTONS
                 Row(
                   children: [
                     // GET
                     ElevatedButton(
+                      child: Text('GET'),
                       onPressed: () async {
                         if (_keyController.text.isEmpty) {
                           return;
@@ -127,22 +136,34 @@ class _MyAppState extends State<MyApp> {
                           if (_type == "String") {
                             result = await _prefs.getString(
                               _keyController.text,
-                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                              EnhancedPreferencesOptions(
+                                enableCache: _enableCache,
+                                enableEncryption: _enableEncryption,
+                              ),
                             );
                           } else if (_type == "Int") {
                             result = await _prefs.getInt(
                               _keyController.text,
-                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                              EnhancedPreferencesOptions(
+                                enableCache: _enableCache,
+                                enableEncryption: _enableEncryption,
+                              ),
                             );
                           } else if (_type == "Double") {
                             result = await _prefs.getDouble(
                               _keyController.text,
-                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                              EnhancedPreferencesOptions(
+                                enableCache: _enableCache,
+                                enableEncryption: _enableEncryption,
+                              ),
                             );
                           } else if (_type == "Bool") {
                             result = await _prefs.getBool(
                               _keyController.text,
-                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                              EnhancedPreferencesOptions(
+                                enableCache: _enableCache,
+                                enableEncryption: _enableEncryption,
+                              ),
                             );
                           }
                         } on Exception catch (e) {
@@ -155,10 +176,10 @@ class _MyAppState extends State<MyApp> {
                           _result = result;
                         });
                       },
-                      child: Text('GET'),
                     ),
                     // SET
                     ElevatedButton(
+                      child: Text('SET'),
                       onPressed: () async {
                         if (_keyController.text.isEmpty) {
                           return;
@@ -170,7 +191,10 @@ class _MyAppState extends State<MyApp> {
                             result = await _prefs.setString(
                               _keyController.text,
                               _valueController.text,
-                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                              EnhancedPreferencesOptions(
+                                enableCache: _enableCache,
+                                enableEncryption: _enableEncryption,
+                              ),
                             );
                           } else if (_type == "Int") {
                             final intValue =
@@ -178,7 +202,10 @@ class _MyAppState extends State<MyApp> {
                             result = await _prefs.setInt(
                               _keyController.text,
                               intValue,
-                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                              EnhancedPreferencesOptions(
+                                enableCache: _enableCache,
+                                enableEncryption: _enableEncryption,
+                              ),
                             );
                           } else if (_type == "Double") {
                             final doubleValue =
@@ -186,7 +213,10 @@ class _MyAppState extends State<MyApp> {
                             result = await _prefs.setDouble(
                               _keyController.text,
                               doubleValue,
-                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                              EnhancedPreferencesOptions(
+                                enableCache: _enableCache,
+                                enableEncryption: _enableEncryption,
+                              ),
                             );
                           } else if (_type == "Bool") {
                             final boolValue =
@@ -194,7 +224,10 @@ class _MyAppState extends State<MyApp> {
                             result = await _prefs.setBool(
                               _keyController.text,
                               boolValue,
-                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                              EnhancedPreferencesOptions(
+                                enableCache: _enableCache,
+                                enableEncryption: _enableEncryption,
+                              ),
                             );
                           }
                         } on Exception catch (e) {
@@ -207,10 +240,10 @@ class _MyAppState extends State<MyApp> {
                           _result = result;
                         });
                       },
-                      child: Text('SET'),
                     ),
                     // REMOVE
                     ElevatedButton(
+                      child: Text('REMOVE'),
                       onPressed: () async {
                         if (_keyController.text.isEmpty) {
                           return;
@@ -229,14 +262,14 @@ class _MyAppState extends State<MyApp> {
                           _result = result;
                         });
                       },
-                      child: Text('REMOVE'),
                     ),
                     // KEYS
                     ElevatedButton(
+                      child: Text('KEYS'),
                       onPressed: () async {
                         dynamic result;
                         try {
-                          result = await _prefs.keys();
+                          result = await _prefs.keys(_enableCache);
                         } on Exception catch (e) {
                           result = e.toString();
                         } on Error catch (e) {
@@ -247,7 +280,24 @@ class _MyAppState extends State<MyApp> {
                           _result = result;
                         });
                       },
-                      child: Text('KEYS'),
+                    ),
+                    // CLEAR
+                    ElevatedButton(
+                      child: Text('CLEAR'),
+                      onPressed: () async {
+                        dynamic result;
+                        try {
+                          result = await _prefs.clear(_enableCache);
+                        } on Exception catch (e) {
+                          result = e.toString();
+                        } on Error catch (e) {
+                          result = e.toString();
+                        }
+
+                        setState(() {
+                          _result = result;
+                        });
+                      },
                     ),
                   ],
                 ),
