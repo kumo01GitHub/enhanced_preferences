@@ -93,6 +93,25 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ],
                 ),
+                // OPTIONS
+                Row(
+                  spacing: 10,
+                  children: [
+                    // CACHE
+                    Text('CACHE:'),
+                    Switch(
+                      value: _enableCache,
+                      onChanged: (enable) async { setState(() { _enableCache = enable; }); },
+                    ),
+                    // ENCRYPTION
+                    Text('ENCRYPTION:'),
+                    Switch(
+                      value: _enableEncryption,
+                      onChanged: (enable) async { setState(() { _enableEncryption = enable; }); },
+                    ),
+                    Text(''),
+                  ]
+                ),
                 // BUTTONS
                 Row(
                   children: [
@@ -231,25 +250,6 @@ class _MyAppState extends State<MyApp> {
                       child: Text('KEYS'),
                     ),
                   ],
-                ),
-                // OPTIONS
-                Row(
-                  spacing: 10,
-                  children: [
-                    // CACHE
-                    Text('CACHE:'),
-                    Switch(
-                      value: _enableCache,
-                      onChanged: (enable) async { setState(() { _enableCache = enable; }); },
-                    ),
-                    // ENCRYPTION
-                    Text('ENCRYPTION:'),
-                    Switch(
-                      value: _enableEncryption,
-                      onChanged: (enable) async { setState(() { _enableEncryption = enable; }); },
-                    ),
-                    Text(''),
-                  ]
                 ),
                 // RESULT
                 Text('${_result ?? ""}'),
