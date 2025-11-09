@@ -41,7 +41,35 @@ namespace enhanced_preferences {
   }
 
   vector<string> RegistryHandler::Keys() {
-    return {"Hoo", "Bar"};
+    const optional<HKEY*> hKey = Open();
+
+    if (hKey)  {
+      DWORD index = 0;
+      DWORD result;
+      vector<string> keys;
+
+      do {
+        char valueName[MAX_PATH + 1];
+        DWORD valueNameSize = MAX_PATH;
+
+        result = RegEnumValueA(
+          *hKey.value(),
+          index,
+          valueName,
+          &valueNameSize,
+          NULL, NULL, NULL, NULL
+        );
+
+        if (result == ERROR_SUCCESS) {
+          keys.push_back(valueName);
+          index++;
+        }
+      } while (result == ERROR_SUCCESS);
+
+      return keys;
+    } else {
+      return {};
+    }
   }
 
   optional<HKEY*> RegistryHandler::Open() {
@@ -80,8 +108,8 @@ namespace enhanced_preferences {
       RegistryHandler::subKey.c_str(),
       key.c_str(),
       RRF_RT_REG_SZ,
-      nullptr,
-      nullptr,
+      NULL,
+      NULL,
       &dataSize
     );
 
@@ -97,7 +125,7 @@ namespace enhanced_preferences {
       RegistryHandler::subKey.c_str(),
       key.c_str(),
       RRF_RT_REG_SZ,
-      nullptr,
+      NULL,
       &data,
       &dataSize
     );

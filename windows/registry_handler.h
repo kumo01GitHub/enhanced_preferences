@@ -27,7 +27,7 @@ public:
 
  private:
   inline static string subKey;
-  inline static const string subKeySuffix = "\\FlutterEnhancedPreferences";
+  inline static const string subKeySuffix = "\\FEP";
   static optional<HKEY*> Open();
   static void Close(optional<HKEY*> hKey);
   static optional<string> GetItem(const string key);
