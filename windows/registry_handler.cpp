@@ -64,6 +64,7 @@ namespace enhanced_preferences {
           keys.push_back(valueName);
           index++;
         }
+        // TODO: Handle error.
       } while (result == ERROR_SUCCESS);
 
       return keys;
