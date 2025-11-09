@@ -20,11 +20,18 @@ class _MyAppState extends State<MyApp> {
   final TextEditingController _keyController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
 
+  bool _enableCache = false;
+  bool _enableEncryption = false;
+
   dynamic _result;
 
   @override
   void initState() {
     super.initState();
+
+    final defaultOpts = EnhancedPreferencesOptions();
+    _enableCache = defaultOpts.enableCache;
+    _enableEncryption = defaultOpts.enableEncryption;
   }
 
   @override
@@ -101,15 +108,23 @@ class _MyAppState extends State<MyApp> {
                           if (_type == "String") {
                             result = await _prefs.getString(
                               _keyController.text,
+                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
                             );
                           } else if (_type == "Int") {
-                            result = await _prefs.getInt(_keyController.text);
+                            result = await _prefs.getInt(
+                              _keyController.text,
+                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                            );
                           } else if (_type == "Double") {
                             result = await _prefs.getDouble(
                               _keyController.text,
+                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
                             );
                           } else if (_type == "Bool") {
-                            result = await _prefs.getBool(_keyController.text);
+                            result = await _prefs.getBool(
+                              _keyController.text,
+                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
+                            );
                           }
                         } on Exception catch (e) {
                           result = e.toString();
@@ -136,6 +151,7 @@ class _MyAppState extends State<MyApp> {
                             result = await _prefs.setString(
                               _keyController.text,
                               _valueController.text,
+                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
                             );
                           } else if (_type == "Int") {
                             final intValue =
@@ -143,6 +159,7 @@ class _MyAppState extends State<MyApp> {
                             result = await _prefs.setInt(
                               _keyController.text,
                               intValue,
+                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
                             );
                           } else if (_type == "Double") {
                             final doubleValue =
@@ -150,6 +167,7 @@ class _MyAppState extends State<MyApp> {
                             result = await _prefs.setDouble(
                               _keyController.text,
                               doubleValue,
+                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
                             );
                           } else if (_type == "Bool") {
                             final boolValue =
@@ -157,6 +175,7 @@ class _MyAppState extends State<MyApp> {
                             result = await _prefs.setBool(
                               _keyController.text,
                               boolValue,
+                              EnhancedPreferencesOptions(enableCache: _enableCache, enableEncryption: _enableEncryption)
                             );
                           }
                         } on Exception catch (e) {
@@ -212,6 +231,25 @@ class _MyAppState extends State<MyApp> {
                       child: Text('KEYS'),
                     ),
                   ],
+                ),
+                // OPTIONS
+                Row(
+                  spacing: 10,
+                  children: [
+                    // CACHE
+                    Text('CACHE:'),
+                    Switch(
+                      value: _enableCache,
+                      onChanged: (enable) async { setState(() { _enableCache = enable; }); },
+                    ),
+                    // ENCRYPTION
+                    Text('ENCRYPTION:'),
+                    Switch(
+                      value: _enableEncryption,
+                      onChanged: (enable) async { setState(() { _enableEncryption = enable; }); },
+                    ),
+                    Text(''),
+                  ]
                 ),
                 // RESULT
                 Text('${_result ?? ""}'),
