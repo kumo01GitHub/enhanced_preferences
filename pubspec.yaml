@@ -35,6 +35,8 @@ flutter:
       macos:
         pluginClass: EnhancedPreferencesPlugin
         sharedDarwinSource: true
+      windows:
+        pluginClass: EnhancedPreferencesPluginCApi
       web:
         pluginClass: EnhancedPreferencesWeb
         fileName: enhanced_preferences_web.dart

@@ -13,7 +13,14 @@ Wraps platform-specific persistent storage for simple data. Supported data types
 | Android | DataStore Preferences | Android Keystore |
 | iOS | NSUserDefaults | Keychain |
 | macOS | NSUserDefaults | Keychain |
+| Windows (experimental) | Windows Registry | CertMgr |
 | Web | localStorage | NOT SUPPORTED |
+
+> [!CAUTION]
+> Windows support is experimental feature.
+> - Not tested enough.
+> - Error handling is not implemented yet.
+> - Encryption is not implemented yet.
 
 ## Usage
 
