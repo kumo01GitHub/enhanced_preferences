@@ -61,6 +61,63 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
     } else {
       result->Error("UNKNOWN_ERROR", "Failure");
     }
+  } else if (method.compare("getInt") == 0) {
+    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+
+    optional<int> res = RegistryHandler::GetInt(key);
+    if (res) {
+      result->Success(flutter::EncodableValue(res.value()));
+    } else {
+      result->Error("UNKNOWN_ERROR", "Failure");
+    }
+  } else if (method.compare("setInt") == 0) {
+    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+    const int value = get<int>(args->at(flutter::EncodableValue("value")));
+
+    optional<string> res = RegistryHandler::SetInt(key, value);
+    if (res) {
+      result->Success(flutter::EncodableValue(res.value()));
+    } else {
+      result->Error("UNKNOWN_ERROR", "Failure");
+    }
+  } else if (method.compare("getDouble") == 0) {
+    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+
+    optional<double> res = RegistryHandler::GetDouble(key);
+    if (res) {
+      result->Success(flutter::EncodableValue(res.value()));
+    } else {
+      result->Error("UNKNOWN_ERROR", "Failure");
+    }
+  } else if (method.compare("setDouble") == 0) {
+    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+    const double value = get<double>(args->at(flutter::EncodableValue("value")));
+
+    optional<string> res = RegistryHandler::SetDouble(key, value);
+    if (res) {
+      result->Success(flutter::EncodableValue(res.value()));
+    } else {
+      result->Error("UNKNOWN_ERROR", "Failure");
+    }
+  } else if (method.compare("getBool") == 0) {
+    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+
+    optional<bool> res = RegistryHandler::GetBool(key);
+    if (res) {
+      result->Success(flutter::EncodableValue(res.value()));
+    } else {
+      result->Error("UNKNOWN_ERROR", "Failure");
+    }
+  } else if (method.compare("setBool") == 0) {
+    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+    const bool value = get<bool>(args->at(flutter::EncodableValue("value")));
+
+    optional<string> res = RegistryHandler::SetBool(key, value);
+    if (res) {
+      result->Success(flutter::EncodableValue(res.value()));
+    } else {
+      result->Error("UNKNOWN_ERROR", "Failure");
+    }
   } else if (method.compare("remove") == 0) {
     const string key = get<string>(args->at(flutter::EncodableValue("key")));
 

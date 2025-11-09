@@ -33,6 +33,63 @@ namespace enhanced_preferences {
     return result;
   }
 
+  optional<int> RegistryHandler::GetInt(
+    const string key
+  ) {
+    const optional<string> result = GetItem(key);
+    if (result) {
+      return stoi(result.value());
+    } else {
+      return nullopt;
+    }
+  }
+
+  optional<string> RegistryHandler::SetInt(
+    const string key,
+    const int value
+  ) {
+    const optional<string> result = SetItem(key, to_string(value));
+    return result;
+  }
+
+  optional<double> RegistryHandler::GetDouble(
+    const string key
+  ) {
+    const optional<string> result = GetItem(key);
+    if (result) {
+      return stod(result.value());
+    } else {
+      return nullopt;
+    }
+  }
+
+  optional<string> RegistryHandler::SetDouble(
+    const string key,
+    const double value
+  ) {
+    const optional<string> result = SetItem(key, to_string(value));
+    return result;
+  }
+
+  optional<bool> RegistryHandler::GetBool(
+    const string key
+  ) {
+    const optional<string> result = GetItem(key);
+    if (result) {
+      return result.value().compare("false");
+    } else {
+      return nullopt;
+    }
+  }
+
+  optional<string> RegistryHandler::SetBool(
+    const string key,
+    const bool value
+  ) {
+    const optional<string> result = SetItem(key, value ? "true" : "false");
+    return result;
+  }
+
   optional<string> RegistryHandler::Remove(
     const string key
   ) {

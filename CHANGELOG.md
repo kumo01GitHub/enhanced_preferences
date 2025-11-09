@@ -1,6 +1,7 @@
 ## 0.4.0
 
 * feat: Support Windows.
+* ci: Add option toggle buttons for example app.
 * ci: Improve tests.
 * doc: Fix `REFERENCE_ERROR` description.
 

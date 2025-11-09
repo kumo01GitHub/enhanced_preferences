@@ -20,6 +20,27 @@ public:
     const string key,
     const string value
   );
+  static optional<int> GetInt(
+    const string key
+  );
+  static optional<string> SetInt(
+    const string key,
+    const int value
+  );
+  static optional<double> GetDouble(
+    const string key
+  );
+  static optional<string> SetDouble(
+    const string key,
+    const double value
+  );
+  static optional<bool> GetBool(
+    const string key
+  );
+  static optional<string> SetBool(
+    const string key,
+    const bool value
+  );
   static optional<string> Remove(
     const string key
   );
