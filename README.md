@@ -72,6 +72,9 @@ await prefs.remove('hello');
 ```dart
 // Get all keys.
 final List<String>? keys = await prefs.keys();
+
+// Get only cached keys.
+final List<String>? cachedKeys = await prefs.keys(true);
 ```
 
 ### Clear all entries
@@ -79,6 +82,9 @@ final List<String>? keys = await prefs.keys();
 ```dart
 // Clear all entries.
 await prefs.clear();
+
+// Clear only cached entries.
+await prefs.clear(true);
 ```
 
 ### Options
