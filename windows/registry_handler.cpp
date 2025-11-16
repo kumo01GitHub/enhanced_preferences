@@ -1,4 +1,5 @@
 #include "registry_handler.h"
+#include "enhanced_preferences_exception.h"
 
 #include <windows.h>
 #include <psapi.h>
@@ -19,22 +20,22 @@ namespace enhanced_preferences {
   }
 
   optional<string> RegistryHandler::GetString(
-    const string &key
+    const string *key
   ) {
     const optional<string> result = GetItem(key);
     return result;
   }
 
   optional<string> RegistryHandler::SetString(
-    const string &key,
-    const string &value
+    const string *key,
+    const string *value
   ) {
     const optional<string> result = SetItem(key, value);
     return result;
   }
 
   optional<int> RegistryHandler::GetInt(
-    const string &key
+    const string *key
   ) {
     const optional<string> result = GetItem(key);
     if (result) {
@@ -45,15 +46,16 @@ namespace enhanced_preferences {
   }
 
   optional<string> RegistryHandler::SetInt(
-    const string &key,
-    const int &value
+    const string *key,
+    const int *value
   ) {
-    const optional<string> result = SetItem(key, to_string(value));
+    const string val = to_string(*value);
+    const optional<string> result = SetItem(key, &val);
     return result;
   }
 
   optional<double> RegistryHandler::GetDouble(
-    const string &key
+    const string *key
   ) {
     const optional<string> result = GetItem(key);
     if (result) {
@@ -64,15 +66,16 @@ namespace enhanced_preferences {
   }
 
   optional<string> RegistryHandler::SetDouble(
-    const string &key,
-    const double &value
+    const string *key,
+    const double *value
   ) {
-    const optional<string> result = SetItem(key, to_string(value));
+    const string val = to_string(*value);
+    const optional<string> result = SetItem(key, &val);
     return result;
   }
 
   optional<bool> RegistryHandler::GetBool(
-    const string &key
+    const string *key
   ) {
     const optional<string> result = GetItem(key);
     if (result) {
@@ -83,15 +86,16 @@ namespace enhanced_preferences {
   }
 
   optional<string> RegistryHandler::SetBool(
-    const string &key,
-    const bool &value
+    const string *key,
+    const bool *value
   ) {
-    const optional<string> result = SetItem(key, value ? "true" : "false");
+    const string val = *value ? "true" : "false";
+    const optional<string> result = SetItem(key, &val);
     return result;
   }
 
   optional<string> RegistryHandler::Remove(
-    const string &key
+    const string *key
   ) {
     const optional<string> result = RemoveItem(key);
     return result;
@@ -149,7 +153,7 @@ namespace enhanced_preferences {
     if (lResult == ERROR_SUCCESS) {
       return &hKey;
     } else {
-      return nullopt;
+      return nullptr;
     }
   }
 
@@ -159,12 +163,12 @@ namespace enhanced_preferences {
     }
   }
 
-  optional<string> RegistryHandler::GetItem(const string &key) {
+  optional<string> RegistryHandler::GetItem(const string *key) {
     DWORD dataSize{};
     LONG lResult = RegGetValueA(
       HKEY_CURRENT_USER,
       RegistryHandler::subKey.c_str(),
-      key.c_str(),
+      (*key).c_str(),
       RRF_RT_REG_SZ,
       NULL,
       NULL,
@@ -181,7 +185,7 @@ namespace enhanced_preferences {
     lResult = RegGetValueA(
       HKEY_CURRENT_USER,
       RegistryHandler::subKey.c_str(),
-      key.c_str(),
+      (*key).c_str(),
       RRF_RT_REG_SZ,
       NULL,
       &data,
@@ -196,24 +200,24 @@ namespace enhanced_preferences {
   }
 
   optional<string> RegistryHandler::SetItem(
-    const string &key,
-    const string &value
+    const string *key,
+    const string *value
   ) {
     const optional<HKEY*> hKey = Open();
     if (hKey) {
       LONG lResult = RegSetValueExA(
         *hKey.value(),
-        key.c_str(),
+        (*key).c_str(),
         0,
         REG_SZ,
-        (LPBYTE)value.c_str(),
-        (DWORD)value.size() * sizeof(char)
+        (LPBYTE)(*value).c_str(),
+        (DWORD)(*value).size() * sizeof(char)
       );
 
       Close(hKey);
 
       if (lResult == ERROR_SUCCESS) {
-        return key;
+        return (*key);
       } else {
         return nullopt;
       }
@@ -222,18 +226,19 @@ namespace enhanced_preferences {
     }
   }
 
-  optional<string> RegistryHandler::RemoveItem(const string &key) {
+  optional<string> RegistryHandler::RemoveItem(const string *key) {
     const optional<HKEY*> hKey = Open();
+
     if (hKey) {
       LONG lResult = RegDeleteValueA(
         *hKey.value(),
-        key.c_str()
+        (*key).c_str()
       );
 
       Close(hKey);
 
       if (lResult == ERROR_SUCCESS) {
-        return key;
+        return (*key);
       } else {
         return nullopt;
       }

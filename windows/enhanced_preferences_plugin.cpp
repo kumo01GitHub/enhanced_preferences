@@ -44,7 +44,7 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
   const flutter::EncodableMap *args = get_if<flutter::EncodableMap>(method_call.arguments());
 
   if (method.compare("getString") == 0) {
-    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+    const string *key = get_if<string>(&args->at(flutter::EncodableValue("key")));
 
     optional<string> res = RegistryHandler::GetString(key);
     if (res) {
@@ -53,8 +53,8 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
       result->Error("UNKNOWN_ERROR", "Failure");
     }
   } else if (method.compare("setString") == 0) {
-    const string key = get<string>(args->at(flutter::EncodableValue("key")));
-    const string value = get<string>(args->at(flutter::EncodableValue("value")));
+    const string *key = get_if<string>(&args->at(flutter::EncodableValue("key")));
+    const string *value = get_if<string>(&args->at(flutter::EncodableValue("value")));
 
     optional<string> res = RegistryHandler::SetString(key, value);
     if (res) {
@@ -63,7 +63,7 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
       result->Error("UNKNOWN_ERROR", "Failure");
     }
   } else if (method.compare("getInt") == 0) {
-    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+    const string *key = get_if<string>(&args->at(flutter::EncodableValue("key")));
 
     optional<int> res = RegistryHandler::GetInt(key);
     if (res) {
@@ -72,8 +72,8 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
       result->Error("UNKNOWN_ERROR", "Failure");
     }
   } else if (method.compare("setInt") == 0) {
-    const string key = get<string>(args->at(flutter::EncodableValue("key")));
-    const int value = get<int>(args->at(flutter::EncodableValue("value")));
+    const string *key = get_if<string>(&args->at(flutter::EncodableValue("key")));
+    const int *value = get_if<int>(&args->at(flutter::EncodableValue("value")));
 
     optional<string> res = RegistryHandler::SetInt(key, value);
     if (res) {
@@ -82,7 +82,7 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
       result->Error("UNKNOWN_ERROR", "Failure");
     }
   } else if (method.compare("getDouble") == 0) {
-    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+    const string *key = get_if<string>(&args->at(flutter::EncodableValue("key")));
 
     optional<double> res = RegistryHandler::GetDouble(key);
     if (res) {
@@ -91,8 +91,8 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
       result->Error("UNKNOWN_ERROR", "Failure");
     }
   } else if (method.compare("setDouble") == 0) {
-    const string key = get<string>(args->at(flutter::EncodableValue("key")));
-    const double value = get<double>(args->at(flutter::EncodableValue("value")));
+    const string *key = get_if<string>(&args->at(flutter::EncodableValue("key")));
+    const double *value = get_if<double>(&args->at(flutter::EncodableValue("value")));
 
     optional<string> res = RegistryHandler::SetDouble(key, value);
     if (res) {
@@ -101,7 +101,7 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
       result->Error("UNKNOWN_ERROR", "Failure");
     }
   } else if (method.compare("getBool") == 0) {
-    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+    const string *key = get_if<string>(&args->at(flutter::EncodableValue("key")));
 
     optional<bool> res = RegistryHandler::GetBool(key);
     if (res) {
@@ -110,8 +110,8 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
       result->Error("UNKNOWN_ERROR", "Failure");
     }
   } else if (method.compare("setBool") == 0) {
-    const string key = get<string>(args->at(flutter::EncodableValue("key")));
-    const bool value = get<bool>(args->at(flutter::EncodableValue("value")));
+    const string *key = get_if<string>(&args->at(flutter::EncodableValue("key")));
+    const bool *value = get_if<bool>(&args->at(flutter::EncodableValue("value")));
 
     optional<string> res = RegistryHandler::SetBool(key, value);
     if (res) {
@@ -120,7 +120,7 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
       result->Error("UNKNOWN_ERROR", "Failure");
     }
   } else if (method.compare("remove") == 0) {
-    const string key = get<string>(args->at(flutter::EncodableValue("key")));
+    const string *key = get_if<string>(&args->at(flutter::EncodableValue("key")));
 
     optional<string> res = RegistryHandler::Remove(key);
     if (res) {

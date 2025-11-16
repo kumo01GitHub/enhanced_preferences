@@ -9,6 +9,8 @@ namespace enhanced_preferences {
     errMsg = msg;
   };
 
+  EnhancedPreferencesException::~EnhancedPreferencesException() {}
+
   char const *EnhancedPreferencesException::what() const noexcept {
     return errMsg.c_str();
   };
