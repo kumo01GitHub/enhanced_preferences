@@ -1,4 +1,5 @@
 #include "enhanced_preferences_plugin.h"
+#include "enhanced_preferences_exception.h"
 #include "registry_handler.h"
 
 // This must be included before many other Windows headers.
