@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        os-version: [2025, 2022, "11-arm"]
+        os-version: [2025, 2022, 11-arm]
 
     steps:
       - name: Checkout
