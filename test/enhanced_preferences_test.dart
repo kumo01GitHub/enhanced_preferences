@@ -312,7 +312,7 @@ void main() {
       );
 
       // Retrieve from platform and cache.
-      final keys = await prefs.keys();
+      final keys = await prefs.keys(false);
       expect(keys, containsAll([key1, key2]));
     });
 
@@ -332,6 +332,59 @@ void main() {
       // Retrieve from cache only.
       final keys = await prefs.keys(true);
       expect(keys, containsAll([key3]));
+    });
+  });
+
+  group('clear', () {
+    EnhancedPreferences prefs = EnhancedPreferences();
+    MockEnhancedPreferencesPlatform fakePlatform =
+        MockEnhancedPreferencesPlatform();
+    EnhancedPreferencesPlatform.instance = fakePlatform;
+
+    test('clear all', () async {
+      final String key1 = "keyKeysTest1";
+      final String value1 = "valueKeysTest1";
+      final String key2 = "keyKeysTest2";
+      final int value2 = 999;
+
+      await prefs.setString(
+        key1, value1, EnhancedPreferencesOptions(enableCache: true)
+      );
+      await prefs.setInt(
+        key2, value2, EnhancedPreferencesOptions(enableCache: false)
+      );
+
+      // Retrieve keys.
+      final keys1 = await prefs.keys();
+
+      // Clear keys.
+      final clear = await prefs.clear(false);
+      final keys2 = await prefs.keys();
+      expect(clear, keys1);
+      expect(keys2, []);
+    });
+
+    test('clear cache only', () async {
+      final String key3 = "keyKeysTest3";
+      final double value3 = 0.123;
+      final String key4 = "keyKeysTest4";
+      final bool value4 = false;
+
+      await prefs.setDouble(
+        key3, value3, EnhancedPreferencesOptions(enableCache: true)
+      );
+      await prefs.setBool(
+        key4, value4, EnhancedPreferencesOptions(enableCache: false)
+      );
+
+      // Retrieve keys.
+      final keys3 = await prefs.keys(true);
+
+      // Clear cache only.
+      final clear = await prefs.clear(true);
+      final keys4 = await prefs.keys(true);
+      expect(clear, keys3);
+      expect(keys4, []);
     });
   });
 
