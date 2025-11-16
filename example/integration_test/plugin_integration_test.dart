@@ -187,11 +187,6 @@ void main() {
   });
 
   group('keys', () {
-    EnhancedPreferences prefs = EnhancedPreferences();
-    MockEnhancedPreferencesPlatform fakePlatform =
-        MockEnhancedPreferencesPlatform();
-    EnhancedPreferencesPlatform.instance = fakePlatform;
-
     test('retrieve all', () async {
       final String key1 = "keyKeysTest1";
       final String value1 = "valueKeysTest1";
@@ -212,11 +207,6 @@ void main() {
   });
 
   group('clear', () {
-    EnhancedPreferences prefs = EnhancedPreferences();
-    MockEnhancedPreferencesPlatform fakePlatform =
-        MockEnhancedPreferencesPlatform();
-    EnhancedPreferencesPlatform.instance = fakePlatform;
-
     test('clear all', () async {
       final String key1 = "keyKeysTest1";
       final String value1 = "valueKeysTest1";
