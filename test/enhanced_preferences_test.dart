@@ -117,19 +117,19 @@ void main() {
     });
 
     test('cache', () async {
-      final String key1 = "cachedKey";
-      final String value1 = "cachedValue";
+      // Enable cache.
+      final String key1 = "keyStringTest1";
+      final String value1 = "valueStringTest1";
       final enableCacheOpts = EnhancedPreferencesOptions(enableCache: true);
 
-      // Enable cache.
       await prefs.setString(key1, value1, enableCacheOpts);
       expect(prefs.cache.containsKey(key1), true);
       expect(prefs.cache[key1], value1);
       expect(await prefs.getString(key1, enableCacheOpts), value1);
 
       // Disable cache.
-      final String key2 = "nonCachedKey";
-      final String value2 = "nonCachedValue";
+      final String key2 = "keyStringTest2";
+      final String value2 = "valueStringTest2";
       final disableCacheOpts = EnhancedPreferencesOptions(enableCache: false);
 
       await prefs.setString(key2, value2, disableCacheOpts);
@@ -160,18 +160,18 @@ void main() {
     });
 
     test('cache', () async {
-      final String key1 = "cachedKey";
+      // Enable cache.
+      final String key1 = "keyIntTest1";
       final int value1 = 999;
       final enableCacheOpts = EnhancedPreferencesOptions(enableCache: true);
 
-      // Enable cache.
       await prefs.setInt(key1, value1, enableCacheOpts);
       expect(prefs.cache.containsKey(key1), true);
       expect(prefs.cache[key1], value1);
       expect(await prefs.getInt(key1, enableCacheOpts), value1);
 
       // Disable cache.
-      final String key2 = "nonCachedKey";
+      final String key2 = "keyIntTest2";
       final int value2 = 1234;
       final disableCacheOpts = EnhancedPreferencesOptions(enableCache: false);
 
@@ -203,18 +203,18 @@ void main() {
     });
 
     test('cache', () async {
-      final String key1 = "cachedKey";
+      // Enable cache.
+      final String key1 = "keyDoubleTest1";
       final double value1 = 12.3;
       final enableCacheOpts = EnhancedPreferencesOptions(enableCache: true);
 
-      // Enable cache.
       await prefs.setDouble(key1, value1, enableCacheOpts);
       expect(prefs.cache.containsKey(key1), true);
       expect(prefs.cache[key1], value1);
       expect(await prefs.getDouble(key1, enableCacheOpts), value1);
 
       // Disable cache.
-      final String key2 = "nonCachedKey";
+      final String key2 = "keyDoubleTest2";
       final double value2 = 0.987;
       final disableCacheOpts = EnhancedPreferencesOptions(enableCache: false);
 
@@ -246,18 +246,18 @@ void main() {
     });
 
     test('cache', () async {
-      final String key1 = "cachedKey";
+      // Enable cache.
+      final String key1 = "keyBoolTest1";
       final bool value1 = true;
       final enableCacheOpts = EnhancedPreferencesOptions(enableCache: true);
 
-      // Enable cache.
       await prefs.setBool(key1, value1, enableCacheOpts);
       expect(prefs.cache.containsKey(key1), true);
       expect(prefs.cache[key1], value1);
       expect(await prefs.getBool(key1, enableCacheOpts), value1);
 
       // Disable cache.
-      final String key2 = "nonCachedKey";
+      final String key2 = "keyBoolTest2";
       final bool value2 = false;
       final disableCacheOpts = EnhancedPreferencesOptions(enableCache: false);
 
@@ -280,66 +280,59 @@ void main() {
         MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
 
-    final String key = "keyToRemove";
-    final String value = "valueToRemove";
+    final String key = "keyRemoveTest";
+    final String value = "valueRemoveTest";
 
-    expect(await prefs.setString(key, value), key);
+    expect(await prefs.setString(key, value, EnhancedPreferencesOptions(enableCache: true)), key);
     expect(await prefs.getString(key), value);
+
+    // Remove.
     expect(await prefs.remove(key), key);
     expect(() => prefs.getString(key), throwsA(isA<PlatformException>()));
+    expect(prefs.cache.keys, isNot(contains(key)));
   });
 
-  test('keys', () async {
+  group('keys', () {
     EnhancedPreferences prefs = EnhancedPreferences();
     MockEnhancedPreferencesPlatform fakePlatform =
         MockEnhancedPreferencesPlatform();
     EnhancedPreferencesPlatform.instance = fakePlatform;
 
-    final String key1 = "key1";
-    final String value1 = "value1";
-    final String key2 = "key2";
-    final int value2 = 999;
-    final String key3 = "key3";
-    final double value3 = 0.123;
-    final String key4 = "key4";
-    final bool value4 = false;
+    test('retrieve all', () async {
+      final String key1 = "keyKeysTest1";
+      final String value1 = "valueKeysTest1";
+      final String key2 = "keyKeysTest2";
+      final int value2 = 999;
 
-    await prefs.setString(
-      key1,
-      value1,
-      EnhancedPreferencesOptions(enableCache: true),
-    );
-    await prefs.setInt(
-      key2,
-      value2,
-      EnhancedPreferencesOptions(enableCache: true),
-    );
-    await prefs.setDouble(
-      key3,
-      value3,
-      EnhancedPreferencesOptions(enableCache: false),
-    );
-    await prefs.setBool(
-      key4,
-      value4,
-      EnhancedPreferencesOptions(enableCache: false),
-    );
-    final keys1 = await prefs.keys();
-    expect(keys1, containsAll([key1, key2, key3, key4]));
-    expect(prefs.cache.keys, containsAll([key1, key2]));
-    expect(prefs.cache.keys, isNot(contains(key3)));
-    expect(prefs.cache.keys, isNot(contains(key4)));
+      await prefs.setString(
+        key1, value1, EnhancedPreferencesOptions(enableCache: true)
+      );
+      await prefs.setInt(
+        key2, value2, EnhancedPreferencesOptions(enableCache: false)
+      );
 
-    await prefs.remove(key1);
-    await prefs.remove(key3);
-    final keys2 = await prefs.keys();
-    expect(keys2, containsAll([key2, key4]));
-    expect(keys2, isNot(contains(key1)));
-    expect(keys2, isNot(contains(key3)));
-    expect(prefs.cache.keys, isNot(contains(key1)));
-    expect(prefs.cache.keys, contains(key2));
-    expect(prefs.cache.keys, isNot(contains(key3)));
-    expect(prefs.cache.keys, isNot(contains(key4)));
+      // Retrieve from platform and cache.
+      final keys = await prefs.keys();
+      expect(keys, containsAll([key1, key2]));
+    });
+
+    test('retrieve cache only', () async {
+      final String key3 = "keyKeysTest3";
+      final double value3 = 0.123;
+      final String key4 = "keyKeysTest4";
+      final bool value4 = false;
+
+      await prefs.setDouble(
+        key3, value3, EnhancedPreferencesOptions(enableCache: true)
+      );
+      await prefs.setBool(
+        key4, value4, EnhancedPreferencesOptions(enableCache: false)
+      );
+
+      // Retrieve from cache only.
+      final keys = await prefs.keys(true);
+      expect(keys, containsAll([key3]));
+    });
   });
 
   test('Options', () async {

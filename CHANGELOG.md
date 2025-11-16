@@ -2,7 +2,7 @@
 
 * feat(windows): Support Windows.
 * feat: Support clear.
-* feat: Support `cacheOnly` option.
+* feat: Support `cacheOnly` option for `keys()` and `clear()`.
 * ci: Add option toggle buttons for example app.
 * ci: Improve tests.
 * doc: Fix `REFERENCE_ERROR` description.
