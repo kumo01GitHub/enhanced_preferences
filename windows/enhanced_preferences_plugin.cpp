@@ -103,9 +103,9 @@ void EnhancedPreferencesPlugin::HandleMethodCall(
     } else {
       result->NotImplemented();
     }
-  } catch (EnhancedPreferencesException epe) {
+  } catch (EnhancedPreferencesException& epe) {
     result->Error(epe.code(), epe.what());
-  } catch (exception e) {
+  } catch (exception& e) {
     result->Error("UNKNOWN_ERROR", e.what());
   }
 }
