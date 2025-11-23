@@ -13,35 +13,35 @@ namespace enhanced_preferences {
 class RegistryHandler {
 public:
   static void Initialize();
-  static optional<string> GetString(
+  static string GetString(
     const string *key
   );
-  static optional<string> SetString(
+  static string SetString(
     const string *key,
     const string *value
   );
-  static optional<int> GetInt(
+  static int GetInt(
     const string *key
   );
-  static optional<string> SetInt(
+  static string SetInt(
     const string *key,
     const int *value
   );
-  static optional<double> GetDouble(
+  static double GetDouble(
     const string *key
   );
-  static optional<string> SetDouble(
+  static string SetDouble(
     const string *key,
     const double *value
   );
-  static optional<bool> GetBool(
+  static bool GetBool(
     const string *key
   );
-  static optional<string> SetBool(
+  static string SetBool(
     const string *key,
     const bool *value
   );
-  static optional<string> Remove(
+  static string Remove(
     const string *key
   );
   static vector<string> Keys();
@@ -49,14 +49,14 @@ public:
  private:
   inline static string subKey;
   inline static const string subKeySuffix = "\\FEP";
-  static optional<HKEY*> Open();
-  static void Close(optional<HKEY*> hKey);
-  static optional<string> GetItem(const string *key);
-  static optional<string> SetItem(
+  static HKEY Open();
+  static void Close(HKEY* hKey);
+  static string GetItem(const string *key);
+  static string SetItem(
     const string *key,
     const string *value
   );
-  static optional<string> RemoveItem(const string *key);
+  static string RemoveItem(const string *key);
 };
 
 }  // namespace enhanced_preferences

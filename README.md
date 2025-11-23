@@ -19,7 +19,6 @@ Wraps platform-specific persistent storage for simple data. Supported data types
 > [!CAUTION]
 > Windows support is experimental feature.
 > - Not tested enough.
-> - Error handling is not implemented yet.
 > - Encryption is not implemented yet.
 
 ## Usage
