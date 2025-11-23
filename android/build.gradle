@@ -1,5 +1,5 @@
 group = "io.kumo01.enhanced_preferences"
-version = "0.3.1"
+version = "0.4.0"
 
 buildscript {
     ext.kotlin_version = "2.1.0"

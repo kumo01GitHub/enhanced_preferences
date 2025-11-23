@@ -1,6 +1,6 @@
 name: enhanced_preferences
 description: "Wraps platform-specific persistent storage for simple data."
-version: 0.3.1
+version: 0.4.0
 repository: https://github.com/kumo01GitHub/enhanced_preferences
 
 environment:
