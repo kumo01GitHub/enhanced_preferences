@@ -3,8 +3,10 @@
 * feat(windows): Support Windows.
 * feat: Support clear.
 * feat: Support `cacheOnly` option for `keys()` and `clear()`.
+* chore: Update dependencies for example.
 * ci: Add option toggle buttons for example app.
 * ci: Improve tests.
+* ci: Remove cache option for `subosito/flutter-action`.
 * doc: Fix `REFERENCE_ERROR` description.
 
 ## 0.3.1
