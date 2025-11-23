@@ -1,4 +1,5 @@
 #include "registry_handler.h"
+#include "enhanced_preferences_exception.h"
 
 #include <windows.h>
 #include <psapi.h>
@@ -18,119 +19,103 @@ namespace enhanced_preferences {
     }
   }
 
-  optional<string> RegistryHandler::GetString(
-    const string &key
+  string RegistryHandler::GetString(
+    const string *key
   ) {
-    const optional<string> result = GetItem(key);
+    const string result = GetItem(key);
     return result;
   }
 
-  optional<string> RegistryHandler::SetString(
-    const string &key,
-    const string &value
+  string RegistryHandler::SetString(
+    const string *key,
+    const string *value
   ) {
-    const optional<string> result = SetItem(key, value);
-    return result;
+    return SetItem(key, value);
   }
 
-  optional<int> RegistryHandler::GetInt(
-    const string &key
+  int RegistryHandler::GetInt(
+    const string *key
   ) {
-    const optional<string> result = GetItem(key);
-    if (result) {
-      return stoi(result.value());
-    } else {
-      return nullopt;
-    }
+    const string result = GetItem(key);
+    return stoi(result);
   }
 
-  optional<string> RegistryHandler::SetInt(
-    const string &key,
-    const int &value
+  string RegistryHandler::SetInt(
+    const string *key,
+    const int *value
   ) {
-    const optional<string> result = SetItem(key, to_string(value));
-    return result;
+    const string val = to_string(*value);
+    return SetItem(key, &val);
   }
 
-  optional<double> RegistryHandler::GetDouble(
-    const string &key
+  double RegistryHandler::GetDouble(
+    const string *key
   ) {
-    const optional<string> result = GetItem(key);
-    if (result) {
-      return stod(result.value());
-    } else {
-      return nullopt;
-    }
+    const string result = GetItem(key);
+    return stod(result);
   }
 
-  optional<string> RegistryHandler::SetDouble(
-    const string &key,
-    const double &value
+  string RegistryHandler::SetDouble(
+    const string *key,
+    const double *value
   ) {
-    const optional<string> result = SetItem(key, to_string(value));
-    return result;
+    const string val = to_string(*value);
+    return SetItem(key, &val);
   }
 
-  optional<bool> RegistryHandler::GetBool(
-    const string &key
+  bool RegistryHandler::GetBool(
+    const string *key
   ) {
-    const optional<string> result = GetItem(key);
-    if (result) {
-      return result.value().compare("false");
-    } else {
-      return nullopt;
-    }
+    const string result = GetItem(key);
+    return result.compare("false");
   }
 
-  optional<string> RegistryHandler::SetBool(
-    const string &key,
-    const bool &value
+  string RegistryHandler::SetBool(
+    const string *key,
+    const bool *value
   ) {
-    const optional<string> result = SetItem(key, value ? "true" : "false");
-    return result;
+    const string val = *value ? "true" : "false";
+    return SetItem(key, &val);
   }
 
-  optional<string> RegistryHandler::Remove(
-    const string &key
+  string RegistryHandler::Remove(
+    const string *key
   ) {
-    const optional<string> result = RemoveItem(key);
-    return result;
+    return RemoveItem(key);
   }
 
   vector<string> RegistryHandler::Keys() {
-    const optional<HKEY*> hKey = Open();
+    const HKEY hKey = Open();
 
-    if (hKey)  {
-      DWORD index = 0;
-      DWORD result;
-      vector<string> keys;
+    DWORD index = 0;
+    DWORD result;
+    vector<string> keys;
 
-      do {
-        char valueName[MAX_PATH + 1];
-        DWORD valueNameSize = MAX_PATH;
+    do {
+      char valueName[MAX_PATH + 1];
+      DWORD valueNameSize = MAX_PATH;
 
-        result = RegEnumValueA(
-          *hKey.value(),
-          index,
-          valueName,
-          &valueNameSize,
-          NULL, NULL, NULL, NULL
-        );
+      result = RegEnumValueA(
+        hKey,
+        index,
+        valueName,
+        &valueNameSize,
+        NULL, NULL, NULL, NULL
+      );
 
-        if (result == ERROR_SUCCESS) {
-          keys.push_back(valueName);
-          index++;
-        }
-        // TODO: Handle error.
-      } while (result == ERROR_SUCCESS);
+      if (result == ERROR_SUCCESS) {
+        keys.push_back(valueName);
+        index++;
+      } else if (result != ERROR_NO_MORE_ITEMS) {
+        throw EnhancedPreferencesException(
+          REFERENCE_ERROR, "Could not get key. [" + to_string(result) + "]");
+      }
+    } while (result == ERROR_SUCCESS);
 
-      return keys;
-    } else {
-      return {};
-    }
+    return keys;
   }
 
-  optional<HKEY*> RegistryHandler::Open() {
+  HKEY RegistryHandler::Open() {
     HKEY hKey;
     DWORD dwDisposition;
 
@@ -147,24 +132,31 @@ namespace enhanced_preferences {
     );
 
     if (lResult == ERROR_SUCCESS) {
-      return &hKey;
+      return hKey;
     } else {
-      return nullopt;
+      throw EnhancedPreferencesException(
+        REFERENCE_ERROR, "Could not open Windows Registry. [" + to_string(lResult) + "]");
     }
   }
 
-  void RegistryHandler::Close(optional<HKEY*> hKey) {
-    if (hKey) {     
-      RegCloseKey(*hKey.value());
+  void RegistryHandler::Close(HKEY* hKey) {
+    if (hKey) {
+      RegCloseKey(*hKey);
     }
   }
 
-  optional<string> RegistryHandler::GetItem(const string &key) {
+  string RegistryHandler::GetItem(const string *key) {
+    if (!key) {
+      throw EnhancedPreferencesException(REFERENCE_ERROR, "Key is null.");
+    } else if (key->empty()) {
+      throw EnhancedPreferencesException(REFERENCE_ERROR, "Key is empty.");
+    }
+
     DWORD dataSize{};
     LONG lResult = RegGetValueA(
       HKEY_CURRENT_USER,
       RegistryHandler::subKey.c_str(),
-      key.c_str(),
+      (*key).c_str(),
       RRF_RT_REG_SZ,
       NULL,
       NULL,
@@ -172,7 +164,8 @@ namespace enhanced_preferences {
     );
 
     if (lResult != ERROR_SUCCESS) {
-      return nullopt;
+      throw EnhancedPreferencesException(
+        REFERENCE_ERROR, "Could not access sub key: " + *key + ". [" + to_string(lResult) + "]");
     }
 
     string data;
@@ -181,7 +174,7 @@ namespace enhanced_preferences {
     lResult = RegGetValueA(
       HKEY_CURRENT_USER,
       RegistryHandler::subKey.c_str(),
-      key.c_str(),
+      (*key).c_str(),
       RRF_RT_REG_SZ,
       NULL,
       &data,
@@ -191,54 +184,67 @@ namespace enhanced_preferences {
     if (lResult == ERROR_SUCCESS) {
       return data.c_str();
     } else {
-      return nullopt;
+      throw EnhancedPreferencesException(
+        REFERENCE_ERROR, "Could not get value for sub key " + *key + ". [" + to_string(lResult) + "]");
     }
   }
 
-  optional<string> RegistryHandler::SetItem(
-    const string &key,
-    const string &value
+  string RegistryHandler::SetItem(
+    const string *key,
+    const string *value
   ) {
-    const optional<HKEY*> hKey = Open();
-    if (hKey) {
-      LONG lResult = RegSetValueExA(
-        *hKey.value(),
-        key.c_str(),
-        0,
-        REG_SZ,
-        (LPBYTE)value.c_str(),
-        (DWORD)value.size() * sizeof(char)
-      );
+    if (!key) {
+      throw EnhancedPreferencesException(REFERENCE_ERROR, "Key is null.");
+    } else if (key->empty()) {
+      throw EnhancedPreferencesException(REFERENCE_ERROR, "Key is empty.");
+    }
 
-      Close(hKey);
+    if (!value) {
+      throw EnhancedPreferencesException(REFERENCE_ERROR, "Value is null.");
+    } else if (value->empty()) {
+      throw EnhancedPreferencesException(REFERENCE_ERROR, "Value is empty.");
+    }
 
-      if (lResult == ERROR_SUCCESS) {
-        return key;
-      } else {
-        return nullopt;
-      }
+    HKEY hKey = Open();
+    LONG lResult = RegSetValueExA(
+      hKey,
+      (*key).c_str(),
+      0,
+      REG_SZ,
+      (LPBYTE)(*value).c_str(),
+      (DWORD)(*value).size() * sizeof(char)
+    );
+
+    Close(&hKey);
+
+    if (lResult == ERROR_SUCCESS) {
+      return (*key);
     } else {
-      return nullopt;
+    throw EnhancedPreferencesException(
+      REFERENCE_ERROR, "Could not set value for sub key: " + *key + ". [" + to_string(lResult) + "]");
     }
   }
 
-  optional<string> RegistryHandler::RemoveItem(const string &key) {
-    const optional<HKEY*> hKey = Open();
-    if (hKey) {
-      LONG lResult = RegDeleteValueA(
-        *hKey.value(),
-        key.c_str()
-      );
+  string RegistryHandler::RemoveItem(const string *key) {
+    if (!key) {
+      throw EnhancedPreferencesException(REFERENCE_ERROR, "Key is null.");
+    } else if (key->empty()) {
+      throw EnhancedPreferencesException(REFERENCE_ERROR, "Key is empty.");
+    }
 
-      Close(hKey);
+    HKEY hKey = Open();
+    LONG lResult = RegDeleteValueA(
+      hKey,
+      (*key).c_str()
+    );
 
-      if (lResult == ERROR_SUCCESS) {
-        return key;
-      } else {
-        return nullopt;
-      }
+    Close(&hKey);
+
+    if (lResult == ERROR_SUCCESS) {
+      return (*key);
     } else {
-      return nullopt;
+      throw EnhancedPreferencesException(
+        REFERENCE_ERROR, "Could not remove sub key: " + *key + ". [" + to_string(lResult) + "]");
     }
   }
 }  // namespace enhanced_preferences
