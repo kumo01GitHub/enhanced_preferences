@@ -8,11 +8,11 @@ public class CryptoHandler {
     private static let kPublicKey: String = "FEPPublicKey"
     private static let kPrivateKey: String = "FEPPrivateKey"
 
-    public static func encrypt(plainText: Data) throws -> CryptoData {
+    public static func encrypt(plainText: Data) throws -> CipherData {
         let key = SymmetricKey(size: .bits256)
         let nonce = AES.GCM.Nonce()
         let sealedBox = try AES.GCM.seal(plainText, using: key, nonce: nonce)
-        return CryptoData(data: sealedBox.combined!, key: try encryptKey(key: key.withUnsafeBytes { body in Data(body) }))
+        return CipherData(data: sealedBox.combined!, key: try encryptKey(key: key.withUnsafeBytes { body in Data(body) }))
     }
 
     public static func decrypt(cipherData: CipherData) throws -> Data? {
