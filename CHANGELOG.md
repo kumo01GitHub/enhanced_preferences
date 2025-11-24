@@ -1,6 +1,7 @@
 ## 0.4.1
 
 * fix: Rename cipher data.
+* ci: Fix test failure.
 
 ## 0.4.0
 

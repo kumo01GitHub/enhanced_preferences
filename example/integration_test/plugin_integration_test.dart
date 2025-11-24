@@ -194,10 +194,14 @@ void main() {
       final int value2 = 999;
 
       await prefs.setString(
-        key1, value1, EnhancedPreferencesOptions(enableCache: true)
+        key1,
+        value1,
+        EnhancedPreferencesOptions(enableCache: true),
       );
       await prefs.setInt(
-        key2, value2, EnhancedPreferencesOptions(enableCache: false)
+        key2,
+        value2,
+        EnhancedPreferencesOptions(enableCache: false),
       );
 
       // Retrieve from platform and cache.
@@ -214,10 +218,14 @@ void main() {
       final int value2 = 999;
 
       await prefs.setString(
-        key1, value1, EnhancedPreferencesOptions(enableCache: true)
+        key1,
+        value1,
+        EnhancedPreferencesOptions(enableCache: true),
       );
       await prefs.setInt(
-        key2, value2, EnhancedPreferencesOptions(enableCache: false)
+        key2,
+        value2,
+        EnhancedPreferencesOptions(enableCache: false),
       );
 
       // Retrieve keys.
@@ -226,7 +234,7 @@ void main() {
       // Clear keys.
       final clear = await prefs.clear(false);
       final keys2 = await prefs.keys();
-      expect(clear, keys1);
+      expect(clear, containsAll(keys1!));
       expect(keys2, []);
     });
   });

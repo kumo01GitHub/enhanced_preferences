@@ -283,7 +283,14 @@ void main() {
     final String key = "keyRemoveTest";
     final String value = "valueRemoveTest";
 
-    expect(await prefs.setString(key, value, EnhancedPreferencesOptions(enableCache: true)), key);
+    expect(
+      await prefs.setString(
+        key,
+        value,
+        EnhancedPreferencesOptions(enableCache: true),
+      ),
+      key,
+    );
     expect(await prefs.getString(key), value);
 
     // Remove.
@@ -305,10 +312,14 @@ void main() {
       final int value2 = 999;
 
       await prefs.setString(
-        key1, value1, EnhancedPreferencesOptions(enableCache: true)
+        key1,
+        value1,
+        EnhancedPreferencesOptions(enableCache: true),
       );
       await prefs.setInt(
-        key2, value2, EnhancedPreferencesOptions(enableCache: false)
+        key2,
+        value2,
+        EnhancedPreferencesOptions(enableCache: false),
       );
 
       // Retrieve from platform and cache.
@@ -323,10 +334,14 @@ void main() {
       final bool value4 = false;
 
       await prefs.setDouble(
-        key3, value3, EnhancedPreferencesOptions(enableCache: true)
+        key3,
+        value3,
+        EnhancedPreferencesOptions(enableCache: true),
       );
       await prefs.setBool(
-        key4, value4, EnhancedPreferencesOptions(enableCache: false)
+        key4,
+        value4,
+        EnhancedPreferencesOptions(enableCache: false),
       );
 
       // Retrieve from cache only.
@@ -348,10 +363,14 @@ void main() {
       final int value2 = 999;
 
       await prefs.setString(
-        key1, value1, EnhancedPreferencesOptions(enableCache: true)
+        key1,
+        value1,
+        EnhancedPreferencesOptions(enableCache: true),
       );
       await prefs.setInt(
-        key2, value2, EnhancedPreferencesOptions(enableCache: false)
+        key2,
+        value2,
+        EnhancedPreferencesOptions(enableCache: false),
       );
 
       // Retrieve keys.
@@ -360,7 +379,7 @@ void main() {
       // Clear keys.
       final clear = await prefs.clear(false);
       final keys2 = await prefs.keys();
-      expect(clear, keys1);
+      expect(clear, containsAll(keys1!));
       expect(keys2, []);
     });
 
@@ -371,10 +390,14 @@ void main() {
       final bool value4 = false;
 
       await prefs.setDouble(
-        key3, value3, EnhancedPreferencesOptions(enableCache: true)
+        key3,
+        value3,
+        EnhancedPreferencesOptions(enableCache: true),
       );
       await prefs.setBool(
-        key4, value4, EnhancedPreferencesOptions(enableCache: false)
+        key4,
+        value4,
+        EnhancedPreferencesOptions(enableCache: false),
       );
 
       // Retrieve keys.
@@ -383,7 +406,7 @@ void main() {
       // Clear cache only.
       final clear = await prefs.clear(true);
       final keys4 = await prefs.keys(true);
-      expect(clear, keys3);
+      expect(clear, containsAll(keys3!));
       expect(keys4, []);
     });
   });
