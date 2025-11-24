@@ -169,7 +169,7 @@ class EnhancedPreferencesRepository(context: Context) {
                 null
             } else if (value.matches(regex) && enableEncryption) {
                 val splitValues = value.split(":")
-                cryptoHandler.decrypt(CryptoData(
+                cryptoHandler.decrypt(CipherData(
                     Base64.decode(splitValues[1], Base64.DEFAULT),
                     Base64.decode(splitValues[2], Base64.DEFAULT),
                     Base64.decode(splitValues[3], Base64.DEFAULT),
@@ -185,10 +185,10 @@ class EnhancedPreferencesRepository(context: Context) {
     private suspend fun setItem(key: String, value: ByteArray, type: EnhancedPreferencesType, enableEncryption: Boolean) {
         this.dataStore.edit { preferences: MutablePreferences ->
             if (enableEncryption) {
-                val cryptoData = cryptoHandler.encrypt(value)
-                val data = Base64.encodeToString(cryptoData.data, Base64.DEFAULT)
-                val dataKey = Base64.encodeToString(cryptoData.key, Base64.DEFAULT)
-                val iv = Base64.encodeToString(cryptoData.iv, Base64.DEFAULT)
+                val cipherData = cryptoHandler.encrypt(value)
+                val data = Base64.encodeToString(cipherData.data, Base64.DEFAULT)
+                val dataKey = Base64.encodeToString(cipherData.key, Base64.DEFAULT)
+                val iv = Base64.encodeToString(cipherData.iv, Base64.DEFAULT)
                 preferences[stringPreferencesKey(key)] = "$type:$data:$dataKey:$iv"
             } else {
                 preferences[stringPreferencesKey(key)] = "$type:${Base64.encodeToString(value, Base64.DEFAULT)}"

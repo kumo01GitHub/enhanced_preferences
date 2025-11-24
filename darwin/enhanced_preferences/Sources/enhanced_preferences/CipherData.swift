@@ -1,6 +1,6 @@
 import Foundation
 
-public class CryptoData {
+public class CipherData {
     public let data: Data
     public let key: Data
 

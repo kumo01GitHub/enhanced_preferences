@@ -77,7 +77,7 @@ class EnvelopeEncryptionHandler(context: Context) {
         }
     }
 
-    fun decrypt(encrypted: ByteArray): ByteArray {
+    fun decrypt(encryptedKey: ByteArray): ByteArray {
         return synchronized(this.cipher) {
             this.cipher
                     .apply {
@@ -92,7 +92,7 @@ class EnvelopeEncryptionHandler(context: Context) {
                                 )
                         )
                     }
-                    .run { this.doFinal(encrypted) }
+                    .run { this.doFinal(encryptedKey) }
         }
     }
 }

@@ -1,3 +1,7 @@
+## 0.4.1
+
+* fix: Rename cipher data.
+
 ## 0.4.0
 
 * feat(windows): Support Windows.

@@ -34,7 +34,7 @@ class CryptoHandler(context: Context) {
         return iv
     }
 
-    fun encrypt(plain: ByteArray): CryptoData {
+    fun encrypt(plainText: ByteArray): CipherData {
         val key = generateKey()
         val iv = generateIv()
 
@@ -44,30 +44,30 @@ class CryptoHandler(context: Context) {
                 key,
                 GCMParameterSpec(GCM_TAG_LENGTH, iv)
             )
-            CryptoData(
-                cipher.doFinal(plain),
+            CipherData(
+                cipher.doFinal(plainText),
                 envelopeEncryptionHandler.encrypt(key.encoded),
                 iv
             )
         }
     }
 
-    fun decrypt(encrypted: CryptoData): ByteArray {
+    fun decrypt(cipherData: CipherData): ByteArray {
         val key =
             SecretKeySpec(
-                envelopeEncryptionHandler.decrypt(encrypted.key),
+                envelopeEncryptionHandler.decrypt(cipherData.key),
                 ALGORITHM
             )
-        val param = GCMParameterSpec(GCM_TAG_LENGTH, encrypted.iv)
+        val param = GCMParameterSpec(GCM_TAG_LENGTH, cipherData.iv)
 
         return synchronized(this.cipher) {
             this.cipher.init(Cipher.DECRYPT_MODE, key, param)
-            this.cipher.doFinal(encrypted.data)
+            this.cipher.doFinal(cipherData.data)
         }
     }
 }
 
-class CryptoData (
+class CipherData (
     val data: ByteArray,
     val key: ByteArray,
     val iv: ByteArray

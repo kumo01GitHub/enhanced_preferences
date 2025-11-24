@@ -32,7 +32,7 @@ public class UserDefaultsHandler {
                 throw EnhancedPreferencesError.referenceError(message: "Invalid value.")
             }
 
-            return try CryptoHandler.decrypt(encrypted: CryptoData(data: data, key: dataKey))!
+            return try CryptoHandler.decrypt(cipherData: CipherData(data: data, key: dataKey))!
         } else {
             let regex = try NSRegularExpression(pattern: "^\(type):[A-Za-z0-9+/=]+$")
             if (regex.matches(in: value, range: NSRange(0..<value.utf16.count)).count == 0) {
@@ -56,8 +56,8 @@ public class UserDefaultsHandler {
 
         if (enableEncryption) {
             do {
-                let cryptoData = try CryptoHandler.encrypt(plain: value)
-                UserDefaultsHandler.getInstance().set("\(type):\(cryptoData.data.base64EncodedString()):\(cryptoData.key.base64EncodedString())", forKey: keyPrefix + key)
+                let cipherData = try CryptoHandler.encrypt(plainText: value)
+                UserDefaultsHandler.getInstance().set("\(type):\(cipherData.data.base64EncodedString()):\(cipherData.key.base64EncodedString())", forKey: keyPrefix + key)
             } catch {
                 throw EnhancedPreferencesError.illegalAccess(message: error.localizedDescription)
             }
